@@ -30,9 +30,18 @@ add_library( # Sets the name of the library.
              src/main/cpp/engine/core/matrix4f.cpp
              src/main/cpp/engine/core/quaternion.cpp
              src/main/cpp/engine/core/transform.cpp
+             src/main/cpp/engine/core/coreengine.cpp
+             src/main/cpp/engine/core/gameobject.cpp
+             src/main/cpp/engine/core/scenewithrootobject.cpp
+             src/main/cpp/engine/core/scenewithtimemeasurement.cpp
+
              src/main/cpp/engine/rendering/vertex.cpp
              src/main/cpp/engine/rendering/renderutils.cpp
 
+             src/main/cpp/engine/components/camera.cpp
+             src/main/cpp/engine/components/gamecomponent.cpp
+
+             src/main/cpp/game/TestScene.cpp
              src/main/cpp/game/TestUserInput.cpp )
 
 include_directories(src/main/cpp/)
