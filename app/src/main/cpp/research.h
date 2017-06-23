@@ -1,0 +1,6 @@
+#ifndef MOONLANDER3D_RESEARCH_H
+#define MOONLANDER3D_RESEARCH_H
+
+void test();
+
+#endif //MOONLANDER3D_RESEARCH_H
