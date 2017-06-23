@@ -43,6 +43,9 @@ void TestScene::makeOpenGLDependentSetup()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_indexBufferObjectName);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr) (g_indices.size() * sizeof(unsigned int)), g_indices.data(),
 				 GL_STATIC_DRAW);
+
+	m_landMesh = make_shared<Mesh>();
+	m_landMeshRenderer = make_shared<MeshRenderer>();
 }
 
 Matrix4f g_mvp;

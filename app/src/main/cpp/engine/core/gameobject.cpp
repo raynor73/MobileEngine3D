@@ -46,7 +46,7 @@ void GameObject::update(float dt)
 void GameObject::render(Shader &shader, RenderingEngine &renderingEngine)
 {
 	for (auto component : m_components)
-		component->render(shader, renderingEngine);
+		component->render(/*shader, renderingEngine*/);
 }
 
 void GameObject::addChild(GameObject *child)

@@ -36,10 +36,15 @@ add_library( # Sets the name of the library.
              src/main/cpp/engine/core/scenewithtimemeasurement.cpp
 
              src/main/cpp/engine/rendering/vertex.cpp
+             src/main/cpp/engine/rendering/mesh.cpp
              src/main/cpp/engine/rendering/renderutils.cpp
+             src/main/cpp/engine/rendering/resourcemanagement/meshresource.cpp
+             src/main/cpp/engine/rendering/meshloading/indexedmodel.cpp
+             src/main/cpp/engine/rendering/meshloading/objmodel.cpp
 
              src/main/cpp/engine/components/camera.cpp
              src/main/cpp/engine/components/gamecomponent.cpp
+             src/main/cpp/engine/components/meshrenderer.cpp
 
              src/main/cpp/game/TestScene.cpp
              src/main/cpp/game/TestUserInput.cpp )
