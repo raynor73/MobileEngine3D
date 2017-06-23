@@ -25,6 +25,13 @@ add_library( # Sets the name of the library.
              src/main/cpp/logwrapper.cpp
 
              src/main/cpp/engine/core/userinput.cpp
+             src/main/cpp/engine/core/vector2f.cpp
+             src/main/cpp/engine/core/vector3f.cpp
+             src/main/cpp/engine/core/matrix4f.cpp
+             src/main/cpp/engine/core/quaternion.cpp
+             src/main/cpp/engine/core/transform.cpp
+             src/main/cpp/engine/rendering/vertex.cpp
+             src/main/cpp/engine/rendering/renderutils.cpp
 
              src/main/cpp/game/TestUserInput.cpp )
 

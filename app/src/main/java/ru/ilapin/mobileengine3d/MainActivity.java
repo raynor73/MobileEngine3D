@@ -15,6 +15,7 @@ import ru.ilapin.common.widgets.joystickview.JoystickView;
 import javax.inject.Inject;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 							@Override
 							public void onSurfaceCreated(final GL10 gl10, final EGLConfig eglConfig) {
 								initEngine(
-										/*mFilesExtractor.getShadersDir().getPath() + File.separator,
+										mFilesExtractor.getShadersDir().getPath() + File.separator/*,
 										mFilesExtractor.getTexturesDir().getPath() + File.separator + "brick.jpg"*/
 								);
 
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 			mGlSurfaceView.onPause();
 	}
 
-	public native void initEngine(/*String shaderDirPath, String brickTexturePath*/);
+	public native void initEngine(String shaderDirPath/*, String brickTexturePath*/);
 
 	public native void onJoystickPositionChanged(JoystickPosition position);
 
