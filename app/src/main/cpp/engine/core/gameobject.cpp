@@ -23,12 +23,12 @@ void GameObject::updateAll(float dt)
 		child->updateAll(dt);
 }
 
-void GameObject::renderAll(Shader &shader, RenderingEngine &renderingEngine)
+void GameObject::renderAll(/*Shader &shader, RenderingEngine &renderingEngine*/)
 {
-	render(shader, renderingEngine);
+	render(/*shader, renderingEngine*/);
 
 	for (auto child : m_children)
-		child->renderAll(shader, renderingEngine);
+		child->renderAll(/*shader, renderingEngine*/);
 }
 
 void GameObject::onOpenGLResized(int width, int height)
@@ -43,7 +43,7 @@ void GameObject::update(float dt)
 		component->update(dt);
 }
 
-void GameObject::render(Shader &shader, RenderingEngine &renderingEngine)
+void GameObject::render(/*Shader &shader, RenderingEngine &renderingEngine*/)
 {
 	for (auto component : m_components)
 		component->render(/*shader, renderingEngine*/);

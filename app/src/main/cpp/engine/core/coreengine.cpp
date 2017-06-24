@@ -8,6 +8,7 @@
 //#include <engine/rendering/renderingengine.h>
 #include "scenewithrootobject.h"
 #include "matrix4f.h"
+#include <engine/core/gameobject.h>
 
 using namespace std;
 
@@ -23,9 +24,9 @@ CoreEngine::CoreEngine(const string &shadersDirPath, UserInput &userInput) :
 	m_hasPrevTimePoint(false)
 {}
 
-static GLuint g_programReference;
-static GLint g_ambientUniformLocation;
-static GLint g_mvpUniformLocation;
+GLuint g_programReference;
+GLint g_ambientUniformLocation;
+GLint g_mvpUniformLocation;
 extern Matrix4f g_mvp;
 extern vector<unsigned int> g_indices;
 extern GLuint g_vertexBufferObjectName;
@@ -94,10 +95,6 @@ GLint getUniformLocation(const string &uniformName)
 
 	return uniformLocation;
 }
-void bindShader()
-{
-	glUseProgram(g_programReference);
-}
 void CoreEngine::onOpenGLReady()
 {
 	m_isOpenGLReady = true;
@@ -157,25 +154,8 @@ void CoreEngine::onRender()
 
 	if (m_scene != nullptr) {
 		m_scene->update();
-
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		bindShader();
-
-		glUniformMatrix4fv(g_mvpUniformLocation, 1, GL_TRUE, g_mvp.getM().data());
-		glUniform3f(g_ambientUniformLocation, 0, 0.5, 0);
-
-		glEnableVertexAttribArray(0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, g_vertexBufferObjectName);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, Vertex::SIZE * sizeof(float), 0);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_indexBufferObjectName);
-
-		glDrawElements(GL_TRIANGLES, g_indices.size(), GL_UNSIGNED_INT, 0);
-
-		glDisableVertexAttribArray(0);
 		//m_renderingEngine->render(m_scene->rootGameObject());
+		m_scene->rootGameObject().renderAll();
 	}
 }
 

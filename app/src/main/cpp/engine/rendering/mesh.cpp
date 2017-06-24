@@ -1,6 +1,14 @@
 #include <engine/rendering/meshloading/objmodel.h>
 #include <logwrapper.h>
+#include <engine/core/matrix4f.h>
 #include "mesh.h"
+
+extern GLint g_ambientUniformLocation;
+extern GLint g_mvpUniformLocation;
+extern GLuint g_vertexBufferObjectName;
+extern GLuint g_indexBufferObjectName;
+extern Matrix4f g_mvp;
+extern GLuint g_programReference;
 
 unordered_map<string, weak_ptr<MeshResource>> Mesh::s_loadedModels;
 
@@ -35,6 +43,7 @@ void Mesh::setVertices(vector<Vertex> &vertices, const vector<unsigned int> &ind
 
 void Mesh::setVertices(vector<Vertex> &vertices, const vector<unsigned int> &indices, bool shouldCalculateNormals)
 {
+	// TODO Load mesh
 	if (shouldCalculateNormals)
 		calculateNormals(vertices, indices);
 
@@ -69,9 +78,32 @@ void Mesh::setVertices(vector<Vertex> &vertices, const vector<unsigned int> &ind
 				   GL_STATIC_DRAW);
 }
 
+void bindShader()
+{
+	glUseProgram(g_programReference);
+}
 void Mesh::draw()
 {
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	bindShader();
+
+	glUniformMatrix4fv(g_mvpUniformLocation, 1, GL_TRUE, g_mvp.getM().data());
+	glUniform3f(g_ambientUniformLocation, 0, 0.5, 0);
+
 	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, g_vertexBufferObjectName);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, Vertex::SIZE * sizeof(float), 0);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_indexBufferObjectName);
+
+	glDrawElements(GL_TRIANGLES, m_meshResource.get()->numberOfIndices(), GL_UNSIGNED_INT, 0);
+
+	glDisableVertexAttribArray(0);
+
+
+	/*glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
 
@@ -88,7 +120,7 @@ void Mesh::draw()
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);
+	glDisableVertexAttribArray(2);*/
 }
 
 void Mesh::calculateNormals(vector<Vertex> &vertices, const vector<unsigned int> &indices)
