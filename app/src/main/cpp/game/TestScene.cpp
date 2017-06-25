@@ -43,13 +43,12 @@ void TestScene::makeOpenGLDependentSetup()
 void TestScene::onOpenGLResized(int width, int height)
 {
 	if (m_camera.use_count() > 0) {
-		Log::e(TAG, "Camera resizing not supported");
-		throw new runtime_error("Camera resizing not supported");
+		Log::e(TAG, "Camera resizing is not supported");
+		throw new runtime_error("Camera resizing is not supported");
 	}
 
 	m_camera = make_shared<Camera>(Utils::toRadians(70), float(width) / float(height), 0.01, 1000);
 	m_cameraGameObject = make_shared<GameObject>();
 	m_cameraGameObject->addComponent(m_camera.get());
 	m_rootGameObject->addChild(m_cameraGameObject.get());
-	//g_mvp.initPerspective(Utils::toRadians(70), float(width) / float(height), 0.01, 1000);
 }
