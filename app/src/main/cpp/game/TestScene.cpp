@@ -32,7 +32,8 @@ void TestScene::makeOpenGLDependentSetup()
 
 	m_landMesh = make_shared<Mesh>();
 	m_landMesh->setVertices(g_vertices, g_indices, true);
-	m_landMeshRenderer = make_shared<MeshRenderer>(m_landMesh.get());
+	m_landMaterial = make_shared<Material>();
+	m_landMeshRenderer = make_shared<MeshRenderer>(m_landMesh.get(), m_landMaterial.get());
 
 	m_landGameObject = make_shared<GameObject>();
 	m_landGameObject->addComponent(m_landMeshRenderer.get());

@@ -39,6 +39,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/engine/rendering/vertex.cpp
              src/main/cpp/engine/rendering/mesh.cpp
              src/main/cpp/engine/rendering/renderutils.cpp
+             src/main/cpp/engine/rendering/material.cpp
              src/main/cpp/engine/rendering/resourcemanagement/meshresource.cpp
              src/main/cpp/engine/rendering/meshloading/indexedmodel.cpp
              src/main/cpp/engine/rendering/meshloading/objmodel.cpp

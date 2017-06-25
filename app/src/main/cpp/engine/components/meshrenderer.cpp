@@ -1,9 +1,9 @@
 #include "meshrenderer.h"
 #include <engine/rendering/renderingengine.h>
 
-MeshRenderer::MeshRenderer(Mesh *mesh/*, Material *material*/) :
-	m_mesh(mesh)/*,
-	m_material(material)*/
+MeshRenderer::MeshRenderer(Mesh *mesh, Material *material) :
+	m_mesh(mesh),
+	m_material(material)
 {}
 
 extern GLint g_ambientUniformLocation;

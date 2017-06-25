@@ -19,6 +19,7 @@ private:
 	shared_ptr<Camera> m_camera;
 	shared_ptr<GameObject> m_cameraGameObject;
 	shared_ptr<GameObject> m_landGameObject;
+	shared_ptr<Material> m_landMaterial;
 	shared_ptr<Mesh> m_landMesh;
 	shared_ptr<MeshRenderer> m_landMeshRenderer;
 };
