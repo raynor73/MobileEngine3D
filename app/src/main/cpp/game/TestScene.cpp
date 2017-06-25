@@ -1,26 +1,16 @@
-//
-// Created by Игорь Лапин on 23.06.17.
-//
-
 #include <engine/core/matrix4f.h>
 #include <utils.h>
-#include <glwrapper.h>
 #include <engine/rendering/vertex.h>
 #include <vector>
+#include <engine/core/gameobject.h>
 #include "TestScene.h"
 
 using namespace std;
 
 static vector<Vertex> g_vertices;
 vector<unsigned int> g_indices;
-GLuint g_vertexBufferObjectName;
-GLuint g_indexBufferObjectName;
 void TestScene::makeOpenGLDependentSetup()
 {
-	// Buffers
-	glGenBuffers(1, &g_vertexBufferObjectName);
-	glGenBuffers(1, &g_indexBufferObjectName);
-
 	float fieldDepth = 10;
 	float fieldWidth = 10;
 
@@ -36,16 +26,13 @@ void TestScene::makeOpenGLDependentSetup()
 	g_indices.push_back(1);
 	g_indices.push_back(3);
 
-	glBindBuffer(GL_ARRAY_BUFFER, g_vertexBufferObjectName);
-	glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr) (g_vertices.size() * Vertex::SIZE * sizeof(float)), g_vertices.data(),
-				 GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_indexBufferObjectName);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr) (g_indices.size() * sizeof(unsigned int)), g_indices.data(),
-				 GL_STATIC_DRAW);
-
 	m_landMesh = make_shared<Mesh>();
-	m_landMeshRenderer = make_shared<MeshRenderer>();
+	m_landMesh->setVertices(g_vertices, g_indices, true);
+	m_landMeshRenderer = make_shared<MeshRenderer>(m_landMesh.get());
+
+	m_landGameObject = make_shared<GameObject>();
+	m_landGameObject->addComponent(m_landMeshRenderer.get());
+	m_rootGameObject->addChild(m_landGameObject.get());
 }
 
 Matrix4f g_mvp;

@@ -5,8 +5,6 @@
 
 extern GLint g_ambientUniformLocation;
 extern GLint g_mvpUniformLocation;
-extern GLuint g_vertexBufferObjectName;
-extern GLuint g_indexBufferObjectName;
 extern Matrix4f g_mvp;
 extern GLuint g_programReference;
 
@@ -43,13 +41,19 @@ void Mesh::setVertices(vector<Vertex> &vertices, const vector<unsigned int> &ind
 
 void Mesh::setVertices(vector<Vertex> &vertices, const vector<unsigned int> &indices, bool shouldCalculateNormals)
 {
-	// TODO Load mesh
 	if (shouldCalculateNormals)
 		calculateNormals(vertices, indices);
 
 	m_meshResource = make_shared<MeshResource>(indices.size());
 
-	GLsizeiptr numberOfVertices = (GLsizeiptr) vertices.size();
+	glBindBuffer(GL_ARRAY_BUFFER, m_meshResource->vertexBufferObjectName());
+	glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr) (vertices.size() * Vertex::SIZE * sizeof(float)), vertices.data(),
+				 GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshResource->indexBufferObjectName());
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr) (indices.size() * sizeof(unsigned int)), indices.data(),
+				 GL_STATIC_DRAW);
+	/*GLsizeiptr numberOfVertices = (GLsizeiptr) vertices.size();
 
 	auto sizeOfVertexBuffer = numberOfVertices * Vertex::SIZE * sizeof(float);
 	unsigned char *temporaryVertexBuffer = new unsigned char[sizeOfVertexBuffer];
@@ -75,7 +79,8 @@ void Mesh::setVertices(vector<Vertex> &vertices, const vector<unsigned int> &ind
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshResource->indexBufferObjectName());
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_meshResource->numberOfIndices() * sizeof(unsigned int), indices.data(),
-				   GL_STATIC_DRAW);
+				   GL_STATIC_DRAW);*/
+
 }
 
 void bindShader()
@@ -93,15 +98,14 @@ void Mesh::draw()
 
 	glEnableVertexAttribArray(0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, g_vertexBufferObjectName);
+	glBindBuffer(GL_ARRAY_BUFFER, m_meshResource->vertexBufferObjectName());
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, Vertex::SIZE * sizeof(float), 0);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_indexBufferObjectName);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshResource->indexBufferObjectName());
 
 	glDrawElements(GL_TRIANGLES, m_meshResource.get()->numberOfIndices(), GL_UNSIGNED_INT, 0);
 
 	glDisableVertexAttribArray(0);
-
 
 	/*glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);

@@ -29,8 +29,6 @@ GLint g_ambientUniformLocation;
 GLint g_mvpUniformLocation;
 extern Matrix4f g_mvp;
 extern vector<unsigned int> g_indices;
-extern GLuint g_vertexBufferObjectName;
-extern GLuint g_indexBufferObjectName;
 static string loadShader(const string &path, const string &name)
 {
 	string shaderText;

@@ -14,6 +14,7 @@ public:
 	virtual void onOpenGLResized(int width, int height) override;
 
 private:
+	shared_ptr<GameObject> m_landGameObject;
 	shared_ptr<Mesh> m_landMesh;
 	shared_ptr<MeshRenderer> m_landMeshRenderer;
 };
