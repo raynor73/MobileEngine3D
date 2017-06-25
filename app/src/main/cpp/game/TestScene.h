@@ -14,6 +14,10 @@ public:
 	virtual void onOpenGLResized(int width, int height) override;
 
 private:
+	static const string TAG;
+
+	shared_ptr<Camera> m_camera;
+	shared_ptr<GameObject> m_cameraGameObject;
 	shared_ptr<GameObject> m_landGameObject;
 	shared_ptr<Mesh> m_landMesh;
 	shared_ptr<MeshRenderer> m_landMeshRenderer;

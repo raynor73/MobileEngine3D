@@ -35,6 +35,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/engine/core/scenewithrootobject.cpp
              src/main/cpp/engine/core/scenewithtimemeasurement.cpp
 
+             src/main/cpp/engine/rendering/renderingengine.cpp
              src/main/cpp/engine/rendering/vertex.cpp
              src/main/cpp/engine/rendering/mesh.cpp
              src/main/cpp/engine/rendering/renderutils.cpp

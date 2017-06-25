@@ -4,6 +4,7 @@
 #include <chrono>
 #include <memory>
 #include <string>
+#include <engine/rendering/renderingengine.h>
 
 using namespace std;
 
@@ -20,7 +21,7 @@ public:
 	CoreEngine &operator =(const CoreEngine &) = delete;
 
 	UserInput &userInput() { return m_userInput; }
-	//RenderingEngine &renderingEngine() { return *m_renderingEngine; }
+	RenderingEngine &renderingEngine() { return *m_renderingEngine; }
 	SceneWithRootObject *scene() { return m_scene; }
 	float fps() const { return m_fps; }
 	void setScene(SceneWithRootObject *);
@@ -30,7 +31,7 @@ public:
 	void onRender();
 
 private:
-	//shared_ptr<RenderingEngine> m_renderingEngine;
+	shared_ptr<RenderingEngine> m_renderingEngine;
 	SceneWithRootObject *m_scene;
 	UserInput &m_userInput;
 	string m_shadersDirPath;

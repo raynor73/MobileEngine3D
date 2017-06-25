@@ -13,7 +13,7 @@ class GameComponent
 public:
 	virtual void onOpenGLResized(int width, int height);
 	virtual void update(float dt) {}
-	virtual void render(/*Shader &, RenderingEngine&*/) {}
+	virtual void render(/*Shader &, */RenderingEngine &) {}
 	virtual void addToEngine(CoreEngine &) {}
 	virtual void removeFromEngine(CoreEngine &) {}
 

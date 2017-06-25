@@ -3,11 +3,6 @@
 #include <engine/core/matrix4f.h>
 #include "mesh.h"
 
-extern GLint g_ambientUniformLocation;
-extern GLint g_mvpUniformLocation;
-extern Matrix4f g_mvp;
-extern GLuint g_programReference;
-
 unordered_map<string, weak_ptr<MeshResource>> Mesh::s_loadedModels;
 
 Mesh::Mesh() {}
@@ -53,48 +48,11 @@ void Mesh::setVertices(vector<Vertex> &vertices, const vector<unsigned int> &ind
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshResource->indexBufferObjectName());
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr) (indices.size() * sizeof(unsigned int)), indices.data(),
 				 GL_STATIC_DRAW);
-	/*GLsizeiptr numberOfVertices = (GLsizeiptr) vertices.size();
-
-	auto sizeOfVertexBuffer = numberOfVertices * Vertex::SIZE * sizeof(float);
-	unsigned char *temporaryVertexBuffer = new unsigned char[sizeOfVertexBuffer];
-	auto m_floatBuffer = reinterpret_cast<float *>(temporaryVertexBuffer);
-	for (int i = 0; i < numberOfVertices; i++) {
-		int base = i * Vertex::SIZE;
-		const Vector3f position = vertices[i].position();
-		const Vector2f textureCoordinate = vertices[i].textureCoordinate();
-		const Vector3f normal = vertices[i].normal();
-
-		m_floatBuffer[base] = position.x();
-		m_floatBuffer[base + 1] = position.y();
-		m_floatBuffer[base + 2] = position.z();
-		m_floatBuffer[base + 3] = textureCoordinate.x();
-		m_floatBuffer[base + 4] = textureCoordinate.y();
-		m_floatBuffer[base + 5] = normal.x();
-		m_floatBuffer[base + 6] = normal.y();
-		m_floatBuffer[base + 7] = normal.z();
-	}
-
-	glBindBuffer(GL_ARRAY_BUFFER, m_meshResource->vertexBufferObjectName());
-	glBufferData(GL_ARRAY_BUFFER, sizeOfVertexBuffer, temporaryVertexBuffer, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshResource->indexBufferObjectName());
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_meshResource->numberOfIndices() * sizeof(unsigned int), indices.data(),
-				   GL_STATIC_DRAW);*/
-
 }
 
-void bindShader()
-{
-	glUseProgram(g_programReference);
-}
 void Mesh::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-
-	bindShader();
-
-	glUniformMatrix4fv(g_mvpUniformLocation, 1, GL_TRUE, g_mvp.getM().data());
-	glUniform3f(g_ambientUniformLocation, 0, 0.5, 0);
 
 	glEnableVertexAttribArray(0);
 

@@ -27,7 +27,6 @@ CoreEngine::CoreEngine(const string &shadersDirPath, UserInput &userInput) :
 GLuint g_programReference;
 GLint g_ambientUniformLocation;
 GLint g_mvpUniformLocation;
-extern Matrix4f g_mvp;
 extern vector<unsigned int> g_indices;
 static string loadShader(const string &path, const string &name)
 {
@@ -118,7 +117,7 @@ void CoreEngine::onOpenGLReady()
 
 	g_ambientUniformLocation = getUniformLocation("R_ambient");
 	g_mvpUniformLocation = getUniformLocation("T_modelViewProjection");
-	//m_renderingEngine = make_shared<RenderingEngine>(m_shadersDirPath);
+	m_renderingEngine = make_shared<RenderingEngine>(m_shadersDirPath);
 
 	if (m_scene != nullptr)
 		m_scene->makeOpenGLDependentSetup();
@@ -131,7 +130,7 @@ void CoreEngine::onOpenGLResized(int width, int height)
 	m_openGLHeight = height;
 
 	if (m_scene != nullptr) {
-		//m_renderingEngine->onOpenGLResized(m_scene->rootGameObject(), m_openGLWidth, m_openGLHeight);
+		m_renderingEngine->onOpenGLResized(m_scene->rootGameObject(), m_openGLWidth, m_openGLHeight);
 		m_scene->onOpenGLResized(width, height);
 	}
 }
@@ -152,8 +151,8 @@ void CoreEngine::onRender()
 
 	if (m_scene != nullptr) {
 		m_scene->update();
-		//m_renderingEngine->render(m_scene->rootGameObject());
-		m_scene->rootGameObject().renderAll();
+		m_renderingEngine->render(m_scene->rootGameObject());
+		//m_scene->rootGameObject().renderAll();
 	}
 }
 
@@ -169,7 +168,7 @@ void CoreEngine::setScene(SceneWithRootObject *scene)
 		m_scene->makeOpenGLDependentSetup();
 
 	if (m_isOpenGLSizeKnown) {
-		//m_renderingEngine->onOpenGLResized(m_scene->rootGameObject(), m_openGLWidth, m_openGLHeight);
+		m_renderingEngine->onOpenGLResized(m_scene->rootGameObject(), m_openGLWidth, m_openGLHeight);
 		m_scene->onOpenGLResized(m_openGLWidth, m_openGLHeight);
 	}
 }

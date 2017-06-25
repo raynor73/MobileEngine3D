@@ -11,7 +11,7 @@ class MeshRenderer : public GameComponent
 public:
 	MeshRenderer(Mesh *mesh/*, Material *material*/);
 
-	void render(/*Shader &shader, RenderingEngine &*/) override;
+	void render(/*Shader &shader,*/ RenderingEngine &) override;
 
 private:
 	Mesh *m_mesh;

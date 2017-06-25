@@ -23,5 +23,5 @@ Matrix4f Camera::calculateViewProjection()
 
 void Camera::addToEngine(CoreEngine &engine)
 {
-	//engine.renderingEngine().setCamera(this);
+	engine.renderingEngine().setCamera(this);
 }

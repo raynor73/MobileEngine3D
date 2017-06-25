@@ -3,9 +3,13 @@
 #include <engine/rendering/vertex.h>
 #include <vector>
 #include <engine/core/gameobject.h>
+#include <engine/components/camera.h>
+#include <logwrapper.h>
 #include "TestScene.h"
 
 using namespace std;
+
+const string TestScene::TAG = "TestScene";
 
 static vector<Vertex> g_vertices;
 vector<unsigned int> g_indices;
@@ -35,8 +39,16 @@ void TestScene::makeOpenGLDependentSetup()
 	m_rootGameObject->addChild(m_landGameObject.get());
 }
 
-Matrix4f g_mvp;
 void TestScene::onOpenGLResized(int width, int height)
 {
-	g_mvp.initPerspective(Utils::toRadians(70), float(width) / float(height), 0.01, 1000);
+	if (m_camera.use_count() > 0) {
+		Log::e(TAG, "Camera resizing not supported");
+		throw new runtime_error("Camera resizing not supported");
+	}
+
+	m_camera = make_shared<Camera>(Utils::toRadians(70), float(width) / float(height), 0.01, 1000);
+	m_cameraGameObject = make_shared<GameObject>();
+	m_cameraGameObject->addComponent(m_camera.get());
+	m_rootGameObject->addChild(m_cameraGameObject.get());
+	//g_mvp.initPerspective(Utils::toRadians(70), float(width) / float(height), 0.01, 1000);
 }
