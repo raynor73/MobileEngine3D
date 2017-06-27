@@ -23,6 +23,8 @@ class SpotLight;*/
 class Shader
 {
 public:
+	static void clearLoadedShaders() { s_loadedShaders.clear(); }
+
 #ifdef __ANDROID__
 	Shader(const string &path, const string &name);
 #else

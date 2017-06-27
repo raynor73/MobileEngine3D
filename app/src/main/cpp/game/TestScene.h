@@ -4,17 +4,21 @@
 
 #include <engine/core/scenewithrootobject.h>
 #include <engine/components/meshrenderer.h>
+#include <engine/core/coreengine.h>
 
 using namespace std;
 
 class TestScene : public SceneWithRootObject
 {
 public:
-	virtual void makeOpenGLDependentSetup() override;
-	virtual void onOpenGLResized(int width, int height) override;
+	void makeOpenGLDependentSetup() override;
+	void onOpenGLResized(int width, int height) override;
+	void setEngine(CoreEngine *) override;
 
 private:
 	static const string TAG;
+
+	CoreEngine *m_coreEngine;
 
 	shared_ptr<Camera> m_camera;
 	shared_ptr<GameObject> m_cameraGameObject;

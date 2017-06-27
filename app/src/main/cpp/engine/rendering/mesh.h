@@ -13,6 +13,8 @@ using namespace std;
 class Mesh
 {
 public:
+	static void clearLoadedModels() { s_loadedModels.clear(); }
+
 	Mesh();
 	Mesh(const string &path);
 

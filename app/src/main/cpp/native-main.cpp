@@ -3,6 +3,7 @@
 #include <game/TestUserInput.h>
 #include <engine/core/coreengine.h>
 #include <game/TestScene.h>
+#include "logwrapper.h"
 
 using namespace std;
 

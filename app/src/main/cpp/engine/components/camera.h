@@ -16,6 +16,7 @@ public:
 	virtual void addToEngine(CoreEngine &) override;
 
 	Matrix4f calculateViewProjection();
+	void reset(float fov, float aspectRatio, float zNear, float zFar);
 
 private:
 	Matrix4f m_projection;

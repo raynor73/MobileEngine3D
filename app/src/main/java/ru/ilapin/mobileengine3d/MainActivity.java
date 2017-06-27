@@ -6,6 +6,7 @@ import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -17,7 +18,11 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import java.io.File;
 
+import static android.opengl.GLSurfaceView.DEBUG_CHECK_GL_ERROR;
+
 public class MainActivity extends AppCompatActivity {
+
+	private static final String TAG = "MainActivity";
 
 	static {
 		System.loadLibrary("native-main");
@@ -63,15 +68,16 @@ public class MainActivity extends AppCompatActivity {
 					final ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
 
 					if (configurationInfo.reqGlEsVersion >= 0x20000) {
+						initEngine(
+								mFilesExtractor.getShadersDir().getPath() + File.separator/*,
+										mFilesExtractor.getTexturesDir().getPath() + File.separator + "brick.jpg"*/
+						);
+
 						mGlSurfaceView.setEGLContextClientVersion(2);
+						mGlSurfaceView.setDebugFlags(DEBUG_CHECK_GL_ERROR);
 						mGlSurfaceView.setRenderer(new GLSurfaceView.Renderer() {
 							@Override
 							public void onSurfaceCreated(final GL10 gl10, final EGLConfig eglConfig) {
-								initEngine(
-										mFilesExtractor.getShadersDir().getPath() + File.separator/*,
-										mFilesExtractor.getTexturesDir().getPath() + File.separator + "brick.jpg"*/
-								);
-
 								MainActivity.this.onSurfaceCreated();
 							}
 

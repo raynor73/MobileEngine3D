@@ -9,6 +9,8 @@
 #include "scenewithrootobject.h"
 #include "matrix4f.h"
 #include <engine/core/gameobject.h>
+#include <engine/rendering/mesh.h>
+#include <engine/rendering/shader.h>
 
 using namespace std;
 
@@ -24,63 +26,12 @@ CoreEngine::CoreEngine(const string &shadersDirPath, UserInput &userInput) :
 	m_hasPrevTimePoint(false)
 {}
 
-extern vector<unsigned int> g_indices;
-/*static string loadShader(const string &path, const string &name)
-{
-	string shaderText;
-	ifstream inputStream(path + name);
-	string line;
-
-	while (getline(inputStream, line)) {
-		regex re("#include \"([a-z\\.]+)\"");
-		smatch match;
-		if (regex_search(line, match, re)) {
-			shaderText.append(loadShader(path, match[1]));
-		} else {
-			shaderText.append(line).append("\n");
-		}
-		shaderText.append(line).append("\n");
-	}
-
-	inputStream.close();
-
-	return shaderText;
-}
-void compileShader(const string &text, GLenum type)
-{
-	GLuint shaderReference = glCreateShader(type);
-	if (shaderReference == 0) {
-		Log::e("Shader", "Error creating shader");
-		throw new runtime_error("Error creating shader");
-	}
-
-	GLint length = (GLint) text.length();
-	const GLchar *rawText = (GLchar *) text.c_str();
-	glShaderSource(shaderReference, 1, &rawText, &length);
-	glCompileShader(shaderReference);
-	if (RenderUtils::glGetShader(shaderReference, GL_COMPILE_STATUS) != GL_TRUE) {
-		Log::e("Shader", RenderUtils::_glGetShaderInfoLog(shaderReference));
-		throw new runtime_error(RenderUtils::_glGetShaderInfoLog(shaderReference));
-	}
-
-	glAttachShader(g_programReference, shaderReference);
-}
-void linkProgram()
-{
-	glLinkProgram(g_programReference);
-	if (RenderUtils::glGetProgram(g_programReference, GL_LINK_STATUS) != GL_TRUE) {
-		Log::e("Shader", RenderUtils::_glGetProgramInfoLog(g_programReference));
-		throw new runtime_error(RenderUtils::_glGetProgramInfoLog(g_programReference));
-	}
-
-	glValidateProgram(g_programReference);
-	if (RenderUtils::glGetProgram(g_programReference, GL_VALIDATE_STATUS) != GL_TRUE) {
-		Log::e("Shader", RenderUtils::_glGetProgramInfoLog(g_programReference));
-		throw new runtime_error(RenderUtils::_glGetProgramInfoLog(g_programReference));
-	}
-}*/
 void CoreEngine::onOpenGLReady()
 {
+	Mesh::clearLoadedModels();
+	Shader::clearLoadedShaders();
+	// TODO Clear loaded textures
+
 	m_isOpenGLReady = true;
 
 	m_renderingEngine = make_shared<RenderingEngine>(m_shadersDirPath);
@@ -118,7 +69,6 @@ void CoreEngine::onRender()
 	if (m_scene != nullptr) {
 		m_scene->update();
 		m_renderingEngine->render(m_scene->rootGameObject());
-		//m_scene->rootGameObject().renderAll();
 	}
 }
 

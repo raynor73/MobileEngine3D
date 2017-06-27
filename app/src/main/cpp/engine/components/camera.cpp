@@ -1,5 +1,4 @@
 #include "camera.h"
-//#include <engine/rendering/renderingengine.h>
 #include <engine/core/coreengine.h>
 #include <engine/core/transform.h>
 
@@ -19,6 +18,11 @@ Matrix4f Camera::calculateViewProjection()
 	cameraTranslation.initTranslation(-position.x(), -position.y(), -position.z());
 
 	return m_projection * cameraRotation * cameraTranslation;
+}
+
+void Camera::reset(float fov, float aspectRatio, float zNear, float zFar)
+{
+	m_projection.initPerspective(fov, aspectRatio, zNear, zFar);
 }
 
 void Camera::addToEngine(CoreEngine &engine)
