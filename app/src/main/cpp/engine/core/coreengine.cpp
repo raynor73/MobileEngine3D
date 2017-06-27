@@ -5,7 +5,7 @@
 #include <engine/rendering/vertex.h>
 #include <vector>
 #include "coreengine.h"
-//#include <engine/rendering/renderingengine.h>
+#include <engine/rendering/renderingengine.h>
 #include "scenewithrootobject.h"
 #include "matrix4f.h"
 #include <engine/core/gameobject.h>
@@ -24,24 +24,21 @@ CoreEngine::CoreEngine(const string &shadersDirPath, UserInput &userInput) :
 	m_hasPrevTimePoint(false)
 {}
 
-GLuint g_programReference;
-GLint g_ambientUniformLocation;
-GLint g_mvpUniformLocation;
 extern vector<unsigned int> g_indices;
-static string loadShader(const string &path, const string &name)
+/*static string loadShader(const string &path, const string &name)
 {
 	string shaderText;
 	ifstream inputStream(path + name);
 	string line;
 
 	while (getline(inputStream, line)) {
-		/*regex re("#include \"([a-z\\.]+)\"");
+		regex re("#include \"([a-z\\.]+)\"");
 		smatch match;
 		if (regex_search(line, match, re)) {
 			shaderText.append(loadShader(path, match[1]));
 		} else {
 			shaderText.append(line).append("\n");
-		}*/
+		}
 		shaderText.append(line).append("\n");
 	}
 
@@ -81,42 +78,11 @@ void linkProgram()
 		Log::e("Shader", RenderUtils::_glGetProgramInfoLog(g_programReference));
 		throw new runtime_error(RenderUtils::_glGetProgramInfoLog(g_programReference));
 	}
-}
-GLint getUniformLocation(const string &uniformName)
-{
-	GLint uniformLocation = glGetUniformLocation(g_programReference, uniformName.c_str());
-	if (uniformLocation < 0) {
-		Log::e("Shader", "Error retrieving uniform location: " + uniformName);
-		throw new runtime_error("Error retrieving uniform location: " + uniformName);
-	}
-
-	return uniformLocation;
-}
+}*/
 void CoreEngine::onOpenGLReady()
 {
 	m_isOpenGLReady = true;
 
-	glClearColor(0, 0, 0.5, 0);
-
-	g_programReference = glCreateProgram();
-
-	if (g_programReference == 0) {
-		Log::e("ShaderResource", "Error creating shader program");
-		throw new runtime_error("Error creating shader program");
-	}
-
-	string vertexShaderText = loadShader(m_shadersDirPath, "forwardambient.vsh");
-	string fragmentShaderText = loadShader(m_shadersDirPath, "forwardambient.fsh");
-
-	compileShader(vertexShaderText, GL_VERTEX_SHADER);
-	compileShader(fragmentShaderText, GL_FRAGMENT_SHADER);
-
-	glBindAttribLocation(g_programReference, 0, "position");
-
-	linkProgram();
-
-	g_ambientUniformLocation = getUniformLocation("R_ambient");
-	g_mvpUniformLocation = getUniformLocation("T_modelViewProjection");
 	m_renderingEngine = make_shared<RenderingEngine>(m_shadersDirPath);
 
 	if (m_scene != nullptr)

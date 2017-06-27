@@ -22,11 +22,11 @@ public:
 
 	void onOpenGLResizedAll(int width, int height);
 	void updateAll(float dt);
-	void renderAll(/*Shader &,*/ RenderingEngine &);
+	void renderAll(Shader &, RenderingEngine &);
 
 	void onOpenGLResized(int width, int height);
 	void update(float dt);
-	void render(/*Shader &,*/ RenderingEngine &);
+	void render(Shader &, RenderingEngine &);
 
 	void addChild(GameObject *);
 	void addComponent(GameComponent *);

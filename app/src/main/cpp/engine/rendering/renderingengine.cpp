@@ -1,5 +1,6 @@
 #include "renderingengine.h"
 //#include <engine/components/baselight.h>
+#include <engine/rendering/shader.h>
 #include <logwrapper.h>
 
 const string RenderingEngine::TAG = "RenderingEngine";
@@ -26,11 +27,12 @@ RenderingEngine::RenderingEngine(const string &shadersDirPath) :
 #endif
 	//glEnable(GL_TEXTURE_2D);
 
-#ifndef __ANDROID__
+#ifdef __ANDROID__
+	m_forwardAmbientShader = make_shared<Shader>(m_shadersDirPath, "forwardambient");
+#else
+	m_forwardAmbientShader = make_shared<Shader>(m_shadersDirPath, "forwardambient", m_vertexArrayName);
 	glGenVertexArrays(1, &m_vertexArrayName);
 #endif
-
-	//m_forwardAmbientShader = make_shared<Shader>(m_shadersDirPath, "forwardambient", m_vertexArrayName);
 }
 
 RenderingEngine::~RenderingEngine()
@@ -55,7 +57,7 @@ void RenderingEngine::render(GameObject &gameObject)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	gameObject.renderAll(/**m_forwardAmbientShader,*/ *this);
+	gameObject.renderAll(*m_forwardAmbientShader, *this);
 
 	/*glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE, GL_ONE);

@@ -40,7 +40,7 @@ private:
 
 	GLuint m_vertexArrayName;
 	Camera *m_mainCamera;
-	//shared_ptr<Shader> m_forwardAmbientShader;
+	shared_ptr<Shader> m_forwardAmbientShader;
 	unordered_map<string, GLuint> m_samplerMap;
 	string m_shadersDirPath;
 

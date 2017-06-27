@@ -33,11 +33,32 @@ Shader::Shader(const string &path, const string &name, GLuint vertexArrayName);
 	}
 }
 
+GLint getUniformLocation(GLuint programReference, const string &uniformName)
+{
+	GLint uniformLocation = glGetUniformLocation(programReference, uniformName.c_str());
+	if (uniformLocation < 0) {
+		Log::e("Shader", "Error retrieving uniform location: " + uniformName);
+		throw new runtime_error("Error retrieving uniform location: " + uniformName);
+	}
+
+	return uniformLocation;
+}
 void Shader::loadShaderAndPutToCache(const string &path, const string &name)
 {
 	m_shaderResource = make_shared<ShaderResource>();
 
+	string vertexShaderText = loadShader(path, "forwardambient.vsh");
+	string fragmentShaderText = loadShader(path, "forwardambient.fsh");
 
+	compileShader(vertexShaderText, GL_VERTEX_SHADER);
+	compileShader(fragmentShaderText, GL_FRAGMENT_SHADER);
+
+	glBindAttribLocation(m_shaderResource->programReference(), 0, "position");
+
+	linkProgram();
+
+	m_uniformLocations["R_ambient"] = getUniformLocation(m_shaderResource->programReference(), "R_ambient");
+	m_uniformLocations["T_modelViewProjection"] = getUniformLocation(m_shaderResource->programReference(), "T_modelViewProjection");
 
 	/*string vertexShaderText = loadShader(path, name + ".vsh");
 	string fragmentShaderText = loadShader(path, name + ".fsh");
