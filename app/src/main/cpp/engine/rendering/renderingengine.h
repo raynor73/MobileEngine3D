@@ -8,6 +8,7 @@
 #include <engine/core/gameobject.h>
 #include <engine/rendering/resourcemanagement/mappedvalues.h>
 #include <glwrapper.h>
+#include "material.h"
 
 using namespace std;
 
@@ -32,8 +33,8 @@ public:
 	//void addLight(BaseLight *light) { m_lights.push_back(light); }
 	void setCamera(Camera *camera) { m_mainCamera = camera; }
 
-	/*virtual void updateUniformStruct(Transform &transform, Material &material, Shader &shader,
-									 const string &unifotmType, const string &uniformName);*/
+	virtual void updateUniformStruct(Transform &transform, Material &material, Shader &shader,
+									 const string &unifotmType, const string &uniformName);
 
 private:
 	static const string TAG;

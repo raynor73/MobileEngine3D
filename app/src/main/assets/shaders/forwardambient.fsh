@@ -3,7 +3,7 @@ precision mediump float;
 //varying vec2 textureCoordinate0;
 
 uniform vec3 R_ambient;
-//uniform sampler2D diffuse;
+//unifrm sampler2D diffuse;
 
 void main()
 {

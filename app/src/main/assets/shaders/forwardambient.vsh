@@ -1,7 +1,7 @@
 precision mediump float;
 
 attribute vec3 position;
-//attribute vec2 textureCoordinate;
+//attribte vec2 textureCoordinate;
 
 //varying vec2 textureCoordinate0;
 

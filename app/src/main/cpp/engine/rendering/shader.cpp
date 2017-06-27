@@ -33,47 +33,22 @@ Shader::Shader(const string &path, const string &name, GLuint vertexArrayName);
 	}
 }
 
-GLint getUniformLocation(GLuint programReference, const string &uniformName)
-{
-	GLint uniformLocation = glGetUniformLocation(programReference, uniformName.c_str());
-	if (uniformLocation < 0) {
-		Log::e("Shader", "Error retrieving uniform location: " + uniformName);
-		throw new runtime_error("Error retrieving uniform location: " + uniformName);
-	}
-
-	return uniformLocation;
-}
 void Shader::loadShaderAndPutToCache(const string &path, const string &name)
 {
 	m_shaderResource = make_shared<ShaderResource>();
 
-	string vertexShaderText = loadShader(path, "forwardambient.vsh");
-	string fragmentShaderText = loadShader(path, "forwardambient.fsh");
-
-	compileShader(vertexShaderText, GL_VERTEX_SHADER);
-	compileShader(fragmentShaderText, GL_FRAGMENT_SHADER);
-
-	glBindAttribLocation(m_shaderResource->programReference(), 0, "position");
-
-	linkProgram();
-
-	m_uniformLocations["R_ambient"] = getUniformLocation(m_shaderResource->programReference(), "R_ambient");
-	m_uniformLocations["T_modelViewProjection"] = getUniformLocation(m_shaderResource->programReference(), "T_modelViewProjection");
-
-	/*string vertexShaderText = loadShader(path, name + ".vsh");
+	string vertexShaderText = loadShader(path, name + ".vsh");
 	string fragmentShaderText = loadShader(path, name + ".fsh");
 
 	setVertexShader(vertexShaderText);
 	setFragmentShader(fragmentShaderText);
 
-	// TODO Make automatic attributes binding
-	setAttributeLocation("position", 0);
-	setAttributeLocation("textureCoordinate", 1);
+	addAllAttributes(vertexShaderText);
 
 	linkProgram();
 
 	addAllUniforms(vertexShaderText);
-	addAllUniforms(fragmentShaderText);*/
+	addAllUniforms(fragmentShaderText);
 
 	s_loadedShaders[name] = m_shaderResource;
 }
@@ -187,10 +162,10 @@ void Shader::addUniform(string uniformType, string uniformName,
 
 void Shader::updateUniforms(Transform &transform, Material &material, RenderingEngine &renderingEngine)
 {
-	glUniformMatrix4fv(m_uniformLocations["T_modelViewProjection"], 1, GL_TRUE, renderingEngine.mainCamera().calculateViewProjection().getM().data());
-	glUniform3f(m_uniformLocations["R_ambient"], 0, 0.5, 0);
+	/*glUniformMatrix4fv(m_uniformLocations["T_modelViewProjection"], 1, GL_TRUE, renderingEngine.mainCamera().calculateViewProjection().getM().data());
+	glUniform3f(m_uniformLocations["R_ambient"], 0, 0.5, 0);*/
 
-	/*Matrix4f worldMatrix = transform.transformation();
+	Matrix4f worldMatrix = transform.transformation();
 	Matrix4f projectedMatrix = renderingEngine.mainCamera().calculateViewProjection() * worldMatrix;
 
 	for (int i = 0; i < m_uniforms.size(); i++) {
@@ -202,9 +177,9 @@ void Shader::updateUniforms(Transform &transform, Material &material, RenderingE
 		string cameraPrefix = "C_";
 
 		if (uniformType == "sampler2D") {
-			GLuint samplerSlot = renderingEngine.samplerSlot(uniformName);
+			/*GLuint samplerSlot = renderingEngine.samplerSlot(uniformName);
 			material.findTexture(uniformName)->bind(samplerSlot);
-			setUniformi(uniformName, samplerSlot);
+			setUniformi(uniformName, samplerSlot);*/
 		} else if (uniformName.find(transformPrefix) == 0) {
 			if (uniformName == "T_modelViewProjection") {
 				setUniform(uniformName, projectedMatrix);
@@ -221,12 +196,12 @@ void Shader::updateUniforms(Transform &transform, Material &material, RenderingE
 				setUniform(uniformName, renderingEngine.findVector3f(unprefixedUniformName));
 			else if (uniformType == "float")
 				setUniformf(uniformName, renderingEngine.findFloat(unprefixedUniformName));
-			else if (uniformType == "DirectionalLight")
+			/*else if (uniformType == "DirectionalLight")
 				setUniform(uniformName, static_cast<DirectionalLight &>(renderingEngine.activeLight()));
 			else if (uniformType == "PointLight")
 				setUniform(uniformName, static_cast<PointLight &>(renderingEngine.activeLight()));
 			else if (uniformType == "SpotLight")
-				setUniform(uniformName, static_cast<SpotLight &>(renderingEngine.activeLight()));
+				setUniform(uniformName, static_cast<SpotLight &>(renderingEngine.activeLight()));*/
 			else
 				renderingEngine.updateUniformStruct(transform, material, *this, uniformType, uniformName);
 		} else if (uniformName.find(cameraPrefix) == 0) {
@@ -246,7 +221,7 @@ void Shader::updateUniforms(Transform &transform, Material &material, RenderingE
 				throw new runtime_error("Unknown uniform name: " + uniformName + " of type " + uniformType);
 			}
 		}
-	}*/
+	}
 }
 
 void Shader::addAllUniforms(const string &shaderText)
@@ -260,6 +235,19 @@ void Shader::addAllUniforms(const string &shaderText)
 	while (regex_search(shaderTextToSearch, match, re)) {
 		m_uniforms.push_back(Uniform(match[1], match[2]));
 		addUniform(match[1], match[2], structsWithFields);
+		shaderTextToSearch = match.suffix();
+	}
+}
+
+void Shader::addAllAttributes(const string &shaderText)
+{
+	regex re("attribute (\\w*?) ([\\w]+)");
+	smatch match;
+
+	string shaderTextToSearch = shaderText;
+	GLuint currentAttributeIndex = 0;
+	while (regex_search(shaderTextToSearch, match, re)) {
+		setAttributeLocation(match[2], currentAttributeIndex);
 		shaderTextToSearch = match.suffix();
 	}
 }

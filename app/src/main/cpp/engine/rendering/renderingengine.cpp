@@ -42,11 +42,11 @@ RenderingEngine::~RenderingEngine()
 #endif
 }
 
-/*void RenderingEngine::updateUniformStruct(Transform &, Material &, Shader &, const string &uniformType,
+void RenderingEngine::updateUniformStruct(Transform &, Material &, Shader &, const string &uniformType,
 										  const string &uniformName) {
 	Log::e("RenderingEngine", "Uniform " + uniformName + " of type " + uniformType + " is not supported");
 	throw new runtime_error("Uniform " + uniformName + " of type " + uniformType + " is not supported");
-}*/
+}
 
 void RenderingEngine::onOpenGLResized(GameObject &gameObject, int width, int height)
 {

@@ -66,6 +66,7 @@ private:
 	void addUniform(string uniformType, string uniformName,
 					unordered_map<string, vector<StructField>> structsWithFields);
 	void addAllUniforms(const string &shaderText);
+	void addAllAttributes(const string &shaderText);
 	void setVertexShader(const string &shaderText);
 #ifndef __ANDROID__
 	void setGeometryShader(const string &shaderText);
