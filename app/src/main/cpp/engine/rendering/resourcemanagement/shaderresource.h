@@ -2,6 +2,9 @@
 #define SHADERRESOURCE_H
 
 #include <glwrapper.h>
+#include <string>
+
+using namespace std;
 
 class ShaderResource
 {
@@ -15,6 +18,8 @@ public:
 	ShaderResource &operator =(const ShaderResource &) = delete;
 
 private:
+	static const string TAG;
+
 	GLuint m_programReference;
 };
 

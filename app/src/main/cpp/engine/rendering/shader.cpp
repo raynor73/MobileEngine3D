@@ -9,6 +9,8 @@
 #include <engine/rendering/renderutils.h>
 #include <logwrapper.h>
 
+const string Shader::TAG = "Shader";
+
 unordered_map<string, weak_ptr<ShaderResource>> Shader::s_loadedShaders;
 
 #ifdef __ANDROID__
@@ -51,6 +53,11 @@ void Shader::loadShaderAndPutToCache(const string &path, const string &name)
 	addAllUniforms(fragmentShaderText);
 
 	s_loadedShaders[name] = m_shaderResource;
+
+	stringstream sstream;
+	sstream << "programReference #1: ";
+	sstream << m_shaderResource->programReference();
+	Log::d(TAG, sstream.str());
 }
 
 void Shader::setVertexShader(const string &text)
@@ -87,6 +94,14 @@ void Shader::linkProgram()
 
 void Shader::bind()
 {
+	stringstream sstream;
+	sstream << "programReference #2: " << m_shaderResource->programReference() << "; ";
+	if (glIsProgram(m_shaderResource->programReference()) == GL_TRUE)
+		sstream << "glIsProgram(): true";
+	else
+		sstream << "glIsProgram(): false";
+	Log::d(TAG, sstream.str());
+
 	glUseProgram(m_shaderResource->programReference());
 }
 

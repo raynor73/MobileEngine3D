@@ -40,6 +40,8 @@ public:
 	virtual void updateUniforms(Transform &, Material &, RenderingEngine &);
 
 private:
+	static const string TAG;
+
 	static unordered_map<string, weak_ptr<ShaderResource>> s_loadedShaders;
 
 	static string loadShader(const string &path, const string &name);
