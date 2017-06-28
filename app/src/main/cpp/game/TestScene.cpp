@@ -11,6 +11,8 @@ using namespace std;
 
 const string TestScene::TAG = "TestScene";
 
+TestScene::TestScene(const string &bricksImagePath) : m_bricksImagePath(bricksImagePath) {}
+
 void TestScene::makeOpenGLDependentSetup()
 {
 	m_rootGameObject = make_shared<GameObject>();
@@ -38,6 +40,8 @@ void TestScene::makeOpenGLDependentSetup()
 	m_landMesh = make_shared<Mesh>();
 	m_landMesh->setVertices(vertices, indices, true);
 	m_landMaterial = make_shared<Material>();
+	m_bricksTexture = make_shared<Texture>(m_bricksImagePath);
+	m_landMaterial->addTexture("diffuse", m_bricksTexture.get());
 	m_landMeshRenderer = make_shared<MeshRenderer>(m_landMesh.get(), m_landMaterial.get());
 
 	m_landGameObject = make_shared<GameObject>();

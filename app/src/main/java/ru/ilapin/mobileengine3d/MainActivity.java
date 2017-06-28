@@ -69,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
 					if (configurationInfo.reqGlEsVersion >= 0x20000) {
 						initEngine(
-								mFilesExtractor.getShadersDir().getPath() + File.separator/*,
-										mFilesExtractor.getTexturesDir().getPath() + File.separator + "brick.jpg"*/
+								mFilesExtractor.getShadersDir().getPath() + File.separator,
+								mFilesExtractor.getTexturesDir().getPath() + File.separator + "bricks.jpg"
 						);
 
 						mGlSurfaceView.setEGLContextClientVersion(2);
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 			mGlSurfaceView.onPause();
 	}
 
-	public native void initEngine(String shaderDirPath/*, String brickTexturePath*/);
+	public native void initEngine(String shadersDirPath, String bricksImagePath);
 
 	public native void onJoystickPositionChanged(JoystickPosition position);
 

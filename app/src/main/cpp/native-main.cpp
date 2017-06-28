@@ -17,22 +17,23 @@ static CoreEngine *g_coreEngine;
 static TestScene *g_scene;
 
 JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNIEnv *env, jobject,
-																			 jstring shadersDirPath_) {
+																			 jstring shadersDirPath_,
+																			 jstring bricksImagePath_) {
 	if (g_isEngineInitialized)
 		return;
 	g_isEngineInitialized = true;
 
 	const char *shadersDirPath = env->GetStringUTFChars(shadersDirPath_, 0);
-	//const char *brickTexturePath = env->GetStringUTFChars(brickTexturePath_, 0);
+	const char *bricksImagePath = env->GetStringUTFChars(bricksImagePath_, 0);
 
 	g_userInput = new TestUserInput();
 	g_coreEngine = new CoreEngine(shadersDirPath, *g_userInput);
-	g_scene = new TestScene();
+	g_scene = new TestScene(bricksImagePath);
 
 	g_coreEngine->setScene(g_scene);
 
 	env->ReleaseStringUTFChars(shadersDirPath_, shadersDirPath);
-	//env->ReleaseStringUTFChars(brickTexturePath_, brickTexturePath);*/
+	env->ReleaseStringUTFChars(bricksImagePath_, bricksImagePath);
 }
 
 JNIEXPORT void JNICALL

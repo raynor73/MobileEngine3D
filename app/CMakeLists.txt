@@ -10,6 +10,40 @@ cmake_minimum_required(VERSION 3.4.1)
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
 
+### Prebuild libjpeg
+add_library( jpeg-lib
+             STATIC
+             IMPORTED )
+
+set_target_properties( # Specifies the target library.
+                       jpeg-lib
+
+                       # Specifies the parameter you want to define.
+                       PROPERTIES IMPORTED_LOCATION
+
+                       # Provides the path to the library you want to import.
+                       ${CMAKE_SOURCE_DIR}/native-libs/${ANDROID_ABI}/libjpeg-local.a )
+
+include_directories(native-libs/includes/libjpeg)
+### /Prebuild libjpeg
+
+### jpegutil
+add_library ( jpegutil-lib
+
+              STATIC
+
+              src/main/cpp/libs/jpegutil/JpegDec.cpp
+              src/main/cpp/libs/jpegutil/JpegDecPlanarYCbCr.cpp
+              src/main/cpp/libs/jpegutil/JpegEnc.cpp
+              src/main/cpp/libs/jpegutil/jpegutil.cpp )
+
+target_link_libraries( jpegutil-lib
+
+                       jpeg-lib )
+
+include_directories(src/main/cpp/libs/jpegutil)
+### /jpegutil
+
 add_library( # Sets the name of the library.
              native-main
 
@@ -41,8 +75,10 @@ add_library( # Sets the name of the library.
              src/main/cpp/engine/rendering/renderutils.cpp
              src/main/cpp/engine/rendering/material.cpp
              src/main/cpp/engine/rendering/shader.cpp
+             src/main/cpp/engine/rendering/texture.cpp
              src/main/cpp/engine/rendering/resourcemanagement/meshresource.cpp
              src/main/cpp/engine/rendering/resourcemanagement/shaderresource.cpp
+             src/main/cpp/engine/rendering/resourcemanagement/textureresource.cpp
              src/main/cpp/engine/rendering/meshloading/indexedmodel.cpp
              src/main/cpp/engine/rendering/meshloading/objmodel.cpp
 
@@ -82,5 +118,7 @@ find_library( # Sets the name of the path variable.
 target_link_libraries( # Specifies the target library.
                        native-main
 
+                       jpeg-lib
+                       jpegutil-lib
                        ${GLESv2-lib}
                        ${log-lib} )

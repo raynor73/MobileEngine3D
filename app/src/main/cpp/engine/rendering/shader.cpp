@@ -176,9 +176,9 @@ void Shader::updateUniforms(Transform &transform, Material &material, RenderingE
 		string cameraPrefix = "C_";
 
 		if (uniformType == "sampler2D") {
-			/*GLuint samplerSlot = renderingEngine.samplerSlot(uniformName);
+			GLuint samplerSlot = renderingEngine.samplerSlot(uniformName);
 			material.findTexture(uniformName)->bind(samplerSlot);
-			setUniformi(uniformName, samplerSlot);*/
+			setUniformi(uniformName, samplerSlot);
 		} else if (uniformName.find(transformPrefix) == 0) {
 			if (uniformName == "T_modelViewProjection") {
 				setUniform(uniformName, projectedMatrix);

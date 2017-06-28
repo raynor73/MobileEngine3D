@@ -1,13 +1,13 @@
 precision mediump float;
 
 attribute vec3 position;
-//attribte vec2 textureCoordinate;
+attribute vec2 textureCoordinate;
 
-//varying vec2 textureCoordinate0;
+varying vec2 textureCoordinate0;
 
 uniform mat4 T_modelViewProjection;
 
 void main() {
 	gl_Position = T_modelViewProjection * vec4(position, 1);
-	//textureCoordinate0 = textureCoordinate;
+	textureCoordinate0 = textureCoordinate;
 }
