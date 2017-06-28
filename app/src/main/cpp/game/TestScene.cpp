@@ -14,6 +14,8 @@ const string TestScene::TAG = "TestScene";
 void TestScene::makeOpenGLDependentSetup()
 {
 	m_rootGameObject = make_shared<GameObject>();
+	m_rootGameObject->setEngine(m_coreEngine);
+	m_camera.reset();
 
 	vector<Vertex> vertices;
 	vector<unsigned int> indices;

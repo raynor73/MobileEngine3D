@@ -17,6 +17,7 @@ public:
 	using SceneWithTimeMeasurement::update;
 
 	void update(float dt) override;
+	void setEngine(CoreEngine *) override;
 
 protected:
 	shared_ptr<GameObject> m_rootGameObject;
