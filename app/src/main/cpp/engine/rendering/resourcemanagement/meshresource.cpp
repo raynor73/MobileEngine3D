@@ -9,6 +9,9 @@ MeshResource::MeshResource(int numberOfIndices) :
 
 MeshResource::~MeshResource()
 {
-	glDeleteBuffers(1, &m_vertexBufferObjectName);
-	glDeleteBuffers(1, &m_indexBufferObjectName);
+	if (glIsBuffer(m_vertexBufferObjectName) == GL_TRUE)
+		glDeleteBuffers(1, &m_vertexBufferObjectName);
+
+	if (glIsBuffer(m_indexBufferObjectName) == GL_TRUE)
+		glDeleteBuffers(1, &m_indexBufferObjectName);
 }

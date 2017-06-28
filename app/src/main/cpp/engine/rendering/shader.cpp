@@ -53,11 +53,6 @@ void Shader::loadShaderAndPutToCache(const string &path, const string &name)
 	addAllUniforms(fragmentShaderText);
 
 	s_loadedShaders[name] = m_shaderResource;
-
-	stringstream sstream;
-	sstream << "programReference #1: ";
-	sstream << m_shaderResource->programReference();
-	Log::d(TAG, sstream.str());
 }
 
 void Shader::setVertexShader(const string &text)
@@ -94,14 +89,6 @@ void Shader::linkProgram()
 
 void Shader::bind()
 {
-	stringstream sstream;
-	sstream << "programReference #2: " << m_shaderResource->programReference() << "; ";
-	if (glIsProgram(m_shaderResource->programReference()) == GL_TRUE)
-		sstream << "glIsProgram(): true";
-	else
-		sstream << "glIsProgram(): false";
-	Log::d(TAG, sstream.str());
-
 	glUseProgram(m_shaderResource->programReference());
 }
 
@@ -177,9 +164,6 @@ void Shader::addUniform(string uniformType, string uniformName,
 
 void Shader::updateUniforms(Transform &transform, Material &material, RenderingEngine &renderingEngine)
 {
-	/*glUniformMatrix4fv(m_uniformLocations["T_modelViewProjection"], 1, GL_TRUE, renderingEngine.mainCamera().calculateViewProjection().getM().data());
-	glUniform3f(m_uniformLocations["R_ambient"], 0, 0.5, 0);*/
-
 	Matrix4f worldMatrix = transform.transformation();
 	Matrix4f projectedMatrix = renderingEngine.mainCamera().calculateViewProjection() * worldMatrix;
 
