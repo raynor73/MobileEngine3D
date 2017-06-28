@@ -22,6 +22,8 @@ public:
 	void bind(GLenum samplerSlot);
 
 private:
+	static const string TAG;
+
 	static unordered_map<string, weak_ptr<TextureResource>> s_loadedTextures;
 
 	shared_ptr<TextureResource> m_textureResource;

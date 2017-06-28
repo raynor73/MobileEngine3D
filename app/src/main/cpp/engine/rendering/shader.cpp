@@ -27,7 +27,7 @@ Shader::Shader(const string &path, const string &name, GLuint vertexArrayName);
 			s_loadedShaders.erase(name);
 			loadShaderAndPutToCache(path, name);
 		} else {
-			Log::i("Shader", "Shader with name:" + name + "already loaded, reusing program");
+			Log::i(TAG, "Shader with name:" + name + "already loaded, reusing program");
 			m_shaderResource = shaderResource.lock();
 		}
 	} else {
@@ -76,14 +76,14 @@ void Shader::linkProgram()
 {
 	glLinkProgram(m_shaderResource->programReference());
 	if (RenderUtils::glGetProgram(m_shaderResource->programReference(), GL_LINK_STATUS) != GL_TRUE) {
-		Log::e("Shader", RenderUtils::_glGetProgramInfoLog(m_shaderResource->programReference()));
-		throw new runtime_error(RenderUtils::_glGetProgramInfoLog(m_shaderResource->programReference()));
+		Log::e(TAG, "Linking failed: " + RenderUtils::_glGetProgramInfoLog(m_shaderResource->programReference()));
+		throw new runtime_error("Linking failed: " + RenderUtils::_glGetProgramInfoLog(m_shaderResource->programReference()));
 	}
 
 	glValidateProgram(m_shaderResource->programReference());
 	if (RenderUtils::glGetProgram(m_shaderResource->programReference(), GL_VALIDATE_STATUS) != GL_TRUE) {
-		Log::e("Shader", RenderUtils::_glGetProgramInfoLog(m_shaderResource->programReference()));
-		throw new runtime_error(RenderUtils::_glGetProgramInfoLog(m_shaderResource->programReference()));
+		Log::e(TAG, "Validation failed:" + RenderUtils::_glGetProgramInfoLog(m_shaderResource->programReference()));
+		throw new runtime_error("Validation failed:" + RenderUtils::_glGetProgramInfoLog(m_shaderResource->programReference()));
 	}
 }
 
@@ -96,7 +96,7 @@ void Shader::compileShader(const string &text, GLenum type)
 {
 	GLuint shaderReference = glCreateShader(type);
 	if (shaderReference == 0) {
-		Log::e("Shader", "Error creating shader");
+		Log::e(TAG, "Error creating shader");
 		throw new runtime_error("Error creating shader");
 	}
 
@@ -105,8 +105,8 @@ void Shader::compileShader(const string &text, GLenum type)
 	glShaderSource(shaderReference, 1, &rawText, &length);
 	glCompileShader(shaderReference);
 	if (RenderUtils::glGetShader(shaderReference, GL_COMPILE_STATUS) != GL_TRUE) {
-		Log::e("Shader", RenderUtils::_glGetShaderInfoLog(shaderReference));
-		throw new runtime_error(RenderUtils::_glGetShaderInfoLog(shaderReference));
+		Log::e(TAG, "Compilation error: " + RenderUtils::_glGetShaderInfoLog(shaderReference));
+		throw new runtime_error("Compilation error: " + RenderUtils::_glGetShaderInfoLog(shaderReference));
 	}
 
 	glAttachShader(m_shaderResource->programReference(), shaderReference);
@@ -155,7 +155,7 @@ void Shader::addUniform(string uniformType, string uniformName,
 
 	GLint uniformLocation = glGetUniformLocation(m_shaderResource->programReference(), uniformName.c_str());
 	if (uniformLocation < 0) {
-		Log::e("Shader", "Error retrieving uniform location: " + uniformName);
+		Log::e(TAG, "Error retrieving uniform location: " + uniformName);
 		throw new runtime_error("Error retrieving uniform location: " + uniformName);
 	}
 
@@ -185,7 +185,7 @@ void Shader::updateUniforms(Transform &transform, Material &material, RenderingE
 			} else if (uniformName == "T_model") {
 				setUniform(uniformName, worldMatrix);
 			} else {
-				Log::e("Shader", "Unknown Transform-related uniform name: " + uniformName + " of type " + uniformType);
+				Log::e(TAG, "Unknown Transform-related uniform name: " + uniformName + " of type " + uniformType);
 				throw new runtime_error("Unknown Transform-related uniform name: " + uniformName + " of type " + uniformType);
 			}
 		} else if (uniformName.find(renderingEnginePrefix) == 0) {
@@ -207,7 +207,7 @@ void Shader::updateUniforms(Transform &transform, Material &material, RenderingE
 			if (uniformName == "C_eyePosition") {
 				setUniform(uniformName, renderingEngine.mainCamera().transform().calculateTransformedTranslation());
 			} else {
-				Log::e("Shader", "Unknown Camera-related uniform name: " + uniformName + " of type " + uniformType);
+				Log::e(TAG, "Unknown Camera-related uniform name: " + uniformName + " of type " + uniformType);
 				throw new runtime_error("Unknown Camera-related uniform name: " + uniformName + " of type " + uniformType);
 			}
 		} else {
@@ -216,7 +216,7 @@ void Shader::updateUniforms(Transform &transform, Material &material, RenderingE
 			} else if (uniformType == "float") {
 				setUniformf(uniformName, material.findFloat(uniformName));
 			}else {
-				Log::e("Shader", "Unknown uniform name: " + uniformName + " of type " + uniformType);
+				Log::e(TAG, "Unknown uniform name: " + uniformName + " of type " + uniformType);
 				throw new runtime_error("Unknown uniform name: " + uniformName + " of type " + uniformType);
 			}
 		}
@@ -248,6 +248,8 @@ void Shader::addAllAttributes(const string &shaderText)
 	while (regex_search(shaderTextToSearch, match, re)) {
 		setAttributeLocation(match[2], currentAttributeIndex);
 		shaderTextToSearch = match.suffix();
+
+		currentAttributeIndex++;
 	}
 }
 
