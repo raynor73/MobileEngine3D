@@ -1,7 +1,10 @@
 #include <engine/rendering/meshloading/objmodel.h>
 #include <logwrapper.h>
 #include <engine/core/matrix4f.h>
+#include <sstream>
 #include "mesh.h"
+
+const string Mesh::TAG = "Mesh";
 
 unordered_map<string, weak_ptr<MeshResource>> Mesh::s_loadedModels;
 
@@ -56,11 +59,14 @@ void Mesh::draw()
 
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_meshResource->vertexBufferObjectName());
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, Vertex::SIZE * sizeof(float), 0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, Vertex::SIZE * sizeof(float),
 						  reinterpret_cast<const void *>(3 * sizeof(float)));
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, Vertex::SIZE * sizeof(float),
+						  reinterpret_cast<const void *>(5 * sizeof(float)));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshResource->indexBufferObjectName());
 
@@ -68,25 +74,7 @@ void Mesh::draw()
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
-
-	/*glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
-
-	glBindBuffer(GL_ARRAY_BUFFER, m_meshResource->vertexBufferObjectName());
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, Vertex::SIZE * sizeof(float), 0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, Vertex::SIZE * sizeof(float),
-							reinterpret_cast<const void *>(3 * sizeof(float)));
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, Vertex::SIZE * sizeof(float),
-							reinterpret_cast<const void *>(5 * sizeof(float)));
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshResource->indexBufferObjectName());
-
-	glDrawElements(GL_TRIANGLES, m_meshResource->numberOfIndices(), GL_UNSIGNED_INT, 0);
-
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);*/
+	glDisableVertexAttribArray(2);
 }
 
 void Mesh::calculateNormals(vector<Vertex> &vertices, const vector<unsigned int> &indices)
@@ -101,9 +89,9 @@ void Mesh::calculateNormals(vector<Vertex> &vertices, const vector<unsigned int>
 
 		Vector3f normal = v1.cross(v2).normalized();
 
-		vertices[i0].normal() += normal;
-		vertices[i1].normal() += normal;
-		vertices[i2].normal() += normal;
+		vertices[i0].setNormal(vertices[i0].normal() += normal);
+		vertices[i1].setNormal(vertices[i1].normal() += normal);
+		vertices[i2].setNormal(vertices[i2].normal() += normal);
 	}
 
 	for (int i = 0; i < vertices.size(); i++)

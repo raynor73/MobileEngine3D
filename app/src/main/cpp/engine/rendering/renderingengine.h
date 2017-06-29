@@ -12,8 +12,7 @@
 
 using namespace std;
 
-/*class BaseLight;
-class Material;*/
+class BaseLight;
 
 class RenderingEngine : public MappedValues
 {
@@ -25,12 +24,12 @@ public:
 	void render(GameObject &gameObject);
 
 	Camera &mainCamera() const;
-	//BaseLight &activeLight() { return *m_activeLight; }
+	BaseLight &activeLight() { return *m_activeLight; }
 	GLuint vertexArrayName() const { return m_vertexArrayName; }
 	GLuint samplerSlot(const string &name) const { return m_samplerMap.at(name); }
 	string shadersDirPath() const { return m_shadersDirPath; }
 
-	//void addLight(BaseLight *light) { m_lights.push_back(light); }
+	void addLight(BaseLight *light) { m_lights.push_back(light); }
 	void setCamera(Camera *camera) { m_mainCamera = camera; }
 
 	virtual void updateUniformStruct(Transform &transform, Material &material, Shader &shader,
@@ -45,8 +44,8 @@ private:
 	unordered_map<string, GLuint> m_samplerMap;
 	string m_shadersDirPath;
 
-	/*list<BaseLight *> m_lights;
-	BaseLight *m_activeLight;*/
+	list<BaseLight *> m_lights;
+	BaseLight *m_activeLight;
 
 	string openGLVersion();
 	void setClearColor(const Vector3f &color);

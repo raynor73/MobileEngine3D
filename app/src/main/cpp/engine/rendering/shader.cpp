@@ -2,9 +2,9 @@
 #include <fstream>
 #include <regex>
 #include <engine/rendering/renderingengine.h>
-/*#include <engine/components/baselight.h>
+#include <engine/components/baselight.h>
 #include <engine/components/directionallight.h>
-#include <engine/components/pointlight.h>
+/*#include <engine/components/pointlight.h>
 #include <engine/components/spotlight.h>*/
 #include <engine/rendering/renderutils.h>
 #include <logwrapper.h>
@@ -134,6 +134,13 @@ unordered_map<string, vector<Shader::StructField>> Shader::findUniformStructs(co
 		shaderTextToSearch = structMatch.suffix();
 	}
 
+	/*for (auto i : structsWithFields) {
+		Log::d(TAG, "Struct: " + i.first);
+		for (auto j : i.second) {
+			Log::d(TAG, "\t" + j.type + ": " + j.name);
+		}
+	}*/
+
 	return structsWithFields;
 }
 
@@ -195,9 +202,9 @@ void Shader::updateUniforms(Transform &transform, Material &material, RenderingE
 				setUniform(uniformName, renderingEngine.findVector3f(unprefixedUniformName));
 			else if (uniformType == "float")
 				setUniformf(uniformName, renderingEngine.findFloat(unprefixedUniformName));
-			/*else if (uniformType == "DirectionalLight")
+			else if (uniformType == "DirectionalLight")
 				setUniform(uniformName, static_cast<DirectionalLight &>(renderingEngine.activeLight()));
-			else if (uniformType == "PointLight")
+			/*else if (uniformType == "PointLight")
 				setUniform(uniformName, static_cast<PointLight &>(renderingEngine.activeLight()));
 			else if (uniformType == "SpotLight")
 				setUniform(uniformName, static_cast<SpotLight &>(renderingEngine.activeLight()));*/
@@ -294,7 +301,7 @@ string Shader::loadShader(const string &path, const string &name)
 	return shaderText;
 }
 
-/*void Shader::setUniform(const string &uniformName, const BaseLight &baseLight)
+void Shader::setUniform(const string &uniformName, const BaseLight &baseLight)
 {
 	setUniform(uniformName + ".color", baseLight.color());
 	setUniformf(uniformName + ".intensity", baseLight.intensity());
@@ -306,7 +313,7 @@ void Shader::setUniform(const string &uniformName, DirectionalLight &directional
 	setUniform(uniformName + ".direction", directionalLight.direction());
 }
 
-void Shader::setUniform(const string &uniformName, PointLight &pointLight)
+/*void Shader::setUniform(const string &uniformName, PointLight &pointLight)
 {
 	setUniform(uniformName + ".base", static_cast<const BaseLight &>(pointLight));
 	setUniformf(uniformName + ".attenuation.constant", pointLight.attenuation().constant());
@@ -325,5 +332,9 @@ void Shader::setUniform(const string &uniformName, SpotLight &spotLight)
 
 void Shader::setAttributeLocation(const string &attributeName, GLuint location)
 {
+	stringstream sstream;
+	sstream << "Binding: " << attributeName << " to " << location;
+	Log::d(TAG, sstream.str());
+
 	glBindAttribLocation(m_shaderResource.get()->programReference(), location, attributeName.c_str());
 }

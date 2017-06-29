@@ -85,6 +85,9 @@ add_library( # Sets the name of the library.
              src/main/cpp/engine/components/camera.cpp
              src/main/cpp/engine/components/gamecomponent.cpp
              src/main/cpp/engine/components/meshrenderer.cpp
+             src/main/cpp/engine/components/baselight.cpp
+             src/main/cpp/engine/components/directionallight.cpp
+             src/main/cpp/engine/components/lightsfactory.cpp
 
              src/main/cpp/game/TestScene.cpp
              src/main/cpp/game/TestController.cpp

@@ -1,6 +1,5 @@
 #include "renderingengine.h"
-//#include <engine/components/baselight.h>
-#include <engine/rendering/shader.h>
+#include <engine/components/baselight.h>
 #include <logwrapper.h>
 
 const string RenderingEngine::TAG = "RenderingEngine";
@@ -10,10 +9,7 @@ RenderingEngine::RenderingEngine(const string &shadersDirPath) :
 		m_shadersDirPath(shadersDirPath)
 {
 	m_samplerMap["diffuse"] = 0;
-//	m_vectors3f["ambient"] = Vector3f(0.1, 0.1, 0.1);
-	m_vectors3f["ambient"] = Vector3f(1, 1, 1);
-
-	glClearColor(0, 0, 0, 0);
+	m_vectors3f["ambient"] = Vector3f(0.1, 0.1, 0.1);
 
 	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
@@ -55,7 +51,7 @@ void RenderingEngine::render(GameObject &gameObject)
 
 	gameObject.renderAll(*m_forwardAmbientShader, *this);
 
-	/*glEnable(GL_BLEND);
+	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE, GL_ONE);
 	glDepthMask(GL_FALSE);
 	glDepthFunc(GL_EQUAL);
@@ -67,7 +63,7 @@ void RenderingEngine::render(GameObject &gameObject)
 
 	glDepthFunc(GL_LESS);
 	glDepthMask(GL_TRUE);
-	glDisable(GL_BLEND);*/
+	glDisable(GL_BLEND);
 }
 
 Camera &RenderingEngine::mainCamera() const

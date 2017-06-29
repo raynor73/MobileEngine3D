@@ -15,9 +15,9 @@ using namespace std;
 class RenderingEngine;
 class Camera;
 class Transform;
-/*class BaseLight;
+class BaseLight;
 class DirectionalLight;
-class PointLight;
+/*class PointLight;
 class SpotLight;*/
 
 class Shader
@@ -76,9 +76,9 @@ private:
 	void setGeometryShader(const string &shaderText);
 #endif
 	void setFragmentShader(const string &shaderText);
-	/*void setUniform(const string &name, const BaseLight &value);
+	void setUniform(const string &name, const BaseLight &value);
 	void setUniform(const string &name, DirectionalLight &value);
-	void setUniform(const string &name, PointLight &value);
+	/*void setUniform(const string &name, PointLight &value);
 	void setUniform(const string &name, SpotLight &value);*/
 	void loadShaderAndPutToCache(const string &path, const string &shaderName);
 	void setAttributeLocation(const string &attributeName, GLuint location);

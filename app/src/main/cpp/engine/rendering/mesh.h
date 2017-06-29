@@ -23,6 +23,8 @@ public:
 	void draw();
 
 private:
+	static const string TAG;
+
 	static unordered_map<string, weak_ptr<MeshResource>> s_loadedModels;
 
 	shared_ptr<MeshResource> m_meshResource;

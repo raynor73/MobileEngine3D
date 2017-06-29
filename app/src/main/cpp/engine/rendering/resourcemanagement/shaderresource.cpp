@@ -1,6 +1,7 @@
 #include "shaderresource.h"
 #include <logwrapper.h>
 #include <stdexcept>
+#include <sstream>
 
 using namespace std;
 
@@ -10,8 +11,8 @@ ShaderResource::ShaderResource()
 {
 	m_programReference = glCreateProgram();
 
-	if (m_programReference == 0 || !glIsProgram(m_programReference)) {
-		Log::e("ShaderResource", "Error creating shader program");
+	if (m_programReference == 0) {
+		Log::e(TAG, "Error creating shader program");
 		throw new runtime_error("Error creating shader program");
 	}
 }

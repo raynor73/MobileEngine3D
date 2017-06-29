@@ -35,6 +35,8 @@ private:
 	shared_ptr<Texture> m_bricksTexture;
 	shared_ptr<Mesh> m_landMesh;
 	shared_ptr<MeshRenderer> m_landMeshRenderer;
+	shared_ptr<GameObject> m_directionalLightGameObject;
+	shared_ptr<DirectionalLight> m_directionalLight;
 };
 
 

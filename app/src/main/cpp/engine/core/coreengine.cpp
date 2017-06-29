@@ -35,7 +35,7 @@ void CoreEngine::onOpenGLReady()
 
 	// Call destructors with glDelete* calls before allocating new OpenGL resources which possibly have the same
 	// indexes/references.
-	// TODO Improve that stinky code
+	// TODO Improve that stinky code (not the only place, check whole project for the same code)
 	m_renderingEngine.reset();
 	m_renderingEngine = make_shared<RenderingEngine>(m_shadersDirPath);
 

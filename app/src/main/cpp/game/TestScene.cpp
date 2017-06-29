@@ -5,6 +5,7 @@
 #include <engine/core/gameobject.h>
 #include <engine/components/camera.h>
 #include <logwrapper.h>
+#include <engine/components/lightsfactory.h>
 #include "TestScene.h"
 
 using namespace std;
@@ -48,11 +49,20 @@ void TestScene::makeOpenGLDependentSetup()
 	m_bricksTexture.reset();
 	m_bricksTexture = make_shared<Texture>(m_bricksImagePath);
 	m_landMaterial->addTexture("diffuse", m_bricksTexture.get());
+	m_landMaterial->addFloat("specularIntensity", 1);
+	m_landMaterial->addFloat("specularPower", 8);
 	m_landMeshRenderer = make_shared<MeshRenderer>(m_landMesh.get(), m_landMaterial.get());
 
 	m_landGameObject = make_shared<GameObject>();
 	m_landGameObject->addComponent(m_landMeshRenderer.get());
 	m_rootGameObject->addChild(m_landGameObject.get());
+
+	m_directionalLightGameObject = make_shared<GameObject>();
+	m_directionalLight.reset();
+	m_directionalLight = LightsFactory::createDirectionalLight(m_coreEngine->renderingEngine(), Vector3f(1, 1, 1), 0.4);
+	m_directionalLightGameObject->transform().setRotation(Quaternion(Vector3f(1, 0, 0), Utils::toRadians(-45)));
+	m_directionalLightGameObject->addComponent(m_directionalLight.get());
+	m_rootGameObject->addChild(m_directionalLightGameObject.get());
 }
 
 void TestScene::onOpenGLResized(int width, int height)
