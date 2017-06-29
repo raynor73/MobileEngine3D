@@ -1,6 +1,6 @@
 #include <jni.h>
 #include <string>
-#include <game/TestUserInput.h>
+#include <game/JoystickInput.h>
 #include <engine/core/coreengine.h>
 #include <game/TestScene.h>
 #include "logwrapper.h"
@@ -12,7 +12,7 @@ extern "C"
 
 static bool g_isEngineInitialized = false;
 
-static TestUserInput *g_userInput;
+static JoystickInput *g_joystickInput;
 static CoreEngine *g_coreEngine;
 static TestScene *g_scene;
 
@@ -26,9 +26,9 @@ JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNI
 	const char *shadersDirPath = env->GetStringUTFChars(shadersDirPath_, 0);
 	const char *bricksImagePath = env->GetStringUTFChars(bricksImagePath_, 0);
 
-	g_userInput = new TestUserInput();
+	g_joystickInput = new JoystickInput();
 	g_coreEngine = new CoreEngine(shadersDirPath);
-	g_scene = new TestScene(bricksImagePath);
+	g_scene = new TestScene(bricksImagePath, *g_joystickInput);
 
 	g_coreEngine->setScene(g_scene);
 
@@ -50,7 +50,7 @@ Java_ru_ilapin_mobileengine3d_MainActivity_onJoystickPositionChanged(JNIEnv *env
 	float x = env->CallFloatMethod(position, getXMethodId);
 	float y = env->CallFloatMethod(position, getYMethodId);
 
-	g_userInput->onJoystickPositionChanged(TestUserInput::JoystickPosition(x, y));
+	g_joystickInput->onJoystickPositionChanged(JoystickInput::JoystickPosition(x, y));
 }
 
 JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_onSurfaceCreated(JNIEnv *, jclass)

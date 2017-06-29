@@ -11,7 +11,10 @@ using namespace std;
 
 const string TestScene::TAG = "TestScene";
 
-TestScene::TestScene(const string &bricksImagePath) : m_bricksImagePath(bricksImagePath) {}
+TestScene::TestScene(const string &bricksImagePath, JoystickInput &joystickInput) :
+		m_bricksImagePath(bricksImagePath),
+		m_joystickInput(joystickInput)
+{}
 
 void TestScene::makeOpenGLDependentSetup()
 {

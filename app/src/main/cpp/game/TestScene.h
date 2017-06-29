@@ -5,13 +5,14 @@
 #include <engine/core/scenewithrootobject.h>
 #include <engine/components/meshrenderer.h>
 #include <engine/core/coreengine.h>
+#include "JoystickInput.h"
 
 using namespace std;
 
 class TestScene : public SceneWithRootObject
 {
 public:
-	TestScene(const string &bricksImagePath);
+	TestScene(const string &bricksImagePath, JoystickInput &joystickInput);
 
 	void makeOpenGLDependentSetup() override;
 	void onOpenGLResized(int width, int height) override;
@@ -23,6 +24,7 @@ private:
 	CoreEngine *m_coreEngine;
 
 	string m_bricksImagePath;
+	JoystickInput &m_joystickInput;
 
 	shared_ptr<Camera> m_camera;
 	shared_ptr<GameObject> m_cameraGameObject;

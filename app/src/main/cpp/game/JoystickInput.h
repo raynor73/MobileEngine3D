@@ -7,7 +7,7 @@
 
 using namespace std;
 
-class TestUserInput
+class JoystickInput
 {
 public:
 	struct JoystickPosition

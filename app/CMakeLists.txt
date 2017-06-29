@@ -87,7 +87,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/engine/components/meshrenderer.cpp
 
              src/main/cpp/game/TestScene.cpp
-             src/main/cpp/game/TestUserInput.cpp )
+             src/main/cpp/game/JoystickInput.cpp )
 
 include_directories(src/main/cpp/)
 
