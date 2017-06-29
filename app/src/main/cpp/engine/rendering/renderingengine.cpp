@@ -13,19 +13,15 @@ RenderingEngine::RenderingEngine(const string &shadersDirPath) :
 //	m_vectors3f["ambient"] = Vector3f(0.1, 0.1, 0.1);
 	m_vectors3f["ambient"] = Vector3f(1, 1, 1);
 
-//	glClearColor(0, 0, 0, 0);
-	glClearColor(0, 0, 0.5, 0);
+	glClearColor(0, 0, 0, 0);
 
 	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
-	/*glEnable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);*/
-	glDisable(GL_CULL_FACE);
-	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
 #ifndef __ANDROID__
 	glEnable(GL_DEPTH_CLAMP);
 #endif
-	//glEnable(GL_TEXTURE_2D);
 
 #ifdef __ANDROID__
 	m_forwardAmbientShader = make_shared<Shader>(m_shadersDirPath, "forwardambient");
