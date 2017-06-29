@@ -6,6 +6,7 @@
 #include <engine/components/meshrenderer.h>
 #include <engine/core/coreengine.h>
 #include "JoystickInput.h"
+#include "TestController.h"
 
 using namespace std;
 
@@ -16,6 +17,7 @@ public:
 
 	void makeOpenGLDependentSetup() override;
 	void onOpenGLResized(int width, int height) override;
+	void update(float dt) override;
 	void setEngine(CoreEngine *) override;
 
 private:
@@ -24,8 +26,8 @@ private:
 	CoreEngine *m_coreEngine;
 
 	string m_bricksImagePath;
-	JoystickInput &m_joystickInput;
 
+	shared_ptr<TestController> m_controller;
 	shared_ptr<Camera> m_camera;
 	shared_ptr<GameObject> m_cameraGameObject;
 	shared_ptr<GameObject> m_landGameObject;

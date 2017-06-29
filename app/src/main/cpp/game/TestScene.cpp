@@ -12,9 +12,10 @@ using namespace std;
 const string TestScene::TAG = "TestScene";
 
 TestScene::TestScene(const string &bricksImagePath, JoystickInput &joystickInput) :
-		m_bricksImagePath(bricksImagePath),
-		m_joystickInput(joystickInput)
-{}
+		m_bricksImagePath(bricksImagePath)
+{
+	m_controller = make_shared<TestController>(joystickInput);
+}
 
 void TestScene::makeOpenGLDependentSetup()
 {
@@ -69,4 +70,13 @@ void TestScene::onOpenGLResized(int width, int height)
 void TestScene::setEngine(CoreEngine *coreEngine)
 {
 	m_coreEngine = coreEngine;
+}
+
+void TestScene::update(float dt) {
+	SceneWithRootObject::update(dt);
+
+	m_camera->transform().rotate(m_camera->yAxis, Utils::toRadians(m_controller->calculateYawRotationSpeed() * dt));
+	m_camera->transform().rotate(m_camera->transform().rotation().calculateRight(),
+								 Utils::toRadians(m_controller->calculatePitchRotationSpeed() * dt));
+
 }

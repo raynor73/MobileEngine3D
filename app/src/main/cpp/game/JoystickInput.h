@@ -2,8 +2,9 @@
 #define MOONLANDER3D_TESTUSERINPUT_H
 
 
-#include <set>
+#include <vector>
 #include <string>
+#include <functional>
 
 using namespace std;
 
@@ -28,13 +29,13 @@ public:
 
 	void onJoystickPositionChanged(const JoystickPosition &);
 
-	void addJoystickListener(void (*)(JoystickPosition));
-	void removeJoystickListener(void (*)(JoystickPosition));
+	size_t addJoystickListener(function<void(JoystickPosition)>);
+	void removeJoystickListener(size_t position);
 
 private:
 	static const string TAG;
 
-	set<void (*)(JoystickPosition)> m_joystickListeners;
+	vector<function<void(JoystickPosition)>> m_joystickListeners;
 };
 
 

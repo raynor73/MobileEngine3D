@@ -5,25 +5,20 @@
 
 const string JoystickInput::TAG = "TestUserInput";
 
-void JoystickInput::addJoystickListener(void (*listener)(JoystickPosition))
+size_t JoystickInput::addJoystickListener(function<void(JoystickPosition)> listener)
 {
-	if (m_joystickListeners.find(listener) != m_joystickListeners.end()) {
-		Log::e(TAG, "Can't add joystick listener twice");
-		throw new runtime_error("Can't add joystick listener twice");
-	}
-
-	m_joystickListeners.insert(listener);
-
+	m_joystickListeners.push_back(listener);
+	return m_joystickListeners.size() - 1;
 }
 
-void JoystickInput::removeJoystickListener(void (*listener)(JoystickPosition))
+void JoystickInput::removeJoystickListener(size_t position)
 {
-	if (m_joystickListeners.find(listener) == m_joystickListeners.end()) {
+	if (m_joystickListeners.size() - 1 < position) {
 		Log::e(TAG, "Joystick listener not found");
 		throw new runtime_error("Joystick listener not found");
 	}
 
-	m_joystickListeners.erase(listener);
+	m_joystickListeners.erase(m_joystickListeners.begin() + position);
 }
 
 void JoystickInput::onJoystickPositionChanged(const JoystickInput::JoystickPosition &position)
