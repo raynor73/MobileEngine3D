@@ -1,21 +1,35 @@
 #include "TestController.h"
 
-TestController::TestController(JoystickInput &joystickInput) : m_joystickInput(joystickInput)
+TestController::TestController(JoystickInput &leftJoystickInput, JoystickInput &rightJoystickInput) :
+		m_leftJoystickInput(leftJoystickInput),
+		m_rightJoystickInput(rightJoystickInput)
 {
-	m_listenerPosition = m_joystickInput.addJoystickListener(m_listener);
+	m_rightJoystickListenerPosition = m_rightJoystickInput.addJoystickListener(m_rightJoystickListener);
+	m_leftJoystickListenerPosition = m_leftJoystickInput.addJoystickListener(m_leftJoystickListener);
 }
 
 TestController::~TestController()
 {
-	m_joystickInput.removeJoystickListener(m_listenerPosition);
+	m_rightJoystickInput.removeJoystickListener(m_rightJoystickListenerPosition);
+	m_leftJoystickInput.removeJoystickListener(m_leftJoystickListenerPosition);
 }
 
 float TestController::calculateYawRotationSpeed()
 {
-	return m_joystickPosition.x() * 45;
+	return m_rightJoystickPosition.x() * 180;
 }
 
 float TestController::calculatePitchRotationSpeed()
 {
-	return m_joystickPosition.y() * 45;
+	return m_rightJoystickPosition.y() * 180;
+}
+
+float TestController::calculateMoveSpeed()
+{
+	return -m_leftJoystickPosition.y() * 10;
+}
+
+float TestController::calculateStrafeSpeed()
+{
+	return m_leftJoystickPosition.x() * 10;
 }

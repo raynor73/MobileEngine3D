@@ -13,7 +13,7 @@ using namespace std;
 class TestScene : public SceneWithRootObject
 {
 public:
-	TestScene(const string &bricksImagePath, JoystickInput &joystickInput);
+	TestScene(const string &bricksImagePath, JoystickInput &leftJoystickInput, JoystickInput &rightJoystickInput);
 
 	void makeOpenGLDependentSetup() override;
 	void onOpenGLResized(int width, int height) override;

@@ -6,12 +6,9 @@ import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
 import ru.ilapin.common.widgets.joystickview.JoystickPosition;
 import ru.ilapin.common.widgets.joystickview.JoystickView;
 
@@ -32,8 +29,10 @@ public class MainActivity extends AppCompatActivity {
 
 	@BindView(R.id.container)
 	ViewGroup mContainerViewGroup;
-	@BindView(R.id.joystick)
-	JoystickView mJoystickView;
+	@BindView(R.id.rightJoystick)
+	JoystickView mRightJoystickView;
+	@BindView(R.id.leftJoystick)
+	JoystickView mLeftJoystickView;
 
 	@Inject
 	FilesExtractor mFilesExtractor;
@@ -95,8 +94,11 @@ public class MainActivity extends AppCompatActivity {
 						});
 						mIsRendererSet = true;
 
-						mJoystickView.getPositionObservable().subscribe(joystickPosition ->
-								mGlSurfaceView.queueEvent(() -> onJoystickPositionChanged(joystickPosition)));
+						mRightJoystickView.getPositionObservable().subscribe(joystickPosition ->
+								mGlSurfaceView.queueEvent(() -> onRightJoystickPositionChanged(joystickPosition)));
+
+						mLeftJoystickView.getPositionObservable().subscribe(joystickPosition ->
+								mGlSurfaceView.queueEvent(() -> onLeftJoystickPositionChanged(joystickPosition)));
 					}
 					break;
 			}
@@ -121,7 +123,9 @@ public class MainActivity extends AppCompatActivity {
 
 	public native void initEngine(String shadersDirPath, String bricksImagePath);
 
-	public native void onJoystickPositionChanged(JoystickPosition position);
+	public native void onRightJoystickPositionChanged(JoystickPosition position);
+
+	public native void onLeftJoystickPositionChanged(JoystickPosition position);
 
 	public native void onSurfaceCreated();
 

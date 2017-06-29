@@ -8,10 +8,17 @@
 		tools:context="ru.ilapin.mobileengine3d.MainActivity">
 
 	<ru.ilapin.common.widgets.joystickview.JoystickView
-			android:id="@+id/joystick"
+			android:id="@+id/rightJoystick"
 			android:layout_width="150dp"
 			android:layout_height="150dp"
 			android:layout_gravity="right|bottom"
+			tools:ignore="RtlHardcoded" />
+
+	<ru.ilapin.common.widgets.joystickview.JoystickView
+			android:id="@+id/leftJoystick"
+			android:layout_width="150dp"
+			android:layout_height="150dp"
+			android:layout_gravity="left|bottom"
 			tools:ignore="RtlHardcoded" />
 
 </FrameLayout>

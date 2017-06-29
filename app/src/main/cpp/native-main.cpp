@@ -12,7 +12,8 @@ extern "C"
 
 static bool g_isEngineInitialized = false;
 
-static JoystickInput *g_joystickInput;
+static JoystickInput *g_rightJoystickInput;
+static JoystickInput *g_leftJoystickInput;
 static CoreEngine *g_coreEngine;
 static TestScene *g_scene;
 
@@ -26,9 +27,10 @@ JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNI
 	const char *shadersDirPath = env->GetStringUTFChars(shadersDirPath_, 0);
 	const char *bricksImagePath = env->GetStringUTFChars(bricksImagePath_, 0);
 
-	g_joystickInput = new JoystickInput();
+	g_leftJoystickInput = new JoystickInput();
+	g_rightJoystickInput = new JoystickInput();
 	g_coreEngine = new CoreEngine(shadersDirPath);
-	g_scene = new TestScene(bricksImagePath, *g_joystickInput);
+	g_scene = new TestScene(bricksImagePath, *g_leftJoystickInput, *g_rightJoystickInput);
 
 	g_coreEngine->setScene(g_scene);
 
@@ -37,7 +39,7 @@ JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNI
 }
 
 JNIEXPORT void JNICALL
-Java_ru_ilapin_mobileengine3d_MainActivity_onJoystickPositionChanged(JNIEnv *env, jobject, jobject position)
+Java_ru_ilapin_mobileengine3d_MainActivity_onRightJoystickPositionChanged(JNIEnv *env, jobject, jobject position)
 {
 	if (!g_isEngineInitialized)
 		return;
@@ -50,7 +52,24 @@ Java_ru_ilapin_mobileengine3d_MainActivity_onJoystickPositionChanged(JNIEnv *env
 	float x = env->CallFloatMethod(position, getXMethodId);
 	float y = env->CallFloatMethod(position, getYMethodId);
 
-	g_joystickInput->onJoystickPositionChanged(JoystickInput::JoystickPosition(x, y));
+	g_rightJoystickInput->onJoystickPositionChanged(JoystickInput::JoystickPosition(x, y));
+}
+
+JNIEXPORT void JNICALL
+Java_ru_ilapin_mobileengine3d_MainActivity_onLeftJoystickPositionChanged(JNIEnv *env, jobject, jobject position)
+{
+	if (!g_isEngineInitialized)
+		return;
+
+	jclass positionClass = env->GetObjectClass(position);
+
+	jmethodID getXMethodId = env->GetMethodID(positionClass, "getX", "()F");
+	jmethodID getYMethodId = env->GetMethodID(positionClass, "getY", "()F");
+
+	float x = env->CallFloatMethod(position, getXMethodId);
+	float y = env->CallFloatMethod(position, getYMethodId);
+
+	g_leftJoystickInput->onJoystickPositionChanged(JoystickInput::JoystickPosition(x, y));
 }
 
 JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_onSurfaceCreated(JNIEnv *, jclass)
