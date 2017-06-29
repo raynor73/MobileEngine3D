@@ -25,7 +25,7 @@ RenderingEngine::RenderingEngine(const string &shadersDirPath) :
 #ifndef __ANDROID__
 	glEnable(GL_DEPTH_CLAMP);
 #endif
-	glEnable(GL_TEXTURE_2D);
+	//glEnable(GL_TEXTURE_2D);
 
 #ifdef __ANDROID__
 	m_forwardAmbientShader = make_shared<Shader>(m_shadersDirPath, "forwardambient");
