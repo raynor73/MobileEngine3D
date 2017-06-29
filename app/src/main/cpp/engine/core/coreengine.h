@@ -8,19 +8,16 @@
 
 using namespace std;
 
-//class RenderingEngine;
 class SceneWithRootObject;
-class UserInput;
 
 class CoreEngine
 {
 public:
-	CoreEngine(const string &shaderDirPath, UserInput &);
+	CoreEngine(const string &shaderDirPath);
 
 	CoreEngine(const CoreEngine &) = delete;
 	CoreEngine &operator =(const CoreEngine &) = delete;
 
-	UserInput &userInput() { return m_userInput; }
 	RenderingEngine &renderingEngine() { return *m_renderingEngine; }
 	SceneWithRootObject *scene() { return m_scene; }
 	float fps() const { return m_fps; }
@@ -33,7 +30,6 @@ public:
 private:
 	shared_ptr<RenderingEngine> m_renderingEngine;
 	SceneWithRootObject *m_scene;
-	UserInput &m_userInput;
 	string m_shadersDirPath;
 	float m_fps;
 	bool m_isOpenGLReady;

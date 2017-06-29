@@ -27,7 +27,7 @@ JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNI
 	const char *bricksImagePath = env->GetStringUTFChars(bricksImagePath_, 0);
 
 	g_userInput = new TestUserInput();
-	g_coreEngine = new CoreEngine(shadersDirPath, *g_userInput);
+	g_coreEngine = new CoreEngine(shadersDirPath);
 	g_scene = new TestScene(bricksImagePath);
 
 	g_coreEngine->setScene(g_scene);

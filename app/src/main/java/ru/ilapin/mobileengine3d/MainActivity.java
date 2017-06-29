@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 import ru.ilapin.common.widgets.joystickview.JoystickPosition;
 import ru.ilapin.common.widgets.joystickview.JoystickView;
 
@@ -93,7 +95,8 @@ public class MainActivity extends AppCompatActivity {
 						});
 						mIsRendererSet = true;
 
-						mJoystickView.getPositionObservable().subscribe(this::onJoystickPositionChanged);
+						mJoystickView.getPositionObservable().subscribe(joystickPosition ->
+								mGlSurfaceView.queueEvent(() -> onJoystickPositionChanged(joystickPosition)));
 					}
 					break;
 			}

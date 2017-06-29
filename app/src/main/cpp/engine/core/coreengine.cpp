@@ -14,9 +14,8 @@
 
 using namespace std;
 
-CoreEngine::CoreEngine(const string &shadersDirPath, UserInput &userInput) :
+CoreEngine::CoreEngine(const string &shadersDirPath) :
 	m_scene(nullptr),
-	m_userInput(userInput),
 	m_shadersDirPath(shadersDirPath),
 	m_fps(0),
 	m_isOpenGLReady(false),

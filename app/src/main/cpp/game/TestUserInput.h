@@ -2,12 +2,12 @@
 #define MOONLANDER3D_TESTUSERINPUT_H
 
 
-#include <engine/core/userinput.h>
 #include <set>
+#include <string>
 
 using namespace std;
 
-class TestUserInput : public UserInput
+class TestUserInput
 {
 public:
 	struct JoystickPosition
@@ -32,6 +32,8 @@ public:
 	void removeJoystickListener(void (*)(JoystickPosition));
 
 private:
+	static const string TAG;
+
 	set<void (*)(JoystickPosition)> m_joystickListeners;
 };
 

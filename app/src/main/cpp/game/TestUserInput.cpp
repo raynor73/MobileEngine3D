@@ -1,5 +1,9 @@
 #include "TestUserInput.h"
 #include <logwrapper.h>
+#include <stdexcept>
+#include <sstream>
+
+const string TestUserInput::TAG = "TestUserInput";
 
 void TestUserInput::addJoystickListener(void (*listener)(JoystickPosition))
 {
