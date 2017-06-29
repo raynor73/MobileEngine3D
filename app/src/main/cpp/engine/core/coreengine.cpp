@@ -30,7 +30,7 @@ void CoreEngine::onOpenGLReady()
 {
 	Mesh::clearLoadedModels();
 	Shader::clearLoadedShaders();
-	// TODO Clear loaded textures
+	Texture::clearLoadedTextures();
 
 	m_isOpenGLReady = true;
 

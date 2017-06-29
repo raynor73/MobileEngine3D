@@ -54,7 +54,8 @@ void Texture::loadTextureAndPutToCache(const string &path)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 		/*stringstream sstream;
-		sstream << "width: " << imageWidth << "; height: " << imageHeight;
+		for (int i = 0; i < 256; i++)
+			sstream << hex << int(image[i]) << " ";
 		Log::d(TAG, sstream.str());*/
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, imageWidth, imageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 

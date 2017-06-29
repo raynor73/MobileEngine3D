@@ -13,6 +13,8 @@ using namespace std;
 class Texture
 {
 public:
+	static void clearLoadedTextures() { s_loadedTextures.clear(); }
+
 	Texture(const string &path);
 
 	Texture(const Texture &) = delete;
