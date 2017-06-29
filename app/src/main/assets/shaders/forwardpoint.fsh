@@ -7,11 +7,11 @@ varying vec3 normal0;
 varying vec3 worldPosition0;
 
 uniform sampler2D diffuse;
-uniform DirectionalLight R_directionalLight;
+uniform PointLight R_pointLight;
 
 void main()
 {
 	gl_FragColor =
 			texture2D(diffuse, textureCoordinate0.xy) *
-			calculateDirectionalLight(R_directionalLight, normalize(normal0), worldPosition0);
+			calculatePointLight(R_pointLight, normalize(normal0), worldPosition0);
 }

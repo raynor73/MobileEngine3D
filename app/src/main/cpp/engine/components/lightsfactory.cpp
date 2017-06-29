@@ -14,15 +14,19 @@ shared_ptr<DirectionalLight> LightsFactory::createDirectionalLight(RenderingEngi
 	return make_shared<DirectionalLight>(renderingEngine, color, intensity, shader);
 }
 
-/*shared_ptr<PointLight> LightsFactory::createPointLight(RenderingEngine &renderingEngine, const Vector3f &color,
+shared_ptr<PointLight> LightsFactory::createPointLight(RenderingEngine &renderingEngine, const Vector3f &color,
 													   float intensity, const Attenuation &attenuation)
 {
-	auto shader = make_shared<Shader>(renderingEngine.shadersDirPath(), "forwardpoint",
-									  renderingEngine.vertexArrayName());
+#ifdef __ANDROID__
+	auto shader = make_shared<Shader>(renderingEngine.shadersDirPath(), "forwardpoint");
+#else
+	return make_shared<PointLight>(renderingEngine, color, intensity, attenuation, shader);
+#endif
+
 	return make_shared<PointLight>(renderingEngine, color, intensity, attenuation, shader);
 }
 
-shared_ptr<SpotLight> LightsFactory::createSpotLight(RenderingEngine &renderingEngine, const Vector3f &color,
+/*shared_ptr<SpotLight> LightsFactory::createSpotLight(RenderingEngine &renderingEngine, const Vector3f &color,
 													 float intensity, const Attenuation &attenuation, float cutoff)
 {
 	auto shader = make_shared<Shader>(renderingEngine.shadersDirPath(), "forwardspot",

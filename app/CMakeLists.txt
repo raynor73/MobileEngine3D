@@ -87,6 +87,8 @@ add_library( # Sets the name of the library.
              src/main/cpp/engine/components/meshrenderer.cpp
              src/main/cpp/engine/components/baselight.cpp
              src/main/cpp/engine/components/directionallight.cpp
+             src/main/cpp/engine/components/attenuation.cpp
+             src/main/cpp/engine/components/pointlight.cpp
              src/main/cpp/engine/components/lightsfactory.cpp
 
              src/main/cpp/game/TestScene.cpp

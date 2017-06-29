@@ -37,6 +37,8 @@ private:
 	shared_ptr<MeshRenderer> m_landMeshRenderer;
 	shared_ptr<GameObject> m_directionalLightGameObject;
 	shared_ptr<DirectionalLight> m_directionalLight;
+	shared_ptr<GameObject> m_pointLightGameObject;
+	shared_ptr<PointLight> m_pointLight;
 };
 
 

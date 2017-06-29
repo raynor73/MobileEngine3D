@@ -4,8 +4,8 @@
 #include <engine/rendering/renderingengine.h>
 #include <engine/components/baselight.h>
 #include <engine/components/directionallight.h>
-/*#include <engine/components/pointlight.h>
-#include <engine/components/spotlight.h>*/
+#include <engine/components/pointlight.h>
+//#include <engine/components/spotlight.h>
 #include <engine/rendering/renderutils.h>
 #include <logwrapper.h>
 
@@ -204,9 +204,9 @@ void Shader::updateUniforms(Transform &transform, Material &material, RenderingE
 				setUniformf(uniformName, renderingEngine.findFloat(unprefixedUniformName));
 			else if (uniformType == "DirectionalLight")
 				setUniform(uniformName, static_cast<DirectionalLight &>(renderingEngine.activeLight()));
-			/*else if (uniformType == "PointLight")
+			else if (uniformType == "PointLight")
 				setUniform(uniformName, static_cast<PointLight &>(renderingEngine.activeLight()));
-			else if (uniformType == "SpotLight")
+			/*else if (uniformType == "SpotLight")
 				setUniform(uniformName, static_cast<SpotLight &>(renderingEngine.activeLight()));*/
 			else
 				renderingEngine.updateUniformStruct(transform, material, *this, uniformType, uniformName);
@@ -313,7 +313,7 @@ void Shader::setUniform(const string &uniformName, DirectionalLight &directional
 	setUniform(uniformName + ".direction", directionalLight.direction());
 }
 
-/*void Shader::setUniform(const string &uniformName, PointLight &pointLight)
+void Shader::setUniform(const string &uniformName, PointLight &pointLight)
 {
 	setUniform(uniformName + ".base", static_cast<const BaseLight &>(pointLight));
 	setUniformf(uniformName + ".attenuation.constant", pointLight.attenuation().constant());
@@ -323,7 +323,7 @@ void Shader::setUniform(const string &uniformName, DirectionalLight &directional
 	setUniformf(uniformName + ".range", pointLight.range());
 }
 
-void Shader::setUniform(const string &uniformName, SpotLight &spotLight)
+/*void Shader::setUniform(const string &uniformName, SpotLight &spotLight)
 {
 	setUniform(uniformName + ".pointLight", static_cast<PointLight &>(spotLight));
 	setUniform(uniformName + ".direction", spotLight.direction());
