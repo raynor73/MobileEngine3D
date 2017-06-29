@@ -14,10 +14,12 @@ const string Shader::TAG = "Shader";
 unordered_map<string, weak_ptr<ShaderResource>> Shader::s_loadedShaders;
 
 #ifdef __ANDROID__
-Shader::Shader(const string &path, const string &name)
+Shader::Shader(const string &path, const string &name) :
+	m_name(name)
 {
 #else
-Shader::Shader(const string &path, const string &name, GLuint vertexArrayName);
+Shader::Shader(const string &path, const string &name, GLuint vertexArrayName) :
+	m_name(name)
 {
 	glBindVertexArray(vertexArrayName);
 #endif
@@ -46,6 +48,8 @@ void Shader::loadShaderAndPutToCache(const string &path, const string &name)
 	setFragmentShader(fragmentShaderText);
 
 	addAllAttributes(vertexShaderText);
+
+	Log::d(TAG, "Fragment shader: " + fragmentShaderText);
 
 	linkProgram();
 
@@ -162,8 +166,8 @@ void Shader::addUniform(string uniformType, string uniformName,
 
 	GLint uniformLocation = glGetUniformLocation(m_shaderResource->programReference(), uniformName.c_str());
 	if (uniformLocation < 0) {
-		Log::e(TAG, "Error retrieving uniform location: " + uniformName);
-		throw new runtime_error("Error retrieving uniform location: " + uniformName);
+		Log::e(TAG, "Error retrieving uniform location: [" + uniformName + "] for " + m_name);
+		throw new runtime_error("Error retrieving uniform location: [" + uniformName + "] for " + m_name);
 	}
 
 	m_uniformLocations[uniformName] = uniformLocation;
@@ -333,7 +337,7 @@ void Shader::setUniform(const string &uniformName, PointLight &pointLight)
 void Shader::setAttributeLocation(const string &attributeName, GLuint location)
 {
 	stringstream sstream;
-	sstream << "Binding: " << attributeName << " to " << location;
+	sstream << "Binding attribute: " << attributeName << " to " << location;
 	Log::d(TAG, sstream.str());
 
 	glBindAttribLocation(m_shaderResource.get()->programReference(), location, attributeName.c_str());

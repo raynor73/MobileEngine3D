@@ -79,7 +79,7 @@ vec4 calculatePointLight(PointLight pointLight, vec3 normal, vec3 worldPosition)
 			pointLight.attenuation.exponent * distance * distance +
 			0.0001;
 
-	return vec4(1, 1, 1, 1);// color / attenuation;
+	return color / attenuation;
 }
 
 vec4 calculateSpotLight(SpotLight spotLight, vec3 normal, vec3 worldPosition)

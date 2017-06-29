@@ -60,6 +60,8 @@ private:
 		Uniform(string type, string name) : StructField(type, name) {}
 	};
 
+	string m_name;
+
 	shared_ptr<ShaderResource> m_shaderResource;
 
 	unordered_map<string, GLint> m_uniformLocations;
