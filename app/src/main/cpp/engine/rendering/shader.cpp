@@ -53,6 +53,10 @@ void Shader::loadShaderAndPutToCache(const string &path, const string &name)
 
 	linkProgram();
 
+	stringstream sstream;
+	sstream << "Program reference #1: " << m_shaderResource->programReference();
+	Log::d(TAG, sstream.str());
+
 	addAllUniforms(vertexShaderText);
 	addAllUniforms(fragmentShaderText);
 
@@ -163,6 +167,10 @@ void Shader::addUniform(string uniformType, string uniformName,
 
 	if (!shouldAddThis)
 		return;
+
+	stringstream sstream;
+	sstream << "Program reference #2: " << m_shaderResource->programReference();
+	Log::d(TAG, sstream.str());
 
 	GLint uniformLocation = glGetUniformLocation(m_shaderResource->programReference(), uniformName.c_str());
 	if (uniformLocation < 0) {
