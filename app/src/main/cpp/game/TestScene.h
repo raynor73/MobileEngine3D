@@ -14,7 +14,12 @@ using namespace std;
 class TestScene : public SceneWithRootObject
 {
 public:
-	TestScene(const string &bricksImagePath, JoystickInput &leftJoystickInput, JoystickInput &rightJoystickInput);
+	static const string TEST_IMAGE_KEY;
+	static const string BRICKS_IMAGE_KEY;
+	static const string MONKEY_MODEL_KEY;
+
+	TestScene(const unordered_map<string, string> &paths, JoystickInput &leftJoystickInput,
+			  JoystickInput &rightJoystickInput);
 
 	void makeOpenGLDependentSetup() override;
 	void onOpenGLResized(int width, int height) override;
@@ -27,15 +32,22 @@ private:
 	CoreEngine *m_coreEngine;
 
 	string m_bricksImagePath;
+	string m_testImagePath;
+	string m_monkeyModelPath;
 
 	shared_ptr<TestController> m_controller;
 	shared_ptr<Camera> m_camera;
 	shared_ptr<GameObject> m_cameraGameObject;
 	shared_ptr<GameObject> m_landGameObject;
+	shared_ptr<GameObject> m_monkeyGameObject;
 	shared_ptr<Material> m_landMaterial;
+	shared_ptr<Material> m_monkeyMaterial;
+	shared_ptr<Texture> m_testTexture;
 	shared_ptr<Texture> m_bricksTexture;
 	shared_ptr<Mesh> m_landMesh;
+	shared_ptr<Mesh> m_monkeyMesh;
 	shared_ptr<MeshRenderer> m_landMeshRenderer;
+	shared_ptr<MeshRenderer> m_monkeyMeshRenderer;
 	shared_ptr<GameObject> m_directionalLightGameObject;
 	shared_ptr<DirectionalLight> m_directionalLight;
 	shared_ptr<GameObject> m_pointLightGameObject;

@@ -5,17 +5,24 @@
 #include <engine/core/gameobject.h>
 #include <engine/components/camera.h>
 #include <logwrapper.h>
+#include <unordered_map>
 #include <engine/components/lightsfactory.h>
 #include "TestScene.h"
 
 using namespace std;
 
+const string TestScene::TEST_IMAGE_KEY = "test";
+const string TestScene::BRICKS_IMAGE_KEY = "bricks";
+const string TestScene::MONKEY_MODEL_KEY = "monkey";
 const string TestScene::TAG = "TestScene";
 
-TestScene::TestScene(const string &bricksImagePath, JoystickInput &leftJoystickInput,
-					 JoystickInput &rightJoystickInput) :
-		m_bricksImagePath(bricksImagePath)
+TestScene::TestScene(const unordered_map<string, string> &paths, JoystickInput &leftJoystickInput,
+					 JoystickInput &rightJoystickInput)
 {
+	m_testImagePath = paths.at(TEST_IMAGE_KEY);
+	m_bricksImagePath = paths.at(BRICKS_IMAGE_KEY);
+	m_monkeyModelPath = paths.at(MONKEY_MODEL_KEY);
+
 	m_controller = make_shared<TestController>(leftJoystickInput, rightJoystickInput);
 }
 
@@ -52,7 +59,6 @@ void TestScene::makeOpenGLDependentSetup()
 	m_landMaterial->addFloat("specularIntensity", 1);
 	m_landMaterial->addFloat("specularPower", 8);
 	m_landMeshRenderer = make_shared<MeshRenderer>(m_landMesh.get(), m_landMaterial.get());
-
 	m_landGameObject = make_shared<GameObject>();
 	m_landGameObject->addComponent(m_landMeshRenderer.get());
 	m_rootGameObject->addChild(m_landGameObject.get());
@@ -79,6 +85,19 @@ void TestScene::makeOpenGLDependentSetup()
 	m_spotLightGameObject->transform().setRotation(Quaternion(Vector3f(0, 1, 0), Utils::toRadians(90)));
 	m_spotLightGameObject->transform().setTranslation(Vector3f(5, 0, 5));
 	m_rootGameObject->addChild(m_spotLightGameObject.get());
+
+	m_monkeyMesh = make_shared<Mesh>(m_monkeyModelPath);
+	m_monkeyMaterial = make_shared<Material>();
+	m_testTexture.reset();
+	m_testTexture = make_shared<Texture>(m_testImagePath);
+	m_monkeyMaterial->addTexture("diffuse", m_testTexture.get());
+	m_monkeyMaterial->addFloat("specularIntensity", 1);
+	m_monkeyMaterial->addFloat("specularPower", 8);
+	m_monkeyMeshRenderer = make_shared<MeshRenderer>(m_monkeyMesh.get(), m_monkeyMaterial.get());
+	m_monkeyGameObject = make_shared<GameObject>();
+	m_monkeyGameObject->addComponent(m_monkeyMeshRenderer.get());
+	m_monkeyGameObject->transform().setTranslation(Vector3f(5, 5, 5));
+	m_rootGameObject->addChild(m_monkeyGameObject.get());
 }
 
 void TestScene::onOpenGLResized(int width, int height)

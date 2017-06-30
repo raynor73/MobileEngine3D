@@ -18,24 +18,37 @@ static CoreEngine *g_coreEngine;
 static TestScene *g_scene;
 
 JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNIEnv *env, jobject,
-																			 jstring shadersDirPath_,
-																			 jstring bricksImagePath_) {
+																			 jobjectArray paths_) {
 	if (g_isEngineInitialized)
 		return;
 	g_isEngineInitialized = true;
 
+	jstring shadersDirPath_ = (jstring) (env->GetObjectArrayElement(paths_, 0));
+	jstring bricksImagePath_ = (jstring) (env->GetObjectArrayElement(paths_, 1));
+	jstring testImagePath_ = (jstring) (env->GetObjectArrayElement(paths_, 2));
+	jstring monkeyModelPath_ = (jstring) (env->GetObjectArrayElement(paths_, 3));
+
 	const char *shadersDirPath = env->GetStringUTFChars(shadersDirPath_, 0);
 	const char *bricksImagePath = env->GetStringUTFChars(bricksImagePath_, 0);
+	const char *testImagePath = env->GetStringUTFChars(testImagePath_, 0);
+	const char *monkeyModelPath = env->GetStringUTFChars(monkeyModelPath_, 0);
+
+	unordered_map<string, string> paths;
+	paths.insert({TestScene::BRICKS_IMAGE_KEY, bricksImagePath});
+	paths.insert({TestScene::TEST_IMAGE_KEY, testImagePath});
+	paths.insert({TestScene::MONKEY_MODEL_KEY, monkeyModelPath});
 
 	g_leftJoystickInput = new JoystickInput();
 	g_rightJoystickInput = new JoystickInput();
 	g_coreEngine = new CoreEngine(shadersDirPath);
-	g_scene = new TestScene(bricksImagePath, *g_leftJoystickInput, *g_rightJoystickInput);
+	g_scene = new TestScene(paths, *g_leftJoystickInput, *g_rightJoystickInput);
 
 	g_coreEngine->setScene(g_scene);
 
 	env->ReleaseStringUTFChars(shadersDirPath_, shadersDirPath);
 	env->ReleaseStringUTFChars(bricksImagePath_, bricksImagePath);
+	env->ReleaseStringUTFChars(testImagePath_, testImagePath);
+	env->ReleaseStringUTFChars(monkeyModelPath_, monkeyModelPath);
 }
 
 JNIEXPORT void JNICALL

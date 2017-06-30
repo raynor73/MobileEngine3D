@@ -50,13 +50,7 @@ void Shader::loadShaderAndPutToCache(const string &path, const string &name)
 
 	addAllAttributes(vertexShaderText);
 
-	Log::d(TAG, "Fragment shader: " + fragmentShaderText);
-
 	linkProgram();
-
-	stringstream sstream;
-	sstream << "Program reference #1: " << m_shaderResource->programReference();
-	Log::d(TAG, sstream.str());
 
 	addAllUniforms(vertexShaderText);
 	addAllUniforms(fragmentShaderText);
@@ -143,13 +137,6 @@ unordered_map<string, vector<Shader::StructField>> Shader::findUniformStructs(co
 		shaderTextToSearch = structMatch.suffix();
 	}
 
-	/*for (auto i : structsWithFields) {
-		Log::d(TAG, "Struct: " + i.first);
-		for (auto j : i.second) {
-			Log::d(TAG, "\t" + j.type + ": " + j.name);
-		}
-	}*/
-
 	return structsWithFields;
 }
 
@@ -168,10 +155,6 @@ void Shader::addUniform(string uniformType, string uniformName,
 
 	if (!shouldAddThis)
 		return;
-
-	stringstream sstream;
-	sstream << "Program reference #2: " << m_shaderResource->programReference();
-	Log::d(TAG, sstream.str());
 
 	GLint uniformLocation = glGetUniformLocation(m_shaderResource->programReference(), uniformName.c_str());
 	if (uniformLocation < 0) {
@@ -246,10 +229,6 @@ void Shader::updateUniforms(Transform &transform, Material &material, RenderingE
 void Shader::addAllUniforms(const string &shaderText)
 {
 	unordered_map<string, vector<StructField>> structsWithFields = findUniformStructs(shaderText);
-
-	for (auto i : structsWithFields) {
-		Log::d(TAG, "Found struct: " + i.first);
-	}
 
 	regex re("uniform (\\w*?) ([\\w]+)");
 	smatch match;
@@ -349,9 +328,5 @@ void Shader::setUniform(const string &uniformName, SpotLight &spotLight)
 
 void Shader::setAttributeLocation(const string &attributeName, GLuint location)
 {
-	stringstream sstream;
-	sstream << "Binding attribute: " << attributeName << " to " << location;
-	Log::d(TAG, sstream.str());
-
 	glBindAttribLocation(m_shaderResource.get()->programReference(), location, attributeName.c_str());
 }

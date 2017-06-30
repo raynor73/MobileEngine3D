@@ -69,10 +69,12 @@ public class MainActivity extends AppCompatActivity {
 					final ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
 
 					if (configurationInfo.reqGlEsVersion >= 0x20000) {
-						initEngine(
+						initEngine(new String[] {
 								mFilesExtractor.getShadersDir().getPath() + File.separator,
-								mFilesExtractor.getTexturesDir().getPath() + File.separator + "bricks.jpg"
-						);
+								mFilesExtractor.getTexturesDir().getPath() + File.separator + "bricks.jpg",
+								mFilesExtractor.getTexturesDir().getPath() + File.separator + "test.jpg",
+								mFilesExtractor.getModelsDir().getPath() + File.separator + "monkey2.obj"
+						});
 
 						mGLSurfaceView.setEGLContextClientVersion(2);
 						mGLSurfaceView.setDebugFlags(DEBUG_CHECK_GL_ERROR);
@@ -122,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 			mGLSurfaceView.onPause();
 	}
 
-	public native void initEngine(String shadersDirPath, String bricksImagePath);
+	public native void initEngine(String[] paths);
 
 	public native void onRightJoystickPositionChanged(JoystickPosition position);
 

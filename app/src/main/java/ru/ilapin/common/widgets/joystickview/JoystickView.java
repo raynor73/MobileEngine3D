@@ -240,8 +240,6 @@ public class JoystickView extends View {
 		if (mState == newState)
 			throw new RuntimeException("Already has state: " + mState);
 
-		Log.d(TAG, mState + " -> " + newState);
-
 		mState = newState;
 		mState.onEnter();
 	}

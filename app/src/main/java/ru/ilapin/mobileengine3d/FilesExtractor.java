@@ -16,12 +16,14 @@ public class FilesExtractor {
 	private static final String TAG = "FilesExtractor";
 	private static final String SHADERS_DIR_NAME = "shaders";
 	private static final String TEXTURES_DIR_NAME = "textures";
+	private static final String MODELS_DIR_NAME = "models";
 
 	public enum State { CHECKING, EXTRACTING, COMPLETED }
 
 	private final Context mContext;
 	private final File mShadersDir;
 	private final File mTexturesDir;
+	private final File mModelsDir;
 	private final BehaviorSubject<State> mStateObservable = BehaviorSubject.create();
 
 	private State mState;
@@ -31,6 +33,7 @@ public class FilesExtractor {
 		mContext = context;
 		mShadersDir = mContext.getDir(SHADERS_DIR_NAME, Context.MODE_PRIVATE);
 		mTexturesDir = mContext.getDir(TEXTURES_DIR_NAME, Context.MODE_PRIVATE);
+		mModelsDir = mContext.getDir(MODELS_DIR_NAME, Context.MODE_PRIVATE);
 
 		checkFiles();
 	}
@@ -47,11 +50,13 @@ public class FilesExtractor {
 		return mTexturesDir;
 	}
 
+	public File getModelsDir() {
+		return mModelsDir;
+	}
+
 	private void changeState(final State newState) {
 		if (newState == mState)
 			throw new RuntimeException("Already has " + mState + " state");
-
-		Log.d(TAG, mState + " -> " + newState);
 
 		mState = newState;
 		mStateObservable.onNext(mState);
@@ -73,7 +78,8 @@ public class FilesExtractor {
 		protected Boolean doInBackground(final Void... params) {
 			try {
 				return isExtractionRequiredForDirName(SHADERS_DIR_NAME, getShadersDir()) ||
-						isExtractionRequiredForDirName(TEXTURES_DIR_NAME, getTexturesDir());
+						isExtractionRequiredForDirName(TEXTURES_DIR_NAME, getTexturesDir()) ||
+						isExtractionRequiredForDirName(MODELS_DIR_NAME, getModelsDir());
 			} catch (final IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -113,6 +119,7 @@ public class FilesExtractor {
 			try {
 				extractDirToDir(SHADERS_DIR_NAME, mShadersDir);
 				extractDirToDir(TEXTURES_DIR_NAME, mTexturesDir);
+				extractDirToDir(MODELS_DIR_NAME, mModelsDir);
 			} catch (final IOException e) {
 				throw new RuntimeException(e);
 			}
