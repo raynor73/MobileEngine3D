@@ -5,6 +5,7 @@
 #include <engine/core/scenewithrootobject.h>
 #include <engine/components/meshrenderer.h>
 #include <engine/core/coreengine.h>
+#include <engine/components/spotlight.h>
 #include "JoystickInput.h"
 #include "TestController.h"
 
@@ -39,6 +40,8 @@ private:
 	shared_ptr<DirectionalLight> m_directionalLight;
 	shared_ptr<GameObject> m_pointLightGameObject;
 	shared_ptr<PointLight> m_pointLight;
+	shared_ptr<GameObject> m_spotLightGameObject;
+	shared_ptr<SpotLight> m_spotLight;
 };
 
 

@@ -18,7 +18,7 @@ class Transform;
 class BaseLight;
 class DirectionalLight;
 class PointLight;
-//class SpotLight;
+class SpotLight;
 
 class Shader
 {
@@ -81,7 +81,7 @@ private:
 	void setUniform(const string &name, const BaseLight &value);
 	void setUniform(const string &name, DirectionalLight &value);
 	void setUniform(const string &name, PointLight &value);
-	//void setUniform(const string &name, SpotLight &value);
+	void setUniform(const string &name, SpotLight &value);
 	void loadShaderAndPutToCache(const string &path, const string &shaderName);
 	void setAttributeLocation(const string &attributeName, GLuint location);
 };

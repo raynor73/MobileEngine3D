@@ -20,16 +20,22 @@ shared_ptr<PointLight> LightsFactory::createPointLight(RenderingEngine &renderin
 #ifdef __ANDROID__
 	auto shader = make_shared<Shader>(renderingEngine.shadersDirPath(), "forwardpoint");
 #else
-	return make_shared<PointLight>(renderingEngine, color, intensity, attenuation, shader);
+	auto shader = make_shared<Shader>(renderingEngine.shadersDirPath(), "forwardpoint",
+									  renderingEngine.vertexArrayName());
 #endif
 
 	return make_shared<PointLight>(renderingEngine, color, intensity, attenuation, shader);
 }
 
-/*shared_ptr<SpotLight> LightsFactory::createSpotLight(RenderingEngine &renderingEngine, const Vector3f &color,
+shared_ptr<SpotLight> LightsFactory::createSpotLight(RenderingEngine &renderingEngine, const Vector3f &color,
 													 float intensity, const Attenuation &attenuation, float cutoff)
 {
+#ifdef __ANDROID__
+	auto shader = make_shared<Shader>(renderingEngine.shadersDirPath(), "forwardspot");
+#else
 	auto shader = make_shared<Shader>(renderingEngine.shadersDirPath(), "forwardspot",
 									  renderingEngine.vertexArrayName());
+#endif
+
 	return make_shared<SpotLight>(renderingEngine, color, intensity, attenuation, cutoff, shader);
-}*/
+}

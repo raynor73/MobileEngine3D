@@ -70,6 +70,15 @@ void TestScene::makeOpenGLDependentSetup()
 												   Attenuation(0, 0, 1));
 	m_pointLightGameObject->addComponent(m_pointLight.get());
 	m_rootGameObject->addChild(m_pointLightGameObject.get());
+
+	m_spotLightGameObject = make_shared<GameObject>();
+	m_spotLight.reset();
+	m_spotLight = LightsFactory::createSpotLight(m_coreEngine->renderingEngine(), Vector3f(0, 1, 1), 0.8,
+												 Attenuation(0, 0, 0.1), 0.7);
+	m_spotLightGameObject->addComponent(m_spotLight.get());
+	m_spotLightGameObject->transform().setRotation(Quaternion(Vector3f(0, 1, 0), Utils::toRadians(90)));
+	m_spotLightGameObject->transform().setTranslation(Vector3f(5, 0, 5));
+	m_rootGameObject->addChild(m_spotLightGameObject.get());
 }
 
 void TestScene::onOpenGLResized(int width, int height)

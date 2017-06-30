@@ -8,6 +8,7 @@
 //#include <engine/components/spotlight.h>
 #include <engine/rendering/renderutils.h>
 #include <logwrapper.h>
+#include <engine/components/spotlight.h>
 
 const string Shader::TAG = "Shader";
 
@@ -218,8 +219,8 @@ void Shader::updateUniforms(Transform &transform, Material &material, RenderingE
 				setUniform(uniformName, static_cast<DirectionalLight &>(renderingEngine.activeLight()));
 			else if (uniformType == "PointLight")
 				setUniform(uniformName, static_cast<PointLight &>(renderingEngine.activeLight()));
-			/*else if (uniformType == "SpotLight")
-				setUniform(uniformName, static_cast<SpotLight &>(renderingEngine.activeLight()));*/
+			else if (uniformType == "SpotLight")
+				setUniform(uniformName, static_cast<SpotLight &>(renderingEngine.activeLight()));
 			else
 				renderingEngine.updateUniformStruct(transform, material, *this, uniformType, uniformName);
 		} else if (uniformName.find(cameraPrefix) == 0) {
@@ -339,12 +340,12 @@ void Shader::setUniform(const string &uniformName, PointLight &pointLight)
 	setUniformf(uniformName + ".range", pointLight.range());
 }
 
-/*void Shader::setUniform(const string &uniformName, SpotLight &spotLight)
+void Shader::setUniform(const string &uniformName, SpotLight &spotLight)
 {
 	setUniform(uniformName + ".pointLight", static_cast<PointLight &>(spotLight));
 	setUniform(uniformName + ".direction", spotLight.direction());
 	setUniformf(uniformName + ".cutoff", spotLight.cutoff());
-}*/
+}
 
 void Shader::setAttributeLocation(const string &attributeName, GLuint location)
 {
