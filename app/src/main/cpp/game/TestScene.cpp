@@ -86,6 +86,7 @@ void TestScene::makeOpenGLDependentSetup()
 	m_spotLightGameObject->transform().setTranslation(Vector3f(5, 0, 5));
 	m_rootGameObject->addChild(m_spotLightGameObject.get());
 
+	m_monkeyMesh.reset();
 	m_monkeyMesh = make_shared<Mesh>(m_monkeyModelPath);
 	m_monkeyMaterial = make_shared<Material>();
 	m_testTexture.reset();

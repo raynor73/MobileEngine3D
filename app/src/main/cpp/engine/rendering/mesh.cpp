@@ -68,7 +68,7 @@ void Mesh::draw()
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshResource->indexBufferObjectName());
 
-	glDrawElements(GL_TRIANGLES, m_meshResource.get()->numberOfIndices(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, m_meshResource->numberOfIndices(), GL_UNSIGNED_INT, 0);
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
