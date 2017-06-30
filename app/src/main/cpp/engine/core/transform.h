@@ -24,6 +24,8 @@ public:
 
 	Matrix4f transformation();
 
+	Quaternion calculateLookAtDirection(const Vector3f &point, const Vector3f &up) const;
+
 	Transform *parentTransformation() { return m_parentTransformation; }
 	void setParentTransformation(Transform *parentTransformation) { m_parentTransformation = parentTransformation; }
 

@@ -29,6 +29,7 @@ public:
 	void render(Shader &, RenderingEngine &);
 
 	void addChild(GameObject *);
+	//TODO Set engine to component in case when it added after parent object added to hierarchy
 	void addComponent(GameComponent *);
 
 	void setEngine(CoreEngine *);

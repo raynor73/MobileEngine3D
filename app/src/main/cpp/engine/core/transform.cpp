@@ -27,6 +27,11 @@ Matrix4f Transform::transformation()
 	return calculateParentMatrix() * translationM * rotationM * scaleM;
 }
 
+Quaternion Transform::calculateLookAtDirection(const Vector3f &point, const Vector3f &up) const
+{
+	return Quaternion(Matrix4f().initRotation((point - m_translation).normalized(), up));
+}
+
 bool Transform::hasChanged() const
 {
 	if (m_parentTransformation != nullptr && m_parentTransformation->hasChanged())

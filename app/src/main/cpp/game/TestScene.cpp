@@ -98,6 +98,8 @@ void TestScene::makeOpenGLDependentSetup()
 	m_monkeyGameObject = make_shared<GameObject>();
 	m_monkeyGameObject->addComponent(m_monkeyMeshRenderer.get());
 	m_monkeyGameObject->transform().setTranslation(Vector3f(5, 5, 5));
+	m_lookAtComponent = make_shared<LookAtComponent>();
+	m_monkeyGameObject->addComponent(m_lookAtComponent.get());
 	m_rootGameObject->addChild(m_monkeyGameObject.get());
 }
 

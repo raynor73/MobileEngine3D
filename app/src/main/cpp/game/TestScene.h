@@ -8,6 +8,7 @@
 #include <engine/components/spotlight.h>
 #include "JoystickInput.h"
 #include "TestController.h"
+#include "lookatcomponent.h"
 
 using namespace std;
 
@@ -54,6 +55,7 @@ private:
 	shared_ptr<PointLight> m_pointLight;
 	shared_ptr<GameObject> m_spotLightGameObject;
 	shared_ptr<SpotLight> m_spotLight;
+	shared_ptr<LookAtComponent> m_lookAtComponent;
 };
 
 

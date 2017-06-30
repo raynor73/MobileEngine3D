@@ -3,7 +3,7 @@
 
 void SceneWithRootObject::update(float dt)
 {
-	m_rootGameObject->update(dt);
+	m_rootGameObject->updateAll(dt);
 }
 
 void SceneWithRootObject::setEngine(CoreEngine *engine) {

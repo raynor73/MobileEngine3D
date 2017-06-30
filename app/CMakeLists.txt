@@ -93,6 +93,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/engine/components/lightsfactory.cpp
 
              src/main/cpp/game/TestScene.cpp
+             src/main/cpp/game/lookatcomponent.cpp
              src/main/cpp/game/TestController.cpp
              src/main/cpp/game/JoystickInput.cpp )
 
