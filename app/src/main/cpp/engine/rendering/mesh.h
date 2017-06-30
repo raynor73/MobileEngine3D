@@ -20,7 +20,7 @@ public:
 
 	void setVertices(vector<Vertex> &, const vector<unsigned int> &);
 	void setVertices(vector<Vertex> &, const vector<unsigned int> &, bool);
-	void draw();
+	void draw() const;
 
 private:
 	static const string TAG;
