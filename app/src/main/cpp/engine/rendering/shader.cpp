@@ -246,6 +246,10 @@ void Shader::addAllUniforms(const string &shaderText)
 {
 	unordered_map<string, vector<StructField>> structsWithFields = findUniformStructs(shaderText);
 
+	for (auto i : structsWithFields) {
+		Log::d(TAG, "Found struct: " + i.first);
+	}
+
 	regex re("uniform (\\w*?) ([\\w]+)");
 	smatch match;
 
