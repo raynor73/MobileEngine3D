@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 	@Inject
 	FilesExtractor mFilesExtractor;
 
-	GLSurfaceView mGlSurfaceView;
+	GLSurfaceView mGLSurfaceView;
 
 	private boolean mIsRendererSet;
 
@@ -53,16 +53,16 @@ public class MainActivity extends AppCompatActivity {
 			switch (state) {
 				case CHECKING:
 				case EXTRACTING:
-					if (mGlSurfaceView != null) {
-						mContainerViewGroup.removeView(mGlSurfaceView);
-						mGlSurfaceView = null;
+					if (mGLSurfaceView != null) {
+						mContainerViewGroup.removeView(mGLSurfaceView);
+						mGLSurfaceView = null;
 						mIsRendererSet = false;
 					}
 					break;
 
 				case COMPLETED:
-					mGlSurfaceView = new GLSurfaceView(this);
-					mContainerViewGroup.addView(mGlSurfaceView, 0);
+					mGLSurfaceView = new GLSurfaceView(this);
+					mContainerViewGroup.addView(mGLSurfaceView, 0);
 
 					final ActivityManager activityManager =
 							(ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -74,9 +74,10 @@ public class MainActivity extends AppCompatActivity {
 								mFilesExtractor.getTexturesDir().getPath() + File.separator + "bricks.jpg"
 						);
 
-						mGlSurfaceView.setEGLContextClientVersion(2);
-						mGlSurfaceView.setDebugFlags(DEBUG_CHECK_GL_ERROR);
-						mGlSurfaceView.setRenderer(new GLSurfaceView.Renderer() {
+						mGLSurfaceView.setEGLContextClientVersion(2);
+						mGLSurfaceView.setDebugFlags(DEBUG_CHECK_GL_ERROR);
+						//mGLSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+						mGLSurfaceView.setRenderer(new GLSurfaceView.Renderer() {
 							@Override
 							public void onSurfaceCreated(final GL10 gl10, final EGLConfig eglConfig) {
 								MainActivity.this.onSurfaceCreated();
@@ -95,10 +96,10 @@ public class MainActivity extends AppCompatActivity {
 						mIsRendererSet = true;
 
 						mRightJoystickView.getPositionObservable().subscribe(joystickPosition ->
-								mGlSurfaceView.queueEvent(() -> onRightJoystickPositionChanged(joystickPosition)));
+								mGLSurfaceView.queueEvent(() -> onRightJoystickPositionChanged(joystickPosition)));
 
 						mLeftJoystickView.getPositionObservable().subscribe(joystickPosition ->
-								mGlSurfaceView.queueEvent(() -> onLeftJoystickPositionChanged(joystickPosition)));
+								mGLSurfaceView.queueEvent(() -> onLeftJoystickPositionChanged(joystickPosition)));
 					}
 					break;
 			}
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 		super.onResume();
 
 		if (mIsRendererSet)
-			mGlSurfaceView.onResume();
+			mGLSurfaceView.onResume();
 	}
 
 	@Override
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 		super.onPause();
 
 		if (mIsRendererSet)
-			mGlSurfaceView.onPause();
+			mGLSurfaceView.onPause();
 	}
 
 	public native void initEngine(String shadersDirPath, String bricksImagePath);

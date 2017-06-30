@@ -55,8 +55,6 @@ void Mesh::setVertices(vector<Vertex> &vertices, const vector<unsigned int> &ind
 
 void Mesh::draw()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
-
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);

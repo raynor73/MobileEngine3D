@@ -64,12 +64,12 @@ void TestScene::makeOpenGLDependentSetup()
 	m_directionalLightGameObject->addComponent(m_directionalLight.get());
 	m_rootGameObject->addChild(m_directionalLightGameObject.get());
 
-	/*m_pointLightGameObject = make_shared<GameObject>();
+	m_pointLightGameObject = make_shared<GameObject>();
 	m_pointLight.reset();
 	m_pointLight = LightsFactory::createPointLight(m_coreEngine->renderingEngine(), Vector3f(0, 1, 0), 0.4,
 												   Attenuation(0, 0, 1));
 	m_pointLightGameObject->addComponent(m_pointLight.get());
-	m_rootGameObject->addChild(m_pointLightGameObject.get());*/
+	m_rootGameObject->addChild(m_pointLightGameObject.get());
 }
 
 void TestScene::onOpenGLResized(int width, int height)

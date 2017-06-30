@@ -52,17 +52,17 @@ void RenderingEngine::render(GameObject &gameObject)
 	gameObject.renderAll(*m_forwardAmbientShader, *this);
 
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_ONE, GL_ONE);
 	glDepthMask(GL_FALSE);
 	glDepthFunc(GL_EQUAL);
+	glBlendFunc(GL_ONE, GL_ONE);
 
 	for (auto light : m_lights) {
 		m_activeLight = light;
 		gameObject.renderAll(*m_activeLight->shader(), *this);
 	}
 
-	glDepthFunc(GL_LESS);
 	glDepthMask(GL_TRUE);
+	glDepthFunc(GL_LESS);
 	glDisable(GL_BLEND);
 }
 
