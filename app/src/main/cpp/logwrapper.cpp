@@ -5,6 +5,11 @@ void Log::e(const std::string &tag, const std::string &text)
 	log(ANDROID_LOG_ERROR, tag, text);
 }
 
+void Log::w(const std::string &tag, const std::string &text)
+{
+	log(ANDROID_LOG_WARN, tag, text);
+}
+
 void Log::i(const std::string &tag, const std::string &text)
 {
 	log(ANDROID_LOG_INFO, tag, text);

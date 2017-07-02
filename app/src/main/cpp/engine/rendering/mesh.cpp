@@ -105,9 +105,11 @@ void Mesh::loadMesh(const string &path)
 	vector<Vertex> vertices;
 	vector<unsigned int> indices;
 
-	for (int i = 0; i < indexedModel.positions().size(); i++)
-		vertices.push_back(Vertex(indexedModel.positions()[i], indexedModel.textureCoordinates()[i],
-						   indexedModel.normals()[i]));
+	for (int i = 0; i < indexedModel.positions().size(); i++) {
+		Vertex vertex = Vertex(indexedModel.positions()[i], indexedModel.textureCoordinates()[i],
+							   indexedModel.normals()[i], indexedModel.tangents()[i]);
+		vertices.push_back(vertex);
+	}
 
 	for (int i = 0; i < indexedModel.indices().size(); i++)
 		indices.push_back(indexedModel.indices()[i]);

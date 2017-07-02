@@ -1,17 +1,12 @@
 precision mediump float;
 
-#include "lighting.glh"
+#include "lighting.fsh"
 
-varying vec2 textureCoordinate0;
-varying vec3 normal0;
-varying vec3 worldPosition0;
-
-uniform sampler2D diffuse;
 uniform PointLight R_pointLight;
 
-void main()
+vec4 calculateLightingEffect(vec3 normal, vec3 worldPosition)
 {
-	gl_FragColor =
-			texture2D(diffuse, textureCoordinate0.xy) *
-			calculatePointLight(R_pointLight, normalize(normal0), worldPosition0);
+	return calculatePointLight(R_pointLight, normal, worldPosition);
 }
+
+#include "lightingMain.fsh"

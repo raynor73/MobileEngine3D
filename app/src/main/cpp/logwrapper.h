@@ -8,6 +8,7 @@ class Log
 {
 public:
 	static void e(const std::string &tag, const std::string &text);
+	static void w(const std::string &tag, const std::string &text);
 	static void i(const std::string &tag, const std::string &text);
 	static void d(const std::string &tag, const std::string &text);
 

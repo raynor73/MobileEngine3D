@@ -5,7 +5,7 @@
 #include <engine/components/baselight.h>
 #include <engine/components/directionallight.h>
 #include <engine/components/pointlight.h>
-//#include <engine/components/spotlight.h>
+#include <engine/components/spotlight.h>
 #include <engine/rendering/renderutils.h>
 #include <logwrapper.h>
 #include <engine/components/spotlight.h>
@@ -44,6 +44,9 @@ void Shader::loadShaderAndPutToCache(const string &path, const string &name)
 
 	string vertexShaderText = loadShader(path, name + ".vsh");
 	string fragmentShaderText = loadShader(path, name + ".fsh");
+
+	/*Log::d(TAG, "Loaded vertex shader Text: [" + name + "]" + vertexShaderText);
+	Log::d(TAG, "Loaded fragment shader Text: [" + name + "]" + fragmentShaderText);*/
 
 	setVertexShader(vertexShaderText);
 	setFragmentShader(fragmentShaderText);
@@ -108,8 +111,8 @@ void Shader::compileShader(const string &text, GLenum type)
 	glShaderSource(shaderReference, 1, &rawText, &length);
 	glCompileShader(shaderReference);
 	if (RenderUtils::glGetShader(shaderReference, GL_COMPILE_STATUS) != GL_TRUE) {
-		Log::e(TAG, "Compilation error: " + RenderUtils::_glGetShaderInfoLog(shaderReference));
-		throw new runtime_error("Compilation error: " + RenderUtils::_glGetShaderInfoLog(shaderReference));
+		Log::e(TAG, "Compilation error: [" + m_name + "] " + RenderUtils::_glGetShaderInfoLog(shaderReference));
+		throw new runtime_error("Compilation error: [" + m_name + "] " + RenderUtils::_glGetShaderInfoLog(shaderReference));
 	}
 
 	glAttachShader(m_shaderResource->programReference(), shaderReference);
@@ -283,7 +286,7 @@ string Shader::loadShader(const string &path, const string &name)
 	string line;
 
 	while (getline(inputStream, line)) {
-		regex re("#include \"([a-z\\.]+)\"");
+		regex re("#include \"([a-zA-Z\\.]+)\"");
 		smatch match;
 		if (regex_search(line, match, re)) {
 			shaderText.append(loadShader(path, match[1]));

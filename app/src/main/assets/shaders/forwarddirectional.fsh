@@ -1,16 +1,12 @@
 precision mediump float;
 
-#include "lighting.glh"
+#include "lighting.fsh"
 
-varying vec2 textureCoordinate0;
-varying vec3 normal0;
-varying vec3 worldPosition0;
-
-uniform sampler2D diffuse;
 uniform DirectionalLight R_directionalLight;
 
-void main() {
-	gl_FragColor =
-			texture2D(diffuse, textureCoordinate0.xy) *
-			calculateDirectionalLight(R_directionalLight, normalize(normal0), worldPosition0);
+vec4 calculateLightingEffect(vec3 normal, vec3 worldPosition)
+{
+	return calculateDirectionalLight(R_directionalLight, normal, worldPosition);
 }
+
+#include "lightingMain.fsh"
