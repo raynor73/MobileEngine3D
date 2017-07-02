@@ -13,7 +13,9 @@ using namespace std;
 
 const string TestScene::TEST_IMAGE_KEY = "test";
 const string TestScene::BRICKS_IMAGE_KEY = "bricks";
+const string TestScene::BRICKS_NORMAL_MAP_IMAGE_KEY = "bricks_normal_map";
 const string TestScene::MONKEY_MODEL_KEY = "monkey";
+const string TestScene::LAND_MODEL_KEY = "land";
 const string TestScene::TAG = "TestScene";
 
 TestScene::TestScene(const unordered_map<string, string> &paths, JoystickInput &leftJoystickInput,
@@ -21,7 +23,9 @@ TestScene::TestScene(const unordered_map<string, string> &paths, JoystickInput &
 {
 	m_testImagePath = paths.at(TEST_IMAGE_KEY);
 	m_bricksImagePath = paths.at(BRICKS_IMAGE_KEY);
+	m_bricksNormalMapImagePath = paths.at(BRICKS_NORMAL_MAP_IMAGE_KEY);
 	m_monkeyModelPath = paths.at(MONKEY_MODEL_KEY);
+	m_landModelPath = paths.at(LAND_MODEL_KEY);
 
 	m_controller = make_shared<TestController>(leftJoystickInput, rightJoystickInput);
 }
@@ -32,7 +36,7 @@ void TestScene::makeOpenGLDependentSetup()
 	m_rootGameObject->setEngine(m_coreEngine);
 	m_camera.reset();
 
-	vector<Vertex> vertices;
+	/*vector<Vertex> vertices;
 	vector<unsigned int> indices;
 
 	float fieldDepth = 10;
@@ -48,19 +52,22 @@ void TestScene::makeOpenGLDependentSetup()
 	indices.push_back(2);
 	indices.push_back(2);
 	indices.push_back(1);
-	indices.push_back(3);
+	indices.push_back(3);*/
 
-	m_landMesh = make_shared<Mesh>();
-	m_landMesh->setVertices(vertices, indices, true);
+	m_landMesh.reset();
+	m_landMesh = make_shared<Mesh>(m_landModelPath);
 	m_landMaterial = make_shared<Material>();
 	m_bricksTexture.reset();
 	m_bricksTexture = make_shared<Texture>(m_bricksImagePath);
+	m_bricksNormalMapTexture = make_shared<Texture>(m_bricksNormalMapImagePath);
 	m_landMaterial->addTexture("diffuse", m_bricksTexture.get());
+	m_landMaterial->addTexture("normalMap", m_bricksNormalMapTexture.get());
 	m_landMaterial->addFloat("specularIntensity", 1);
 	m_landMaterial->addFloat("specularPower", 8);
 	m_landMeshRenderer = make_shared<MeshRenderer>(m_landMesh.get(), m_landMaterial.get());
 	m_landGameObject = make_shared<GameObject>();
 	m_landGameObject->addComponent(m_landMeshRenderer.get());
+	m_landGameObject->transform().setTranslation(Vector3f(0, -1, 0));
 	m_rootGameObject->addChild(m_landGameObject.get());
 
 	m_directionalLightGameObject = make_shared<GameObject>();

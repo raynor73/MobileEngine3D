@@ -9,6 +9,7 @@ RenderingEngine::RenderingEngine(const string &shadersDirPath) :
 		m_shadersDirPath(shadersDirPath)
 {
 	m_samplerMap["diffuse"] = 0;
+	m_samplerMap["normalMap"] = 1;
 	m_vectors3f["ambient"] = Vector3f(0.1, 0.1, 0.1);
 
 	glFrontFace(GL_CW);

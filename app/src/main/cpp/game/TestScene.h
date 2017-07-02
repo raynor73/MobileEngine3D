@@ -17,7 +17,9 @@ class TestScene : public SceneWithRootObject
 public:
 	static const string TEST_IMAGE_KEY;
 	static const string BRICKS_IMAGE_KEY;
+	static const string BRICKS_NORMAL_MAP_IMAGE_KEY;
 	static const string MONKEY_MODEL_KEY;
+	static const string LAND_MODEL_KEY;
 
 	TestScene(const unordered_map<string, string> &paths, JoystickInput &leftJoystickInput,
 			  JoystickInput &rightJoystickInput);
@@ -33,8 +35,10 @@ private:
 	CoreEngine *m_coreEngine;
 
 	string m_bricksImagePath;
+	string m_bricksNormalMapImagePath;
 	string m_testImagePath;
 	string m_monkeyModelPath;
+	string m_landModelPath;
 
 	shared_ptr<TestController> m_controller;
 	shared_ptr<Camera> m_camera;
@@ -45,6 +49,7 @@ private:
 	shared_ptr<Material> m_monkeyMaterial;
 	shared_ptr<Texture> m_testTexture;
 	shared_ptr<Texture> m_bricksTexture;
+	shared_ptr<Texture> m_bricksNormalMapTexture;
 	shared_ptr<Mesh> m_landMesh;
 	shared_ptr<Mesh> m_monkeyMesh;
 	shared_ptr<MeshRenderer> m_landMeshRenderer;

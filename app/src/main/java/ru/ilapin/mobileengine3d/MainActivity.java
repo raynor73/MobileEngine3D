@@ -71,14 +71,15 @@ public class MainActivity extends AppCompatActivity {
 					if (configurationInfo.reqGlEsVersion >= 0x20000) {
 						initEngine(new String[] {
 								mFilesExtractor.getShadersDir().getPath() + File.separator,
-								mFilesExtractor.getTexturesDir().getPath() + File.separator + "bricks.jpg",
+								mFilesExtractor.getTexturesDir().getPath() + File.separator + "bricks2.jpg",
 								mFilesExtractor.getTexturesDir().getPath() + File.separator + "test.jpg",
-								mFilesExtractor.getModelsDir().getPath() + File.separator + "monkey2.obj"
+								mFilesExtractor.getModelsDir().getPath() + File.separator + "monkey2.obj",
+								mFilesExtractor.getTexturesDir().getPath() + File.separator + "bricks2_normal.jpg",
+								mFilesExtractor.getModelsDir().getPath() + File.separator + "plane3.obj",
 						});
 
 						mGLSurfaceView.setEGLContextClientVersion(2);
 						mGLSurfaceView.setDebugFlags(DEBUG_CHECK_GL_ERROR);
-						//mGLSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
 						mGLSurfaceView.setRenderer(new GLSurfaceView.Renderer() {
 							@Override
 							public void onSurfaceCreated(final GL10 gl10, final EGLConfig eglConfig) {

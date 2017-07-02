@@ -2,11 +2,11 @@ precision mediump float;
 
 varying vec2 textureCoordinate0;
 varying vec3 worldPosition0;
-varying vec3 normal0;
-//varying mat3 tbnMatrix;
+//varying vec3 normal0;
+varying mat3 tbnMatrix;
 
 uniform sampler2D diffuse;
-//unifrm sampler2D normalMap;
+uniform sampler2D normalMap;
 
 uniform vec3 R_ambient;
 
