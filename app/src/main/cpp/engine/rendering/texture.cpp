@@ -1,7 +1,6 @@
 #include "texture.h"
 #include <logwrapper.h>
 #include <JpegDec.h>
-#include <sstream>
 
 using namespace std;
 using namespace jpegutil;
@@ -53,10 +52,6 @@ void Texture::loadTextureAndPutToCache(const string &path)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-		/*stringstream sstream;
-		for (int i = 0; i < 256; i++)
-			sstream << hex << int(image[i]) << " ";
-		Log::d(TAG, sstream.str());*/
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, imageWidth, imageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 
 		s_loadedTextures[path] = m_textureResource;

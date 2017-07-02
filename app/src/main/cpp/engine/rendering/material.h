@@ -12,6 +12,7 @@ using namespace std;
 class Material : public MappedValues
 {
 public:
+	// TODO Add constructor with standard parameters
 	Material() {}
 
 	void addTexture(const string &name, Texture *texture) { m_textures[name] = texture; }

@@ -29,6 +29,7 @@ JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNI
 	jstring monkeyModelPath_ = (jstring) (env->GetObjectArrayElement(paths_, 3));
 	jstring bricksNormalMapImagePath_ = (jstring) (env->GetObjectArrayElement(paths_, 4));
 	jstring landModelPath_ = (jstring) (env->GetObjectArrayElement(paths_, 5));
+	jstring defaultNormalMapImagePath_ = (jstring) (env->GetObjectArrayElement(paths_, 6));
 
 	const char *shadersDirPath = env->GetStringUTFChars(shadersDirPath_, 0);
 	const char *bricksImagePath = env->GetStringUTFChars(bricksImagePath_, 0);
@@ -36,6 +37,7 @@ JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNI
 	const char *testImagePath = env->GetStringUTFChars(testImagePath_, 0);
 	const char *monkeyModelPath = env->GetStringUTFChars(monkeyModelPath_, 0);
 	const char *landModelPath = env->GetStringUTFChars(landModelPath_, 0);
+	const char *defaultNormalMapImagePath = env->GetStringUTFChars(defaultNormalMapImagePath_, 0);
 
 	unordered_map<string, string> paths;
 	paths.insert({TestScene::BRICKS_IMAGE_KEY, bricksImagePath});
@@ -43,6 +45,7 @@ JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNI
 	paths.insert({TestScene::TEST_IMAGE_KEY, testImagePath});
 	paths.insert({TestScene::MONKEY_MODEL_KEY, monkeyModelPath});
 	paths.insert({TestScene::LAND_MODEL_KEY, landModelPath});
+	paths.insert({TestScene::DEFAULT_NORMAL_MAP_IMAGE_KEY, defaultNormalMapImagePath});
 
 	g_leftJoystickInput = new JoystickInput();
 	g_rightJoystickInput = new JoystickInput();
@@ -57,6 +60,7 @@ JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNI
 	env->ReleaseStringUTFChars(testImagePath_, testImagePath);
 	env->ReleaseStringUTFChars(monkeyModelPath_, monkeyModelPath);
 	env->ReleaseStringUTFChars(landModelPath_, landModelPath);
+	env->ReleaseStringUTFChars(defaultNormalMapImagePath_, defaultNormalMapImagePath);
 }
 
 JNIEXPORT void JNICALL

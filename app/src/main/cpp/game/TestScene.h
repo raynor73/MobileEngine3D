@@ -15,6 +15,7 @@ using namespace std;
 class TestScene : public SceneWithRootObject
 {
 public:
+	static const string DEFAULT_NORMAL_MAP_IMAGE_KEY;
 	static const string TEST_IMAGE_KEY;
 	static const string BRICKS_IMAGE_KEY;
 	static const string BRICKS_NORMAL_MAP_IMAGE_KEY;
@@ -34,11 +35,14 @@ private:
 
 	CoreEngine *m_coreEngine;
 
+	string m_defaultNormalMapImagePath;
 	string m_bricksImagePath;
 	string m_bricksNormalMapImagePath;
 	string m_testImagePath;
 	string m_monkeyModelPath;
 	string m_landModelPath;
+
+	shared_ptr<Texture> m_defaultNormalMapTexture;
 
 	shared_ptr<TestController> m_controller;
 	shared_ptr<Camera> m_camera;

@@ -11,6 +11,7 @@
 
 using namespace std;
 
+const string TestScene::DEFAULT_NORMAL_MAP_IMAGE_KEY = "default_normal_map";
 const string TestScene::TEST_IMAGE_KEY = "test";
 const string TestScene::BRICKS_IMAGE_KEY = "bricks";
 const string TestScene::BRICKS_NORMAL_MAP_IMAGE_KEY = "bricks_normal_map";
@@ -21,6 +22,7 @@ const string TestScene::TAG = "TestScene";
 TestScene::TestScene(const unordered_map<string, string> &paths, JoystickInput &leftJoystickInput,
 					 JoystickInput &rightJoystickInput)
 {
+	m_defaultNormalMapImagePath = paths.at(DEFAULT_NORMAL_MAP_IMAGE_KEY);
 	m_testImagePath = paths.at(TEST_IMAGE_KEY);
 	m_bricksImagePath = paths.at(BRICKS_IMAGE_KEY);
 	m_bricksNormalMapImagePath = paths.at(BRICKS_NORMAL_MAP_IMAGE_KEY);
@@ -35,6 +37,9 @@ void TestScene::makeOpenGLDependentSetup()
 	m_rootGameObject = make_shared<GameObject>();
 	m_rootGameObject->setEngine(m_coreEngine);
 	m_camera.reset();
+
+	m_defaultNormalMapTexture.reset();
+	m_defaultNormalMapTexture = make_shared<Texture>(m_defaultNormalMapImagePath);
 
 	/*vector<Vertex> vertices;
 	vector<unsigned int> indices;
@@ -99,6 +104,7 @@ void TestScene::makeOpenGLDependentSetup()
 	m_testTexture.reset();
 	m_testTexture = make_shared<Texture>(m_testImagePath);
 	m_monkeyMaterial->addTexture("diffuse", m_testTexture.get());
+	m_monkeyMaterial->addTexture("normalMap", m_defaultNormalMapTexture.get());
 	m_monkeyMaterial->addFloat("specularIntensity", 1);
 	m_monkeyMaterial->addFloat("specularPower", 8);
 	m_monkeyMeshRenderer = make_shared<MeshRenderer>(m_monkeyMesh.get(), m_monkeyMaterial.get());
