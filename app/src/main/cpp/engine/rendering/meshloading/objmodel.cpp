@@ -77,6 +77,8 @@ IndexedModel OBJModel::toIndexedModel() const
 			indexedModel.positions().push_back(currentPosition);
 			indexedModel.textureCoordinates().push_back(currentTextureCoordinate);
 			indexedModel.normals().push_back(currentNormal);
+
+			indexedModel.tangents().push_back(Vector3f());
 		}
 
 		unsigned int normalModelIndex;
@@ -89,6 +91,8 @@ IndexedModel OBJModel::toIndexedModel() const
 			normalModel.positions().push_back(currentPosition);
 			normalModel.textureCoordinates().push_back(currentTextureCoordinate);
 			normalModel.normals().push_back(currentNormal);
+
+			normalModel.tangents().push_back(Vector3f());
 		}
 
 		indexedModel.indices().push_back(modelVertexIndex);
@@ -98,10 +102,13 @@ IndexedModel OBJModel::toIndexedModel() const
 
 	if (!m_hasNormals) {
 		normalModel.calculateNormals();
-
 		for (int i = 0; i < indexedModel.normals().size(); i++)
 			indexedModel.normals()[i] = normalModel.normals()[indexMap[i]];
 	}
+
+	normalModel.calculateTangents();
+	for (int i = 0; i < indexedModel.tangents().size(); i++)
+		indexedModel.tangents()[i] = indexedModel.tangents()[indexMap[i]];
 
 	return indexedModel;
 }

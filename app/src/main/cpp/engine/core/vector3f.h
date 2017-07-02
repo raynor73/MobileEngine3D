@@ -12,6 +12,9 @@ public:
 	Vector3f(float x, float y, float z);
 
 	void set(float x, float y, float z) { m_x = x; m_y = y; m_z = z; }
+	void setX(float x) { m_x = x; }
+	void setY(float y) { m_y = y; }
+	void setZ(float z) { m_z = z; }
 
 	operator std::string() const;
 	float length() const;
