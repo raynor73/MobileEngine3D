@@ -46,6 +46,7 @@ void TestScene::makeOpenGLDependentSetup()
 	m_landMaterial = make_shared<Material>();
 	m_bricksTexture.reset();
 	m_bricksTexture = make_shared<Texture>(m_bricksImagePath);
+	m_bricksNormalMapTexture.reset();
 	m_bricksNormalMapTexture = make_shared<Texture>(m_bricksNormalMapImagePath);
 	m_landMaterial->addTexture("diffuse", m_bricksTexture.get());
 	m_landMaterial->addTexture("normalMap", m_bricksNormalMapTexture.get());
