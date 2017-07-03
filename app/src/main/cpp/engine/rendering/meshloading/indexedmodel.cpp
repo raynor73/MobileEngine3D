@@ -1,5 +1,6 @@
 #include <logwrapper.h>
 #include <utils.h>
+#include <cmath>
 #include "indexedmodel.h"
 
 using namespace std;
@@ -42,8 +43,9 @@ void IndexedModel::calculateTangents()
 		float deltaU2 = m_textureCoordinates[i2].x() - m_textureCoordinates[i0].x();
 		float deltaV2 = m_textureCoordinates[i2].y() - m_textureCoordinates[i0].y();
 
-		float f = 1.0f / (deltaU1 * deltaV2 - deltaU2 * deltaV1);
-		Log::d(TAG, "f: " + Utils::toString(f));
+		float dividend = deltaU1 * deltaV2 - deltaU2 * deltaV1;
+		//TODO: The first 0.0f may need to be changed to 1.0f here.
+		float f = abs(dividend) < FLT_EPSILON ? 0.0f : 1.0f / dividend;
 		Vector3f tangent;
 		tangent.setX(f * (deltaV2 * edge1.x() - deltaV1 * edge2.x()));
 		tangent.setY(f * (deltaV2 * edge1.y() - deltaV1 * edge2.y()));
@@ -56,7 +58,7 @@ void IndexedModel::calculateTangents()
 	}
 
 	for (int i = 0; i < m_tangents.size(); i++) {
-		//Log::d(TAG, "Tangent #1: " + string(m_tangents[i]));
 		m_tangents[i] = m_tangents[i].normalized();
+//		Log::d(TAG, "Tangent #1: " + string(m_tangents[i]));
 	}
 }

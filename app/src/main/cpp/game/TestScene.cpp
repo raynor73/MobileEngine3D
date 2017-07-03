@@ -80,7 +80,7 @@ void TestScene::makeOpenGLDependentSetup()
 	m_spotLightGameObject->transform().setTranslation(Vector3f(5, 0, 5));
 	m_rootGameObject->addChild(m_spotLightGameObject.get());
 
-	/*m_monkeyMesh.reset();
+	m_monkeyMesh.reset();
 	m_monkeyMesh = make_shared<Mesh>(m_monkeyModelPath);
 	m_monkeyMaterial = make_shared<Material>();
 	m_testTexture.reset();
@@ -95,7 +95,7 @@ void TestScene::makeOpenGLDependentSetup()
 	m_monkeyGameObject->transform().setTranslation(Vector3f(5, 5, 5));
 	m_lookAtComponent = make_shared<LookAtComponent>();
 	m_monkeyGameObject->addComponent(m_lookAtComponent.get());
-	m_rootGameObject->addChild(m_monkeyGameObject.get());*/
+	m_rootGameObject->addChild(m_monkeyGameObject.get());
 }
 
 void TestScene::onOpenGLResized(int width, int height)

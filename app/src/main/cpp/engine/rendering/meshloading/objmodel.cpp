@@ -2,8 +2,11 @@
 #include <fstream>
 #include <sstream>
 #include <unordered_map>
+#include <logwrapper.h>
 
 using namespace std;
+
+const string OBJModel::TAG = "OBJModel";
 
 OBJModel::OBJModel(const string &path) :
 	m_hasTextureCoordinates(false),
@@ -76,9 +79,9 @@ IndexedModel OBJModel::toIndexedModel() const
 
 			indexedModel.positions().push_back(currentPosition);
 			indexedModel.textureCoordinates().push_back(currentTextureCoordinate);
-			indexedModel.normals().push_back(currentNormal);
-
-			indexedModel.tangents().push_back(Vector3f());
+			if (m_hasNormals)
+				indexedModel.normals().push_back(currentNormal);
+			//indexedModel.tangents().push_back(Vector3f());
 		}
 
 		unsigned int normalModelIndex;
@@ -91,7 +94,6 @@ IndexedModel OBJModel::toIndexedModel() const
 			normalModel.positions().push_back(currentPosition);
 			normalModel.textureCoordinates().push_back(currentTextureCoordinate);
 			normalModel.normals().push_back(currentNormal);
-
 			normalModel.tangents().push_back(Vector3f());
 		}
 
@@ -102,13 +104,13 @@ IndexedModel OBJModel::toIndexedModel() const
 
 	if (!m_hasNormals) {
 		normalModel.calculateNormals();
-		for (int i = 0; i < indexedModel.normals().size(); i++)
-			indexedModel.normals()[i] = normalModel.normals()[indexMap[i]];
+		for (int i = 0; i < indexedModel.positions().size(); i++)
+			indexedModel.normals().push_back(normalModel.normals()[indexMap[i]]);
 	}
 
 	normalModel.calculateTangents();
-	for (int i = 0; i < indexedModel.tangents().size(); i++)
-		indexedModel.tangents()[i] = indexedModel.tangents()[indexMap[i]];
+	for (int i = 0; i < indexedModel.positions().size(); i++)
+		indexedModel.tangents().push_back(normalModel.tangents()[indexMap[i]]);
 
 	return indexedModel;
 }

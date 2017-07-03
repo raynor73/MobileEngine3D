@@ -17,6 +17,8 @@ public:
 	IndexedModel toIndexedModel() const;
 
 private:
+	static const string TAG;
+
 	vector<Vector3f> m_positions;
 	vector<Vector2f> m_textureCoordinates;
 	vector<Vector3f> m_normals;

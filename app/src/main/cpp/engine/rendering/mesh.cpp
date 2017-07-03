@@ -108,7 +108,6 @@ void Mesh::loadMesh(const string &path)
 	for (int i = 0; i < indexedModel.positions().size(); i++) {
 		Vertex vertex = Vertex(indexedModel.positions()[i], indexedModel.textureCoordinates()[i],
 							   indexedModel.normals()[i], indexedModel.tangents()[i]);
-		//Log::d(TAG, "Tangent:" + string(vertex.tangent()));
 		vertices.push_back(vertex);
 	}
 
