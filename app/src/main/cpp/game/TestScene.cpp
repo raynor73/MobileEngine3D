@@ -94,7 +94,7 @@ void TestScene::makeOpenGLDependentSetup()
 	m_monkeyMeshRenderer = make_shared<MeshRenderer>(m_monkeyMesh.get(), m_monkeyMaterial.get());
 	m_monkeyGameObject = make_shared<GameObject>();
 	m_monkeyGameObject->addComponent(m_monkeyMeshRenderer.get());
-	m_monkeyGameObject->transform().setTranslation(Vector3f(5, 5, 5));
+	m_monkeyGameObject->transform().setTranslation(Vector3f(5, 10, 5));
 	m_lookAtComponent = make_shared<LookAtComponent>();
 	m_monkeyGameObject->addComponent(m_lookAtComponent.get());
 	m_rootGameObject->addChild(m_monkeyGameObject.get());
@@ -105,6 +105,7 @@ void TestScene::makeOpenGLDependentSetup()
 	m_monkeyPlaneGameObject = make_shared<GameObject>();
 	m_monkeyPlaneGameObject->addComponent(m_monkeyPlaneMeshRenderer.get());
 	m_monkeyPlaneGameObject->transform().setTranslation(Vector3f(0, 0, -5));
+	m_monkeyPlaneGameObject->transform().setRotation(Quaternion(Vector3f(1, 0, 0), Utils::toRadians(90)));
 	m_monkeyGameObject->addChild(m_monkeyPlaneGameObject.get());
 }
 
