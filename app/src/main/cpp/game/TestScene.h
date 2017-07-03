@@ -45,25 +45,41 @@ private:
 	shared_ptr<Texture> m_defaultNormalMapTexture;
 
 	shared_ptr<TestController> m_controller;
+
 	shared_ptr<Camera> m_camera;
+
 	shared_ptr<GameObject> m_cameraGameObject;
 	shared_ptr<GameObject> m_landGameObject;
 	shared_ptr<GameObject> m_monkeyGameObject;
+	shared_ptr<GameObject> m_monkeyPlaneGameObject;
+	shared_ptr<GameObject> m_planeGameObject;
+
 	shared_ptr<Material> m_landMaterial;
 	shared_ptr<Material> m_monkeyMaterial;
+
 	shared_ptr<Texture> m_testTexture;
 	shared_ptr<Texture> m_bricksTexture;
 	shared_ptr<Texture> m_bricksNormalMapTexture;
+
 	shared_ptr<Mesh> m_landMesh;
 	shared_ptr<Mesh> m_monkeyMesh;
+	shared_ptr<Mesh> m_monkeyPlaneMesh;
+	shared_ptr<Mesh> m_planeMesh;
+
 	shared_ptr<MeshRenderer> m_landMeshRenderer;
 	shared_ptr<MeshRenderer> m_monkeyMeshRenderer;
+	shared_ptr<MeshRenderer> m_monkeyPlaneMeshRenderer;
+	shared_ptr<MeshRenderer> m_planeMeshRenderer;
+
 	shared_ptr<GameObject> m_directionalLightGameObject;
 	shared_ptr<DirectionalLight> m_directionalLight;
+
 	shared_ptr<GameObject> m_pointLightGameObject;
 	shared_ptr<PointLight> m_pointLight;
+
 	shared_ptr<GameObject> m_spotLightGameObject;
 	shared_ptr<SpotLight> m_spotLight;
+
 	shared_ptr<LookAtComponent> m_lookAtComponent;
 };
 

@@ -56,6 +56,7 @@ void TestScene::makeOpenGLDependentSetup()
 	m_landGameObject = make_shared<GameObject>();
 	m_landGameObject->addComponent(m_landMeshRenderer.get());
 	m_landGameObject->transform().setTranslation(Vector3f(0, -1, 0));
+	m_landGameObject->transform().setScale(Vector3f(4, 4, 4));
 	m_rootGameObject->addChild(m_landGameObject.get());
 
 	m_directionalLightGameObject = make_shared<GameObject>();
@@ -97,6 +98,14 @@ void TestScene::makeOpenGLDependentSetup()
 	m_lookAtComponent = make_shared<LookAtComponent>();
 	m_monkeyGameObject->addComponent(m_lookAtComponent.get());
 	m_rootGameObject->addChild(m_monkeyGameObject.get());
+
+	m_monkeyPlaneMesh.reset();
+	m_monkeyPlaneMesh = make_shared<Mesh>(m_landModelPath);
+	m_monkeyPlaneMeshRenderer = make_shared<MeshRenderer>(m_monkeyPlaneMesh.get(), m_landMaterial.get());
+	m_monkeyPlaneGameObject = make_shared<GameObject>();
+	m_monkeyPlaneGameObject->addComponent(m_monkeyPlaneMeshRenderer.get());
+	m_monkeyPlaneGameObject->transform().setTranslation(Vector3f(0, 0, -5));
+	m_monkeyGameObject->addChild(m_monkeyPlaneGameObject.get());
 }
 
 void TestScene::onOpenGLResized(int width, int height)
