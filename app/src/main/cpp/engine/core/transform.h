@@ -27,9 +27,9 @@ public:
 	Quaternion calculateLookAtDirection(const Vector3f &point, const Vector3f &up) const;
 
 	Transform *parentTransformation() { return m_parentTransformation; }
-	void setParentTransformation(Transform *parentTransformation) { m_parentTransformation = parentTransformation; }
+	void setParentTransformation(Transform *parentTransformation) { m_hasChanged = true; m_parentTransformation = parentTransformation; }
 
-	bool hasChanged() const;
+	bool hasChanged();
 
 	void rotate(const Vector3f &axis, float angle);
 
@@ -45,7 +45,6 @@ private:
 	Vector3f m_scale;
 
 	bool m_hasChanged;
-	bool m_parentMatrixCalculatedFirstTime;
 
 	Matrix4f calculateParentMatrix();
 };

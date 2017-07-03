@@ -5,16 +5,13 @@ Transform::Transform() :
 		m_translation(Vector3f(0, 0, 0)),
 		m_rotation(Quaternion(0, 0, 0, 1)),
 		m_scale(Vector3f(1, 1, 1)),
-		m_hasChanged(true),
-		m_parentMatrixCalculatedFirstTime(false)
+		m_hasChanged(true)
 {
 	m_parentMatrix.initIdentity();
 }
 
 Matrix4f Transform::transformation()
 {
-	m_hasChanged = false;
-
 	Matrix4f translationM;
 	translationM.initTranslation(m_translation.x(), m_translation.y(), m_translation.z());
 
@@ -32,12 +29,17 @@ Quaternion Transform::calculateLookAtDirection(const Vector3f &point, const Vect
 	return Quaternion(Matrix4f().initRotation((point - m_translation).normalized(), up));
 }
 
-bool Transform::hasChanged() const
+bool Transform::hasChanged()
 {
 	if (m_parentTransformation != nullptr && m_parentTransformation->hasChanged())
 		return true;
 
-	return m_hasChanged;
+	if (m_hasChanged) {
+		m_hasChanged = false;
+		return true;
+	} else {
+		return m_hasChanged;
+	}
 }
 
 void Transform::rotate(const Vector3f &axis, float angle)
@@ -47,11 +49,8 @@ void Transform::rotate(const Vector3f &axis, float angle)
 
 Matrix4f Transform::calculateParentMatrix()
 {
-	if (m_parentTransformation != nullptr &&
-			(!m_parentMatrixCalculatedFirstTime || m_parentTransformation->hasChanged())) {
-		m_parentMatrixCalculatedFirstTime = true;
+	if (m_parentTransformation != nullptr && m_parentTransformation->hasChanged())
 		m_parentMatrix = m_parentTransformation->transformation();
-	}
 
 	return m_parentMatrix;
 }
