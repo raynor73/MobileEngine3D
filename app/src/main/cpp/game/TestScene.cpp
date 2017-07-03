@@ -12,9 +12,11 @@
 using namespace std;
 
 const string TestScene::DEFAULT_NORMAL_MAP_IMAGE_KEY = "default_normal_map";
+const string TestScene::DEFAULT_DISPLACEMENT_MAP_IMAGE_KEY = "default_displacement_map";
 const string TestScene::TEST_IMAGE_KEY = "test";
 const string TestScene::BRICKS_IMAGE_KEY = "bricks";
 const string TestScene::BRICKS_NORMAL_MAP_IMAGE_KEY = "bricks_normal_map";
+const string TestScene::BRICKS_DISPLACEMENT_MAP_IMAGE_KEY = "bricks_displacement_map";
 const string TestScene::MONKEY_MODEL_KEY = "monkey";
 const string TestScene::LAND_MODEL_KEY = "land";
 const string TestScene::TAG = "TestScene";
@@ -23,9 +25,11 @@ TestScene::TestScene(const unordered_map<string, string> &paths, JoystickInput &
 					 JoystickInput &rightJoystickInput)
 {
 	m_defaultNormalMapImagePath = paths.at(DEFAULT_NORMAL_MAP_IMAGE_KEY);
+	m_defaultDisplacementMapImagePath = paths.at(DEFAULT_DISPLACEMENT_MAP_IMAGE_KEY);
 	m_testImagePath = paths.at(TEST_IMAGE_KEY);
 	m_bricksImagePath = paths.at(BRICKS_IMAGE_KEY);
 	m_bricksNormalMapImagePath = paths.at(BRICKS_NORMAL_MAP_IMAGE_KEY);
+	m_bricksDisplacementMapImagePath = paths.at(BRICKS_DISPLACEMENT_MAP_IMAGE_KEY);
 	m_monkeyModelPath = paths.at(MONKEY_MODEL_KEY);
 	m_landModelPath = paths.at(LAND_MODEL_KEY);
 
@@ -39,20 +43,27 @@ void TestScene::makeOpenGLDependentSetup()
 	m_camera.reset();
 
 	m_defaultNormalMapTexture.reset();
+	m_defaultDisplacementMapTexture.reset();
 	m_defaultNormalMapTexture = make_shared<Texture>(m_defaultNormalMapImagePath);
+	m_defaultDisplacementMapTexture = make_shared<Texture>(m_defaultDisplacementMapImagePath);
 
 	m_landMesh.reset();
 	m_monkeyPlaneMesh.reset();
 	m_landMesh = make_shared<Mesh>(m_landModelPath);
-	m_landMaterial = make_shared<Material>();
 	m_bricksTexture.reset();
 	m_bricksTexture = make_shared<Texture>(m_bricksImagePath);
 	m_bricksNormalMapTexture.reset();
+	m_bricksDisplacementMapTexture.reset();
 	m_bricksNormalMapTexture = make_shared<Texture>(m_bricksNormalMapImagePath);
-	m_landMaterial->addTexture("diffuse", m_bricksTexture.get());
-	m_landMaterial->addTexture("normalMap", m_bricksNormalMapTexture.get());
-	m_landMaterial->addFloat("specularIntensity", 1);
-	m_landMaterial->addFloat("specularPower", 8);
+	m_bricksDisplacementMapTexture = make_shared<Texture>(m_bricksDisplacementMapImagePath);
+	m_landMaterial = make_shared<Material>(
+			m_bricksTexture.get(),
+			0.5f,
+			4.0f,
+			m_bricksNormalMapTexture.get(),
+			m_bricksDisplacementMapTexture.get(),
+			0.03f
+	);
 	m_landMeshRenderer = make_shared<MeshRenderer>(m_landMesh.get(), m_landMaterial.get());
 	m_landGameObject = make_shared<GameObject>();
 	m_landGameObject->addComponent(m_landMeshRenderer.get());
@@ -85,13 +96,15 @@ void TestScene::makeOpenGLDependentSetup()
 
 	m_monkeyMesh.reset();
 	m_monkeyMesh = make_shared<Mesh>(m_monkeyModelPath);
-	m_monkeyMaterial = make_shared<Material>();
 	m_testTexture.reset();
 	m_testTexture = make_shared<Texture>(m_testImagePath);
-	m_monkeyMaterial->addTexture("diffuse", m_testTexture.get());
-	m_monkeyMaterial->addTexture("normalMap", m_defaultNormalMapTexture.get());
-	m_monkeyMaterial->addFloat("specularIntensity", 1);
-	m_monkeyMaterial->addFloat("specularPower", 8);
+	m_monkeyMaterial = make_shared<Material>(
+			m_testTexture.get(),
+			1.0f,
+			8.0f,
+			m_defaultNormalMapTexture.get(),
+			m_defaultDisplacementMapTexture.get()
+	);
 	m_monkeyMeshRenderer = make_shared<MeshRenderer>(m_monkeyMesh.get(), m_monkeyMaterial.get());
 	m_monkeyGameObject = make_shared<GameObject>();
 	m_monkeyGameObject->addComponent(m_monkeyMeshRenderer.get());

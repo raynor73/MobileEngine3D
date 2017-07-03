@@ -12,8 +12,8 @@ using namespace std;
 class Material : public MappedValues
 {
 public:
-	// TODO Add constructor with standard parameters
-	Material() {}
+	Material(Texture *diffuse, float specularIntensity, float specularPower, Texture *normalMap,
+			 Texture *displacementMap, float displacementMapScale = 0, float displacementMapOffset = 0);
 
 	void addTexture(const string &name, Texture *texture) { m_textures[name] = texture; }
 	Texture *findTexture(const string &name) const;

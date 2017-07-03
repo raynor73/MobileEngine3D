@@ -30,6 +30,8 @@ JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNI
 	jstring bricksNormalMapImagePath_ = (jstring) (env->GetObjectArrayElement(paths_, 4));
 	jstring landModelPath_ = (jstring) (env->GetObjectArrayElement(paths_, 5));
 	jstring defaultNormalMapImagePath_ = (jstring) (env->GetObjectArrayElement(paths_, 6));
+	jstring defaultDisplacementMapImagePath_ = (jstring) (env->GetObjectArrayElement(paths_, 7));
+	jstring bricksDisplacementMapImagePath_ = (jstring) (env->GetObjectArrayElement(paths_, 8));
 
 	const char *shadersDirPath = env->GetStringUTFChars(shadersDirPath_, 0);
 	const char *bricksImagePath = env->GetStringUTFChars(bricksImagePath_, 0);
@@ -38,6 +40,8 @@ JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNI
 	const char *monkeyModelPath = env->GetStringUTFChars(monkeyModelPath_, 0);
 	const char *landModelPath = env->GetStringUTFChars(landModelPath_, 0);
 	const char *defaultNormalMapImagePath = env->GetStringUTFChars(defaultNormalMapImagePath_, 0);
+	const char *defaultDisplacementMapImagePath = env->GetStringUTFChars(defaultDisplacementMapImagePath_, 0);
+	const char *bricksDisplacementMapImagePath = env->GetStringUTFChars(bricksDisplacementMapImagePath_, 0);
 
 	unordered_map<string, string> paths;
 	paths.insert({TestScene::BRICKS_IMAGE_KEY, bricksImagePath});
@@ -46,6 +50,8 @@ JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNI
 	paths.insert({TestScene::MONKEY_MODEL_KEY, monkeyModelPath});
 	paths.insert({TestScene::LAND_MODEL_KEY, landModelPath});
 	paths.insert({TestScene::DEFAULT_NORMAL_MAP_IMAGE_KEY, defaultNormalMapImagePath});
+	paths.insert({TestScene::DEFAULT_DISPLACEMENT_MAP_IMAGE_KEY, defaultDisplacementMapImagePath});
+	paths.insert({TestScene::BRICKS_DISPLACEMENT_MAP_IMAGE_KEY, bricksDisplacementMapImagePath});
 
 	g_leftJoystickInput = new JoystickInput();
 	g_rightJoystickInput = new JoystickInput();
@@ -61,6 +67,8 @@ JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNI
 	env->ReleaseStringUTFChars(monkeyModelPath_, monkeyModelPath);
 	env->ReleaseStringUTFChars(landModelPath_, landModelPath);
 	env->ReleaseStringUTFChars(defaultNormalMapImagePath_, defaultNormalMapImagePath);
+	env->ReleaseStringUTFChars(defaultDisplacementMapImagePath_, defaultDisplacementMapImagePath);
+	env->ReleaseStringUTFChars(bricksDisplacementMapImagePath_, bricksDisplacementMapImagePath);
 }
 
 JNIEXPORT void JNICALL

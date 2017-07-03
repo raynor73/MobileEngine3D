@@ -1,0 +1,6 @@
+vec2 calculateParallaxTextureCoordinate(sampler2D displacementMap, mat3 tbnMatrix, vec3 directionToEye,
+										vec2 textureCoordinate, float scale, float bias)
+{
+	return textureCoordinate + (directionToEye * tbnMatrix).xy *
+		   (texture2D(displacementMap, textureCoordinate).r * scale + bias);
+}

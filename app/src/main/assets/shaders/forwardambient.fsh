@@ -2,18 +2,23 @@ precision mediump float;
 
 varying vec2 textureCoordinate0;
 varying vec3 worldPosition0;
-varying vec3 normal0;
-varying vec3 tangent0;
 varying mat3 tbnMatrix;
 
+uniform vec3 C_eyePosition;
 uniform sampler2D diffuse;
-uniform sampler2D normalMap;
+uniform sampler2D displacementMap;
+uniform float displacementMapScale;
+uniform float displacementMapBias;
 
 uniform vec3 R_ambient;
 
-vec4 calculateLightingEffect(vec3 normal, vec3 worldPosition)
-{
-	return vec4(R_ambient, 1);
-}
+#include "sampling.glh"
 
-#include "lightingMain.fsh"
+void main()
+{
+	vec3 directionToEye = normalize(C_eyePosition - worldPosition0);
+	vec2 textureCoordinate = calculateParallaxTextureCoordinate(displacementMap, tbnMatrix, directionToEye,
+																textureCoordinate0, displacementMapScale,
+																displacementMapBias);
+	gl_FragColor = texture2D(diffuse, textureCoordinate) * vec4(R_ambient, 1);
+}

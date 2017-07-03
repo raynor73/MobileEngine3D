@@ -77,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
 								mFilesExtractor.getTexturesDir().getPath() + File.separator + "bricks2_normal.jpg",
 								mFilesExtractor.getModelsDir().getPath() + File.separator + "plane3.obj",
 								mFilesExtractor.getTexturesDir().getPath() + File.separator + "default_normal.jpg",
+								mFilesExtractor.getTexturesDir().getPath() + File.separator + "default_displacement.jpg",
+								mFilesExtractor.getTexturesDir().getPath() + File.separator + "bricks2_displacement.jpg",
 						});
 
 						mGLSurfaceView.setEGLContextClientVersion(2);

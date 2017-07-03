@@ -16,9 +16,11 @@ class TestScene : public SceneWithRootObject
 {
 public:
 	static const string DEFAULT_NORMAL_MAP_IMAGE_KEY;
+	static const string DEFAULT_DISPLACEMENT_MAP_IMAGE_KEY;
 	static const string TEST_IMAGE_KEY;
 	static const string BRICKS_IMAGE_KEY;
 	static const string BRICKS_NORMAL_MAP_IMAGE_KEY;
+	static const string BRICKS_DISPLACEMENT_MAP_IMAGE_KEY;
 	static const string MONKEY_MODEL_KEY;
 	static const string LAND_MODEL_KEY;
 
@@ -36,13 +38,17 @@ private:
 	CoreEngine *m_coreEngine;
 
 	string m_defaultNormalMapImagePath;
+	string m_defaultDisplacementMapImagePath;
+
 	string m_bricksImagePath;
 	string m_bricksNormalMapImagePath;
+	string m_bricksDisplacementMapImagePath;
 	string m_testImagePath;
 	string m_monkeyModelPath;
 	string m_landModelPath;
 
 	shared_ptr<Texture> m_defaultNormalMapTexture;
+	shared_ptr<Texture> m_defaultDisplacementMapTexture;
 
 	shared_ptr<TestController> m_controller;
 
@@ -60,6 +66,7 @@ private:
 	shared_ptr<Texture> m_testTexture;
 	shared_ptr<Texture> m_bricksTexture;
 	shared_ptr<Texture> m_bricksNormalMapTexture;
+	shared_ptr<Texture> m_bricksDisplacementMapTexture;
 
 	shared_ptr<Mesh> m_landMesh;
 	shared_ptr<Mesh> m_monkeyMesh;
