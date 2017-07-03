@@ -41,24 +41,6 @@ void TestScene::makeOpenGLDependentSetup()
 	m_defaultNormalMapTexture.reset();
 	m_defaultNormalMapTexture = make_shared<Texture>(m_defaultNormalMapImagePath);
 
-	/*vector<Vertex> vertices;
-	vector<unsigned int> indices;
-
-	float fieldDepth = 10;
-	float fieldWidth = 10;
-
-	vertices.push_back(Vertex(Vector3f(-fieldWidth, -1, -fieldDepth), Vector2f(0, 0)));
-	vertices.push_back(Vertex(Vector3f(-fieldWidth, -1, fieldDepth * 3), Vector2f(0, 1)));
-	vertices.push_back(Vertex(Vector3f(fieldWidth * 3, -1, -fieldDepth), Vector2f(1, 0)));
-	vertices.push_back(Vertex(Vector3f(fieldWidth * 3, -1, fieldDepth * 3), Vector2f(1, 1)));
-
-	indices.push_back(0);
-	indices.push_back(1);
-	indices.push_back(2);
-	indices.push_back(2);
-	indices.push_back(1);
-	indices.push_back(3);*/
-
 	m_landMesh.reset();
 	m_landMesh = make_shared<Mesh>(m_landModelPath);
 	m_landMaterial = make_shared<Material>();
@@ -98,7 +80,7 @@ void TestScene::makeOpenGLDependentSetup()
 	m_spotLightGameObject->transform().setTranslation(Vector3f(5, 0, 5));
 	m_rootGameObject->addChild(m_spotLightGameObject.get());
 
-	m_monkeyMesh.reset();
+	/*m_monkeyMesh.reset();
 	m_monkeyMesh = make_shared<Mesh>(m_monkeyModelPath);
 	m_monkeyMaterial = make_shared<Material>();
 	m_testTexture.reset();
@@ -113,7 +95,7 @@ void TestScene::makeOpenGLDependentSetup()
 	m_monkeyGameObject->transform().setTranslation(Vector3f(5, 5, 5));
 	m_lookAtComponent = make_shared<LookAtComponent>();
 	m_monkeyGameObject->addComponent(m_lookAtComponent.get());
-	m_rootGameObject->addChild(m_monkeyGameObject.get());
+	m_rootGameObject->addChild(m_monkeyGameObject.get());*/
 }
 
 void TestScene::onOpenGLResized(int width, int height)
