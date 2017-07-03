@@ -42,6 +42,7 @@ void TestScene::makeOpenGLDependentSetup()
 	m_defaultNormalMapTexture = make_shared<Texture>(m_defaultNormalMapImagePath);
 
 	m_landMesh.reset();
+	m_monkeyPlaneMesh.reset();
 	m_landMesh = make_shared<Mesh>(m_landModelPath);
 	m_landMaterial = make_shared<Material>();
 	m_bricksTexture.reset();
@@ -99,7 +100,6 @@ void TestScene::makeOpenGLDependentSetup()
 	m_monkeyGameObject->addComponent(m_lookAtComponent.get());
 	m_rootGameObject->addChild(m_monkeyGameObject.get());
 
-	m_monkeyPlaneMesh.reset();
 	m_monkeyPlaneMesh = make_shared<Mesh>(m_landModelPath);
 	m_monkeyPlaneMeshRenderer = make_shared<MeshRenderer>(m_monkeyPlaneMesh.get(), m_landMaterial.get());
 	m_monkeyPlaneGameObject = make_shared<GameObject>();
