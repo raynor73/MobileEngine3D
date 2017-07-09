@@ -17,6 +17,7 @@ public class FilesExtractor {
 	private static final String SHADERS_DIR_NAME = "shaders";
 	private static final String TEXTURES_DIR_NAME = "textures";
 	private static final String MODELS_DIR_NAME = "models";
+	private static final String SCENES_DIR_NAME = "scenes";
 
 	public enum State { CHECKING, EXTRACTING, COMPLETED }
 
@@ -24,6 +25,7 @@ public class FilesExtractor {
 	private final File mShadersDir;
 	private final File mTexturesDir;
 	private final File mModelsDir;
+	private final File mScenesDir;
 	private final BehaviorSubject<State> mStateObservable = BehaviorSubject.create();
 
 	private State mState;
@@ -34,6 +36,7 @@ public class FilesExtractor {
 		mShadersDir = mContext.getDir(SHADERS_DIR_NAME, Context.MODE_PRIVATE);
 		mTexturesDir = mContext.getDir(TEXTURES_DIR_NAME, Context.MODE_PRIVATE);
 		mModelsDir = mContext.getDir(MODELS_DIR_NAME, Context.MODE_PRIVATE);
+		mScenesDir = mContext.getDir(SCENES_DIR_NAME, Context.MODE_PRIVATE);
 
 		checkFiles();
 	}
@@ -52,6 +55,10 @@ public class FilesExtractor {
 
 	public File getModelsDir() {
 		return mModelsDir;
+	}
+
+	public File getScenesDir() {
+		return mScenesDir;
 	}
 
 	private void changeState(final State newState) {
@@ -79,7 +86,8 @@ public class FilesExtractor {
 			try {
 				return isExtractionRequiredForDirName(SHADERS_DIR_NAME, getShadersDir()) ||
 						isExtractionRequiredForDirName(TEXTURES_DIR_NAME, getTexturesDir()) ||
-						isExtractionRequiredForDirName(MODELS_DIR_NAME, getModelsDir());
+						isExtractionRequiredForDirName(MODELS_DIR_NAME, getModelsDir()) ||
+						isExtractionRequiredForDirName(SCENES_DIR_NAME, getScenesDir());
 			} catch (final IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -120,6 +128,7 @@ public class FilesExtractor {
 				extractDirToDir(SHADERS_DIR_NAME, mShadersDir);
 				extractDirToDir(TEXTURES_DIR_NAME, mTexturesDir);
 				extractDirToDir(MODELS_DIR_NAME, mModelsDir);
+				extractDirToDir(SCENES_DIR_NAME, mScenesDir);
 			} catch (final IOException e) {
 				throw new RuntimeException(e);
 			}

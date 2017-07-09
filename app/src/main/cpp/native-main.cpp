@@ -3,6 +3,7 @@
 #include <game/JoystickInput.h>
 #include <engine/core/coreengine.h>
 #include <game/TestScene.h>
+#include <game/MainMenuScene.h>
 #include "logwrapper.h"
 
 using namespace std;
@@ -16,6 +17,7 @@ static JoystickInput *g_rightJoystickInput;
 static JoystickInput *g_leftJoystickInput;
 static CoreEngine *g_coreEngine;
 static TestScene *g_scene;
+static MainMenuScene *g_mainMenuScene;
 
 JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNIEnv *env, jobject,
 																			 jobjectArray paths_) {
@@ -33,6 +35,10 @@ JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNI
 	jstring defaultDisplacementMapImagePath_ = (jstring) (env->GetObjectArrayElement(paths_, 7));
 	jstring bricksDisplacementMapImagePath_ = (jstring) (env->GetObjectArrayElement(paths_, 8));
 
+	jstring texturesDirPath_ = (jstring) (env->GetObjectArrayElement(paths_, 9));
+	jstring modelsDirPath_ = (jstring) (env->GetObjectArrayElement(paths_, 10));
+	jstring scenesDirPath_ = (jstring) (env->GetObjectArrayElement(paths_, 11));
+
 	const char *shadersDirPath = env->GetStringUTFChars(shadersDirPath_, 0);
 	const char *bricksImagePath = env->GetStringUTFChars(bricksImagePath_, 0);
 	const char *bricksNormalMapImagePath = env->GetStringUTFChars(bricksNormalMapImagePath_, 0);
@@ -42,6 +48,10 @@ JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNI
 	const char *defaultNormalMapImagePath = env->GetStringUTFChars(defaultNormalMapImagePath_, 0);
 	const char *defaultDisplacementMapImagePath = env->GetStringUTFChars(defaultDisplacementMapImagePath_, 0);
 	const char *bricksDisplacementMapImagePath = env->GetStringUTFChars(bricksDisplacementMapImagePath_, 0);
+
+	const char *texturesDirPath = env->GetStringUTFChars(texturesDirPath_, 0);
+	const char *modelsDirPath = env->GetStringUTFChars(modelsDirPath_, 0);
+	const char *scenesDirPath = env->GetStringUTFChars(scenesDirPath_, 0);
 
 	unordered_map<string, string> paths;
 	paths.insert({TestScene::BRICKS_IMAGE_KEY, bricksImagePath});
@@ -58,7 +68,13 @@ JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNI
 	g_coreEngine = new CoreEngine(shadersDirPath);
 	g_scene = new TestScene(paths, *g_leftJoystickInput, *g_rightJoystickInput);
 
-	g_coreEngine->setScene(g_scene);
+	std::unordered_map<std::string, std::string> dirPaths;
+	dirPaths.insert({MainMenuScene::TEXTURES_DIR_PATH_KEY, texturesDirPath});
+	dirPaths.insert({MainMenuScene::MODELS_DIR_PATH_KEY, modelsDirPath});
+	dirPaths.insert({MainMenuScene::SCENES_DIR_PATH_KEY, scenesDirPath});
+	g_mainMenuScene = new MainMenuScene(dirPaths, *g_leftJoystickInput, *g_rightJoystickInput);
+
+	g_coreEngine->setScene(g_mainMenuScene);
 
 	env->ReleaseStringUTFChars(shadersDirPath_, shadersDirPath);
 	env->ReleaseStringUTFChars(bricksImagePath_, bricksImagePath);
@@ -69,6 +85,10 @@ JNIEXPORT void JNICALL Java_ru_ilapin_mobileengine3d_MainActivity_initEngine(JNI
 	env->ReleaseStringUTFChars(defaultNormalMapImagePath_, defaultNormalMapImagePath);
 	env->ReleaseStringUTFChars(defaultDisplacementMapImagePath_, defaultDisplacementMapImagePath);
 	env->ReleaseStringUTFChars(bricksDisplacementMapImagePath_, bricksDisplacementMapImagePath);
+
+	env->ReleaseStringUTFChars(texturesDirPath_, texturesDirPath);
+	env->ReleaseStringUTFChars(modelsDirPath_, modelsDirPath);
+	env->ReleaseStringUTFChars(scenesDirPath_, scenesDirPath);
 }
 
 JNIEXPORT void JNICALL

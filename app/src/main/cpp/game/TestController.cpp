@@ -26,10 +26,10 @@ float TestController::calculatePitchRotationSpeed()
 
 float TestController::calculateMoveSpeed()
 {
-	return -m_leftJoystickPosition.y() * 10;
+	return -m_leftJoystickPosition.y() * 100;
 }
 
 float TestController::calculateStrafeSpeed()
 {
-	return m_leftJoystickPosition.x() * 10;
+	return m_leftJoystickPosition.x() * 100;
 }

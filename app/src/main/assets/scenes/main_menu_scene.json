@@ -1,0 +1,40 @@
+{
+  "textures": {
+    "default_normal_map": {
+      "filename": "default_normal.jpg"
+    },
+    "default_displacement_map": {
+      "filename": "default_displacement.jpg"
+    },
+    "moon_surface": {
+      "filename": "moon_surface.jpg"
+    }
+  },
+  "materials": {
+    "moon_surface": {
+      "diffuse": "moon_surface",
+      "specularIntensity": 1.0,
+      "specularPower": 8.0,
+      "normalMap": "default_normal_map",
+      "displacementMap": "default_displacement_map",
+      "displacementMapScale": 0.0,
+      "displacementMapOffset": 0.0
+    }
+  },
+  "meshes": {
+    "moon_surface": {
+      "filename": "moon_surface.obj"
+    }
+  },
+  "objects": {
+    "moon_surface": {
+      "mesh": "moon_surface",
+      "transformation": {
+        "translation": [0.0, 0.0, 0.0],
+        "rotation": [1.0, 0.0, 0.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "material": "moon_surface"
+    }
+  }
+}

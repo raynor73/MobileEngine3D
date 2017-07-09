@@ -50,10 +50,11 @@ add_library( # Sets the name of the library.
              # Sets the library as a shared library.
              SHARED
 
-             # Provides a relative path to your source file(s).
              src/main/cpp/native-main.cpp
 
              src/main/cpp/research.cpp
+
+             src/main/cpp/libs/json-parser/json.c
 
              src/main/cpp/utils.cpp
              src/main/cpp/logwrapper.cpp
@@ -93,11 +94,13 @@ add_library( # Sets the name of the library.
              src/main/cpp/engine/components/lightsfactory.cpp
 
              src/main/cpp/game/TestScene.cpp
+             src/main/cpp/game/MainMenuScene.cpp
              src/main/cpp/game/lookatcomponent.cpp
              src/main/cpp/game/TestController.cpp
              src/main/cpp/game/JoystickInput.cpp )
 
 include_directories(src/main/cpp/)
+include_directories(src/main/cpp/libs/)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
