@@ -6,12 +6,17 @@
 #include <libs/json-parser/json.h>
 #include <logwrapper.h>
 #include <engine/components/meshrenderer.h>
+#include <engine/components/lightsfactory.h>
+#include <engine/core/coreengine.h>
 
 const std::string MainMenuScene::TEXTURES_DIR_PATH_KEY = "TEXTURES_DIR_PATH";
 const std::string MainMenuScene::MODELS_DIR_PATH_KEY = "MODELS_DIR_PATH_KEY";
 const std::string MainMenuScene::SCENES_DIR_PATH_KEY = "SCENES_DIR_PATH_KEY";
 
 const string MainMenuScene::TAG = "MainMenuScene";
+
+const std::string MainMenuScene::GAME_OBJECT_TYPE_MESH = "MESH";
+const std::string MainMenuScene::GAME_OBJECT_TYPE_DIRECTIONAL_LIGHT = "DIRECTIONAL_LIGHT";
 
 MainMenuScene::MainMenuScene(const std::unordered_map<string, string> &dirPaths, JoystickInput &leftJoystickInput,
 							 JoystickInput &rightJoystickInput)
@@ -63,6 +68,113 @@ void MainMenuScene::freeMemory()
 	m_gameComponents.clear();
 }
 
+void MainMenuScene::loadMeshGameObject(json_value *gameObjectJsonObject, std::string name)
+{
+	Log::i(TAG, std::string("Loading game object: ") + name);
+
+	auto meshJsonString = findJsonValue(gameObjectJsonObject, "mesh");
+	auto materialJsonString = findJsonValue(gameObjectJsonObject, "material");
+	auto transformationJsonObject = findJsonValue(gameObjectJsonObject, "transformation");
+
+	GameObject *gameObject = new GameObject();
+	m_gameObjects.insert({name, gameObject});
+	MeshRenderer *meshRenderer = new MeshRenderer(m_meshes.at(meshJsonString->u.string.ptr),
+												  m_materials.at(materialJsonString->u.string.ptr));
+	m_gameComponents.push_back(meshRenderer);
+	gameObject->addComponent(meshRenderer);
+
+	auto translationJsonArray = findJsonValue(transformationJsonObject, "translation");
+	auto translation = Vector3f((float) translationJsonArray->u.array.values[0]->u.dbl,
+								(float) translationJsonArray->u.array.values[1]->u.dbl,
+								(float) translationJsonArray->u.array.values[2]->u.dbl);
+	Log::i(TAG, "\ttranslation: " + std::string(translation));
+	gameObject->transform().setTranslation(translation);
+
+	auto rotationJsonArray = findJsonValue(transformationJsonObject, "rotation");
+	auto rotationAxis = Vector3f((float) rotationJsonArray->u.array.values[0]->u.dbl,
+								 (float) rotationJsonArray->u.array.values[1]->u.dbl,
+								 (float) rotationJsonArray->u.array.values[2]->u.dbl);
+	float rotationAngle = (float) rotationJsonArray->u.array.values[3]->u.dbl;
+	auto rotation = Quaternion(rotationAxis, Utils::toRadians(rotationAngle));
+	Log::i(TAG, "\trotation: axis: " + std::string(rotationAxis) + "; angle: " + Utils::toString(rotationAngle));
+	gameObject->transform().setRotation(rotation);
+
+	auto scaleJsonArray = findJsonValue(transformationJsonObject, "scale");
+	auto scale = Vector3f((float) scaleJsonArray->u.array.values[0]->u.dbl,
+						  (float) scaleJsonArray->u.array.values[1]->u.dbl,
+						  (float) scaleJsonArray->u.array.values[2]->u.dbl);
+	Log::i(TAG, "\tscale: " + std::string(scale));
+	gameObject->transform().setScale(scale);
+
+	m_rootGameObject->addChild(gameObject);
+}
+
+void MainMenuScene::loadDirectionalLightGameObject(json_value *gameObjectJsonObject, std::string name)
+{
+	Log::i(TAG, std::string("Loading directional light: ") + name);
+
+	auto colorJsonArray = findJsonValue(gameObjectJsonObject, "color");
+	auto color = Vector3f((float) colorJsonArray->u.array.values[0]->u.dbl,
+						  (float) colorJsonArray->u.array.values[1]->u.dbl,
+						  (float) colorJsonArray->u.array.values[2]->u.dbl);
+	Log::i(TAG, "\tcolor: " + std::string(color));
+
+	float intensity = (float) findJsonValue(gameObjectJsonObject, "intensity")->u.dbl;
+	Log::i(TAG, "\tintensity: " + Utils::toString(intensity));
+
+	auto directionalLight = LightsFactory::createDirectionalLight(m_coreEngine->renderingEngine(), color, intensity);
+	m_gameComponents.push_back(directionalLight);
+
+	auto transformationJsonObject = findJsonValue(gameObjectJsonObject, "transformation");
+	auto rotationJsonArray = findJsonValue(transformationJsonObject, "rotation");
+	auto rotationAxis = Vector3f((float) rotationJsonArray->u.array.values[0]->u.dbl,
+								 (float) rotationJsonArray->u.array.values[1]->u.dbl,
+								 (float) rotationJsonArray->u.array.values[2]->u.dbl);
+	float rotationAngle = (float) rotationJsonArray->u.array.values[3]->u.dbl;
+	auto rotation = Quaternion(rotationAxis, Utils::toRadians(rotationAngle));
+	Log::i(TAG, "\trotation: axis: " + std::string(rotationAxis) + "; angle: " + Utils::toString(rotationAngle));
+	auto gameObject = new GameObject();
+	m_gameObjects.insert({name, gameObject});
+	gameObject->addComponent(directionalLight);
+	gameObject->transform().setRotation(rotation);
+	m_rootGameObject->addChild(gameObject);
+
+	/*auto meshJsonString = findJsonValue(gameObjectJsonObject, "mesh");
+	auto materialJsonString = findJsonValue(gameObjectJsonObject, "material");
+	auto transformationJsonObject = findJsonValue(gameObjectJsonObject, "transformation");
+
+	GameObject *gameObject = new GameObject();
+	m_gameObjects.insert({name, gameObject});
+	MeshRenderer *meshRenderer = new MeshRenderer(m_meshes.at(meshJsonString->u.string.ptr),
+												  m_materials.at(materialJsonString->u.string.ptr));
+	m_gameComponents.push_back(meshRenderer);
+	gameObject->addComponent(meshRenderer);
+
+	auto translationJsonArray = findJsonValue(transformationJsonObject, "translation");
+	auto translation = Vector3f((float) translationJsonArray->u.array.values[0]->u.dbl,
+								(float) translationJsonArray->u.array.values[1]->u.dbl,
+								(float) translationJsonArray->u.array.values[2]->u.dbl);
+	Log::i(TAG, "\ttranslation: " + std::string(translation));
+	gameObject->transform().setTranslation(translation);
+
+	auto rotationJsonArray = findJsonValue(transformationJsonObject, "rotation");
+	auto rotationAxis = Vector3f((float) rotationJsonArray->u.array.values[0]->u.dbl,
+								 (float) rotationJsonArray->u.array.values[1]->u.dbl,
+								 (float) rotationJsonArray->u.array.values[2]->u.dbl);
+	float rotationAngle = (float) rotationJsonArray->u.array.values[3]->u.dbl;
+	auto rotation = Quaternion(rotationAxis, rotationAngle);
+	Log::i(TAG, "\trotation: axis: " + std::string(rotationAxis) + "; angle: " + Utils::toString(rotationAngle));
+	gameObject->transform().setRotation(rotation);
+
+	auto scaleJsonArray = findJsonValue(transformationJsonObject, "scale");
+	auto scale = Vector3f((float) scaleJsonArray->u.array.values[0]->u.dbl,
+						  (float) scaleJsonArray->u.array.values[1]->u.dbl,
+						  (float) scaleJsonArray->u.array.values[2]->u.dbl);
+	Log::i(TAG, "\tscale: " + std::string(scale));
+	gameObject->transform().setScale(scale);
+
+	m_rootGameObject->addChild(gameObject);*/
+}
 
 void MainMenuScene::makeOpenGLDependentSetup()
 {
@@ -124,43 +236,16 @@ void MainMenuScene::makeOpenGLDependentSetup()
 	json_value *objectsJsonObject = findJsonValue(sceneJsonObject, "objects");
 	for (int i = 0; i < objectsJsonObject->u.object.length; i++) {
 		auto entry = objectsJsonObject->u.object.values[i];
-		Log::i(TAG, std::string("Loading game object: ") + entry.name);
-		auto gameObjectJsonObject = entry.value;
-		auto meshJsonString = findJsonValue(gameObjectJsonObject, "mesh");
-		auto materialJsonString = findJsonValue(gameObjectJsonObject, "material");
-		auto transformationJsonObject = findJsonValue(gameObjectJsonObject, "transformation");
-
-		GameObject *gameObject = new GameObject();
-		m_gameObjects.insert({entry.name, gameObject});
-		MeshRenderer *meshRenderer = new MeshRenderer(m_meshes.at(meshJsonString->u.string.ptr),
-													  m_materials.at(materialJsonString->u.string.ptr));
-		m_gameComponents.push_back(meshRenderer);
-		gameObject->addComponent(meshRenderer);
-
-		auto translationJsonArray = findJsonValue(transformationJsonObject, "translation");
-		auto translation = Vector3f((float) translationJsonArray->u.array.values[0]->u.dbl,
-									(float) translationJsonArray->u.array.values[1]->u.dbl,
-									(float) translationJsonArray->u.array.values[2]->u.dbl);
-		Log::i(TAG, "\ttranslation: " + std::string(translation));
-		gameObject->transform().setTranslation(translation);
-
-		auto rotationJsonArray = findJsonValue(transformationJsonObject, "rotation");
-		auto rotationAxis = Vector3f((float) rotationJsonArray->u.array.values[0]->u.dbl,
-									 (float) rotationJsonArray->u.array.values[1]->u.dbl,
-									 (float) rotationJsonArray->u.array.values[2]->u.dbl);
-		float rotationAngle = (float) rotationJsonArray->u.array.values[3]->u.dbl;
-		auto rotation = Quaternion(rotationAxis, rotationAngle);
-		Log::i(TAG, "\trotation: axis: " + std::string(rotationAxis) + "; angle: " + Utils::toString(rotationAngle));
-		gameObject->transform().setRotation(rotation);
-
-		auto scaleJsonArray = findJsonValue(transformationJsonObject, "scale");
-		auto scale = Vector3f((float) scaleJsonArray->u.array.values[0]->u.dbl,
-							  (float) scaleJsonArray->u.array.values[1]->u.dbl,
-							  (float) scaleJsonArray->u.array.values[2]->u.dbl);
-		Log::i(TAG, "\tscale: " + std::string(scale));
-		gameObject->transform().setScale(scale);
-
-		m_rootGameObject->addChild(gameObject);
+		auto type = findJsonValue(entry.value, "type")->u.string.ptr;
+		if (type == GAME_OBJECT_TYPE_MESH) {
+			loadMeshGameObject(entry.value, entry.name);
+		} else if (type == GAME_OBJECT_TYPE_DIRECTIONAL_LIGHT) {
+			loadDirectionalLightGameObject(entry.value, entry.name);
+		} else {
+			std::string msg = string("Unknown game object type: ") + type;
+			Log::e(TAG, msg);
+			throw std::runtime_error(msg);
+		}
 	}
 
 	delete sceneJson;

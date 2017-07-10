@@ -73,22 +73,23 @@ void TestScene::makeOpenGLDependentSetup()
 
 	m_directionalLightGameObject = make_shared<GameObject>();
 	m_directionalLight.reset();
-	m_directionalLight = LightsFactory::createDirectionalLight(m_coreEngine->renderingEngine(), Vector3f(1, 1, 1), 0.4);
+	m_directionalLight.reset(LightsFactory::createDirectionalLight(m_coreEngine->renderingEngine(), Vector3f(1, 1, 1),
+																   0.4));
 	m_directionalLightGameObject->transform().setRotation(Quaternion(Vector3f(1, 0, 0), Utils::toRadians(-45)));
 	m_directionalLightGameObject->addComponent(m_directionalLight.get());
 	m_rootGameObject->addChild(m_directionalLightGameObject.get());
 
 	m_pointLightGameObject = make_shared<GameObject>();
 	m_pointLight.reset();
-	m_pointLight = LightsFactory::createPointLight(m_coreEngine->renderingEngine(), Vector3f(0, 1, 0), 0.4,
-												   Attenuation(0, 0, 1));
+	m_pointLight.reset(LightsFactory::createPointLight(m_coreEngine->renderingEngine(), Vector3f(0, 1, 0), 0.4,
+													   Attenuation(0, 0, 1)));
 	m_pointLightGameObject->addComponent(m_pointLight.get());
 	m_rootGameObject->addChild(m_pointLightGameObject.get());
 
 	m_spotLightGameObject = make_shared<GameObject>();
 	m_spotLight.reset();
-	m_spotLight = LightsFactory::createSpotLight(m_coreEngine->renderingEngine(), Vector3f(0, 1, 1), 0.8,
-												 Attenuation(0, 0, 0.1), 0.7);
+	m_spotLight.reset(LightsFactory::createSpotLight(m_coreEngine->renderingEngine(), Vector3f(0, 1, 1), 0.8,
+													 Attenuation(0, 0, 0.1), 0.7));
 	m_spotLightGameObject->addComponent(m_spotLight.get());
 	m_spotLightGameObject->transform().setRotation(Quaternion(Vector3f(0, 1, 0), Utils::toRadians(90)));
 	m_spotLightGameObject->transform().setTranslation(Vector3f(5, 0, 5));

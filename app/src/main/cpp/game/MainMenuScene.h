@@ -30,7 +30,10 @@ public:
 	void setEngine(CoreEngine *) override;
 
 private:
-	static const string TAG;
+	static const std::string TAG;
+
+	static const std::string GAME_OBJECT_TYPE_MESH;
+	static const std::string GAME_OBJECT_TYPE_DIRECTIONAL_LIGHT;
 
 	CoreEngine *m_coreEngine;
 
@@ -50,6 +53,8 @@ private:
 
 	json_value *findJsonValue(json_value *jsonObject, std::string name);
 	void freeMemory();
+	void loadMeshGameObject(json_value *gameObjectJsonObject, std::string name);
+	void loadDirectionalLightGameObject(json_value *gameObjectJsonObject, std::string name);
 };
 
 
