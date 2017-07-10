@@ -115,7 +115,7 @@ Vector3f Vector3f::operator /(float a) const
 Vector3f::operator std::string() const
 {
 	std::ostringstream stringStream;
-	stringStream << "Vector3f: " << m_x << "; " << m_y << "; " << m_z<< std::endl;
+	stringStream << "Vector3f: " << m_x << "; " << m_y << "; " << m_z;
 	return stringStream.str();
 }
 

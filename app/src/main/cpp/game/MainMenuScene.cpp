@@ -5,6 +5,7 @@
 #include <fstream>
 #include <libs/json-parser/json.h>
 #include <logwrapper.h>
+#include <engine/components/meshrenderer.h>
 
 const std::string MainMenuScene::TEXTURES_DIR_PATH_KEY = "TEXTURES_DIR_PATH";
 const std::string MainMenuScene::MODELS_DIR_PATH_KEY = "MODELS_DIR_PATH_KEY";
@@ -22,6 +23,11 @@ MainMenuScene::MainMenuScene(const std::unordered_map<string, string> &dirPaths,
 	m_controller = make_shared<TestController>(leftJoystickInput, rightJoystickInput);
 }
 
+MainMenuScene::~MainMenuScene()
+{
+	freeMemory();
+}
+
 json_value *MainMenuScene::findJsonValue(json_value *jsonObject, std::string name)
 {
 	for (int i = 0; i < jsonObject->u.object.length; i++) {
@@ -34,12 +40,8 @@ json_value *MainMenuScene::findJsonValue(json_value *jsonObject, std::string nam
 	throw std::runtime_error(msg);
 }
 
-void MainMenuScene::makeOpenGLDependentSetup()
+void MainMenuScene::freeMemory()
 {
-	m_rootGameObject = make_shared<GameObject>();
-	m_rootGameObject->setEngine(m_coreEngine);
-	m_camera.reset();
-
 	for (auto textureEntry : m_textures)
 		delete textureEntry.second;
 	m_textures.clear();
@@ -51,6 +53,24 @@ void MainMenuScene::makeOpenGLDependentSetup()
 	for (auto meshEntry : m_meshes)
 		delete meshEntry.second;
 	m_meshes.clear();
+
+	for (auto gameObjectEntry : m_gameObjects)
+		delete gameObjectEntry.second;
+	m_gameObjects.clear();
+
+	for (auto gameComponentEntry : m_gameComponents)
+		delete gameComponentEntry;
+	m_gameComponents.clear();
+}
+
+
+void MainMenuScene::makeOpenGLDependentSetup()
+{
+	m_rootGameObject = make_shared<GameObject>();
+	m_rootGameObject->setEngine(m_coreEngine);
+	m_camera.reset();
+
+	freeMemory();
 
 	std::ifstream is(m_scenesDirPath + "main_menu_scene.json", std::ios::binary);
 	std::streampos fileSize = is.tellg();
@@ -101,7 +121,47 @@ void MainMenuScene::makeOpenGLDependentSetup()
 		m_meshes.insert({entry.name, new Mesh(m_modelsDirPath + filenameJsonString->u.string.ptr)});
 	}
 
-	// TODO Implement game objects loading
+	json_value *objectsJsonObject = findJsonValue(sceneJsonObject, "objects");
+	for (int i = 0; i < objectsJsonObject->u.object.length; i++) {
+		auto entry = objectsJsonObject->u.object.values[i];
+		Log::i(TAG, std::string("Loading game object: ") + entry.name);
+		auto gameObjectJsonObject = entry.value;
+		auto meshJsonString = findJsonValue(gameObjectJsonObject, "mesh");
+		auto materialJsonString = findJsonValue(gameObjectJsonObject, "material");
+		auto transformationJsonObject = findJsonValue(gameObjectJsonObject, "transformation");
+
+		GameObject *gameObject = new GameObject();
+		m_gameObjects.insert({entry.name, gameObject});
+		MeshRenderer *meshRenderer = new MeshRenderer(m_meshes.at(meshJsonString->u.string.ptr),
+													  m_materials.at(materialJsonString->u.string.ptr));
+		m_gameComponents.push_back(meshRenderer);
+		gameObject->addComponent(meshRenderer);
+
+		auto translationJsonArray = findJsonValue(transformationJsonObject, "translation");
+		auto translation = Vector3f((float) translationJsonArray->u.array.values[0]->u.dbl,
+									(float) translationJsonArray->u.array.values[1]->u.dbl,
+									(float) translationJsonArray->u.array.values[2]->u.dbl);
+		Log::i(TAG, "\ttranslation: " + std::string(translation));
+		gameObject->transform().setTranslation(translation);
+
+		auto rotationJsonArray = findJsonValue(transformationJsonObject, "rotation");
+		auto rotationAxis = Vector3f((float) rotationJsonArray->u.array.values[0]->u.dbl,
+									 (float) rotationJsonArray->u.array.values[1]->u.dbl,
+									 (float) rotationJsonArray->u.array.values[2]->u.dbl);
+		float rotationAngle = (float) rotationJsonArray->u.array.values[3]->u.dbl;
+		auto rotation = Quaternion(rotationAxis, rotationAngle);
+		Log::i(TAG, "\trotation: axis: " + std::string(rotationAxis) + "; angle: " + Utils::toString(rotationAngle));
+		gameObject->transform().setRotation(rotation);
+
+		auto scaleJsonArray = findJsonValue(transformationJsonObject, "scale");
+		auto scale = Vector3f((float) scaleJsonArray->u.array.values[0]->u.dbl,
+							  (float) scaleJsonArray->u.array.values[1]->u.dbl,
+							  (float) scaleJsonArray->u.array.values[2]->u.dbl);
+		Log::i(TAG, "\tscale: " + std::string(scale));
+		gameObject->transform().setScale(scale);
+
+		m_rootGameObject->addChild(gameObject);
+	}
 
 	delete sceneJson;
 
@@ -188,9 +248,9 @@ void MainMenuScene::makeOpenGLDependentSetup()
 void MainMenuScene::onOpenGLResized(int width, int height)
 {
 	if (m_camera.use_count() > 0) {
-		m_camera->reset(Utils::toRadians(70), float(width) / float(height), 0.01, 1000);
+		m_camera->reset(Utils::toRadians(70), float(width) / float(height), 0.1, 10000);
 	} else {
-		m_camera = make_shared<Camera>(Utils::toRadians(70), float(width) / float(height), 0.01, 1000);
+		m_camera = make_shared<Camera>(Utils::toRadians(70), float(width) / float(height), 0.1, 10000);
 
 		m_cameraGameObject = make_shared<GameObject>();
 		m_cameraGameObject->addComponent(m_camera.get());
