@@ -3,7 +3,6 @@
 #include <engine/core/transform.h>
 #include <engine/core/gameobject.h>
 #include <fstream>
-#include <libs/json-parser/json.h>
 #include <logwrapper.h>
 #include <engine/components/meshrenderer.h>
 #include <engine/components/lightsfactory.h>
@@ -15,6 +14,7 @@ const std::string MainMenuScene::SCENES_DIR_PATH_KEY = "SCENES_DIR_PATH_KEY";
 
 const string MainMenuScene::TAG = "MainMenuScene";
 
+const std::string MainMenuScene::GAME_OBJECT_TYPE_CAMERA = "CAMERA";
 const std::string MainMenuScene::GAME_OBJECT_TYPE_MESH = "MESH";
 const std::string MainMenuScene::GAME_OBJECT_TYPE_DIRECTIONAL_LIGHT = "DIRECTIONAL_LIGHT";
 
@@ -68,6 +68,24 @@ void MainMenuScene::freeMemory()
 	m_gameComponents.clear();
 }
 
+Vector3f MainMenuScene::parseTranslation(json_value *transformationJsonObject)
+{
+	auto translationJsonArray = findJsonValue(transformationJsonObject, "translation");
+	return Vector3f((float) translationJsonArray->u.array.values[0]->u.dbl,
+					(float) translationJsonArray->u.array.values[1]->u.dbl,
+					(float) translationJsonArray->u.array.values[2]->u.dbl);
+}
+
+Quaternion MainMenuScene::parseRotation(json_value *transformationJsonObject)
+{
+	auto rotationJsonArray = findJsonValue(transformationJsonObject, "rotation");
+	auto rotationAxis = Vector3f((float) rotationJsonArray->u.array.values[0]->u.dbl,
+								 (float) rotationJsonArray->u.array.values[1]->u.dbl,
+								 (float) rotationJsonArray->u.array.values[2]->u.dbl);
+	float rotationAngle = (float) rotationJsonArray->u.array.values[3]->u.dbl;
+	return Quaternion(rotationAxis, Utils::toRadians(rotationAngle));
+}
+
 void MainMenuScene::loadMeshGameObject(json_value *gameObjectJsonObject, std::string name)
 {
 	Log::i(TAG, std::string("Loading game object: ") + name);
@@ -83,19 +101,14 @@ void MainMenuScene::loadMeshGameObject(json_value *gameObjectJsonObject, std::st
 	m_gameComponents.push_back(meshRenderer);
 	gameObject->addComponent(meshRenderer);
 
-	auto translationJsonArray = findJsonValue(transformationJsonObject, "translation");
-	auto translation = Vector3f((float) translationJsonArray->u.array.values[0]->u.dbl,
-								(float) translationJsonArray->u.array.values[1]->u.dbl,
-								(float) translationJsonArray->u.array.values[2]->u.dbl);
+	auto translation = parseTranslation(transformationJsonObject);
 	Log::i(TAG, "\ttranslation: " + std::string(translation));
 	gameObject->transform().setTranslation(translation);
 
-	auto rotationJsonArray = findJsonValue(transformationJsonObject, "rotation");
-	auto rotationAxis = Vector3f((float) rotationJsonArray->u.array.values[0]->u.dbl,
-								 (float) rotationJsonArray->u.array.values[1]->u.dbl,
-								 (float) rotationJsonArray->u.array.values[2]->u.dbl);
-	float rotationAngle = (float) rotationJsonArray->u.array.values[3]->u.dbl;
-	auto rotation = Quaternion(rotationAxis, Utils::toRadians(rotationAngle));
+	auto rotation = parseRotation(transformationJsonObject);
+	Vector3f rotationAxis;
+	float rotationAngle;
+	rotation.calculateAxisAndAngle(rotationAxis, rotationAngle);
 	Log::i(TAG, "\trotation: axis: " + std::string(rotationAxis) + "; angle: " + Utils::toString(rotationAngle));
 	gameObject->transform().setRotation(rotation);
 
@@ -138,42 +151,6 @@ void MainMenuScene::loadDirectionalLightGameObject(json_value *gameObjectJsonObj
 	gameObject->addComponent(directionalLight);
 	gameObject->transform().setRotation(rotation);
 	m_rootGameObject->addChild(gameObject);
-
-	/*auto meshJsonString = findJsonValue(gameObjectJsonObject, "mesh");
-	auto materialJsonString = findJsonValue(gameObjectJsonObject, "material");
-	auto transformationJsonObject = findJsonValue(gameObjectJsonObject, "transformation");
-
-	GameObject *gameObject = new GameObject();
-	m_gameObjects.insert({name, gameObject});
-	MeshRenderer *meshRenderer = new MeshRenderer(m_meshes.at(meshJsonString->u.string.ptr),
-												  m_materials.at(materialJsonString->u.string.ptr));
-	m_gameComponents.push_back(meshRenderer);
-	gameObject->addComponent(meshRenderer);
-
-	auto translationJsonArray = findJsonValue(transformationJsonObject, "translation");
-	auto translation = Vector3f((float) translationJsonArray->u.array.values[0]->u.dbl,
-								(float) translationJsonArray->u.array.values[1]->u.dbl,
-								(float) translationJsonArray->u.array.values[2]->u.dbl);
-	Log::i(TAG, "\ttranslation: " + std::string(translation));
-	gameObject->transform().setTranslation(translation);
-
-	auto rotationJsonArray = findJsonValue(transformationJsonObject, "rotation");
-	auto rotationAxis = Vector3f((float) rotationJsonArray->u.array.values[0]->u.dbl,
-								 (float) rotationJsonArray->u.array.values[1]->u.dbl,
-								 (float) rotationJsonArray->u.array.values[2]->u.dbl);
-	float rotationAngle = (float) rotationJsonArray->u.array.values[3]->u.dbl;
-	auto rotation = Quaternion(rotationAxis, rotationAngle);
-	Log::i(TAG, "\trotation: axis: " + std::string(rotationAxis) + "; angle: " + Utils::toString(rotationAngle));
-	gameObject->transform().setRotation(rotation);
-
-	auto scaleJsonArray = findJsonValue(transformationJsonObject, "scale");
-	auto scale = Vector3f((float) scaleJsonArray->u.array.values[0]->u.dbl,
-						  (float) scaleJsonArray->u.array.values[1]->u.dbl,
-						  (float) scaleJsonArray->u.array.values[2]->u.dbl);
-	Log::i(TAG, "\tscale: " + std::string(scale));
-	gameObject->transform().setScale(scale);
-
-	m_rootGameObject->addChild(gameObject);*/
 }
 
 void MainMenuScene::makeOpenGLDependentSetup()
@@ -241,6 +218,8 @@ void MainMenuScene::makeOpenGLDependentSetup()
 			loadMeshGameObject(entry.value, entry.name);
 		} else if (type == GAME_OBJECT_TYPE_DIRECTIONAL_LIGHT) {
 			loadDirectionalLightGameObject(entry.value, entry.name);
+		} else if (type == GAME_OBJECT_TYPE_CAMERA) {
+			loadCamera(entry.value);
 		} else {
 			std::string msg = string("Unknown game object type: ") + type;
 			Log::e(TAG, msg);
@@ -249,85 +228,24 @@ void MainMenuScene::makeOpenGLDependentSetup()
 	}
 
 	delete sceneJson;
+}
 
-	/*m_defaultNormalMapTexture.reset();
-	m_defaultDisplacementMapTexture.reset();
-	m_defaultNormalMapTexture = make_shared<Texture>(m_defaultNormalMapImagePath);
-	m_defaultDisplacementMapTexture = make_shared<Texture>(m_defaultDisplacementMapImagePath);
+void MainMenuScene::loadCamera(json_value *gameObjectJsonObject)
+{
+	Log::i(TAG, std::string("Loading camera transformation:"));
 
-	m_landMesh.reset();
-	m_monkeyPlaneMesh.reset();
-	m_landMesh = make_shared<Mesh>(m_landModelPath);
-	m_bricksTexture.reset();
-	m_bricksTexture = make_shared<Texture>(m_bricksImagePath);
-	m_bricksNormalMapTexture.reset();
-	m_bricksDisplacementMapTexture.reset();
-	m_bricksNormalMapTexture = make_shared<Texture>(m_bricksNormalMapImagePath);
-	m_bricksDisplacementMapTexture = make_shared<Texture>(m_bricksDisplacementMapImagePath);
-	m_landMaterial = make_shared<Material>(
-			m_bricksTexture.get(),
-			0.5f,
-			4.0f,
-			m_bricksNormalMapTexture.get(),
-			m_bricksDisplacementMapTexture.get(),
-			0.03f
-	);
-	m_landMeshRenderer = make_shared<MeshRenderer>(m_landMesh.get(), m_landMaterial.get());
-	m_landGameObject = make_shared<GameObject>();
-	m_landGameObject->addComponent(m_landMeshRenderer.get());
-	m_landGameObject->transform().setTranslation(Vector3f(0, -1, 0));
-	m_landGameObject->transform().setScale(Vector3f(4, 4, 4));
-	m_rootGameObject->addChild(m_landGameObject.get());
+	auto transformationJsonObject = findJsonValue(gameObjectJsonObject, "transformation");
 
-	m_directionalLightGameObject = make_shared<GameObject>();
-	m_directionalLight.reset();
-	m_directionalLight = LightsFactory::createDirectionalLight(m_coreEngine->renderingEngine(), Vector3f(1, 1, 1), 0.4);
-	m_directionalLightGameObject->transform().setRotation(Quaternion(Vector3f(1, 0, 0), Utils::toRadians(-45)));
-	m_directionalLightGameObject->addComponent(m_directionalLight.get());
-	m_rootGameObject->addChild(m_directionalLightGameObject.get());
+	auto translation = parseTranslation(transformationJsonObject);
+	Log::i(TAG, "\ttranslation: " + std::string(translation));
+	m_cameraStartPosition = translation;
 
-	m_pointLightGameObject = make_shared<GameObject>();
-	m_pointLight.reset();
-	m_pointLight = LightsFactory::createPointLight(m_coreEngine->renderingEngine(), Vector3f(0, 1, 0), 0.4,
-												   Attenuation(0, 0, 1));
-	m_pointLightGameObject->addComponent(m_pointLight.get());
-	m_rootGameObject->addChild(m_pointLightGameObject.get());
-
-	m_spotLightGameObject = make_shared<GameObject>();
-	m_spotLight.reset();
-	m_spotLight = LightsFactory::createSpotLight(m_coreEngine->renderingEngine(), Vector3f(0, 1, 1), 0.8,
-												 Attenuation(0, 0, 0.1), 0.7);
-	m_spotLightGameObject->addComponent(m_spotLight.get());
-	m_spotLightGameObject->transform().setRotation(Quaternion(Vector3f(0, 1, 0), Utils::toRadians(90)));
-	m_spotLightGameObject->transform().setTranslation(Vector3f(5, 0, 5));
-	m_rootGameObject->addChild(m_spotLightGameObject.get());
-
-	m_monkeyMesh.reset();
-	m_monkeyMesh = make_shared<Mesh>(m_monkeyModelPath);
-	m_testTexture.reset();
-	m_testTexture = make_shared<Texture>(m_testImagePath);
-	m_monkeyMaterial = make_shared<Material>(
-			m_testTexture.get(),
-			1.0f,
-			8.0f,
-			m_defaultNormalMapTexture.get(),
-			m_defaultDisplacementMapTexture.get()
-	);
-	m_monkeyMeshRenderer = make_shared<MeshRenderer>(m_monkeyMesh.get(), m_monkeyMaterial.get());
-	m_monkeyGameObject = make_shared<GameObject>();
-	m_monkeyGameObject->addComponent(m_monkeyMeshRenderer.get());
-	m_monkeyGameObject->transform().setTranslation(Vector3f(5, 10, 5));
-	m_lookAtComponent = make_shared<LookAtComponent>();
-	m_monkeyGameObject->addComponent(m_lookAtComponent.get());
-	m_rootGameObject->addChild(m_monkeyGameObject.get());
-
-	m_monkeyPlaneMesh = make_shared<Mesh>(m_landModelPath);
-	m_monkeyPlaneMeshRenderer = make_shared<MeshRenderer>(m_monkeyPlaneMesh.get(), m_landMaterial.get());
-	m_monkeyPlaneGameObject = make_shared<GameObject>();
-	m_monkeyPlaneGameObject->addComponent(m_monkeyPlaneMeshRenderer.get());
-	m_monkeyPlaneGameObject->transform().setTranslation(Vector3f(0, 0, -5));
-	m_monkeyPlaneGameObject->transform().setRotation(Quaternion(Vector3f(1, 0, 0), Utils::toRadians(90)));
-	m_monkeyGameObject->addChild(m_monkeyPlaneGameObject.get());*/
+	auto rotation = parseRotation(transformationJsonObject);
+	Vector3f rotationAxis;
+	float rotationAngle;
+	rotation.calculateAxisAndAngle(rotationAxis, rotationAngle);
+	Log::i(TAG, "\trotation: axis: " + std::string(rotationAxis) + "; angle: " + Utils::toString(rotationAngle));
+	m_cameraStartRotation = rotation;
 }
 
 void MainMenuScene::onOpenGLResized(int width, int height)
@@ -339,6 +257,8 @@ void MainMenuScene::onOpenGLResized(int width, int height)
 
 		m_cameraGameObject = make_shared<GameObject>();
 		m_cameraGameObject->addComponent(m_camera.get());
+		m_cameraGameObject->transform().setTranslation(m_cameraStartPosition);
+		m_cameraGameObject->transform().setRotation(m_cameraStartRotation);
 		m_rootGameObject->addChild(m_cameraGameObject.get());
 	}
 }
@@ -348,6 +268,7 @@ void MainMenuScene::setEngine(CoreEngine *coreEngine)
 	m_coreEngine = coreEngine;
 }
 
+//static float g_timePassed = 0;
 void MainMenuScene::update(float dt) {
 	SceneWithRootObject::update(dt);
 
@@ -364,4 +285,14 @@ void MainMenuScene::update(float dt) {
 	m_camera->transform().rotate(m_camera->transform().rotation().calculateRight(),
 								 Utils::toRadians(m_controller->calculatePitchRotationSpeed() * dt));
 
+	/*g_timePassed += dt;
+	if (g_timePassed >= 1) {
+		g_timePassed = 0;
+		Vector3f axis;
+		float angle;
+		m_camera->transform().rotation().calculateAxisAndAngle(axis, angle);
+		Log::d(TAG, "Camera:");
+		Log::d(TAG, "\taxis: " + string(axis) + "; angle: " + Utils::toString(angle));
+		Log::d(TAG, "\tposition: " + string(m_camera->transform().translation()));
+	}*/
 }

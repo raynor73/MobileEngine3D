@@ -27,6 +27,13 @@
     }
   },
   "objects": {
+    "camera": {
+      "type": "CAMERA",
+      "transformation": {
+        "translation": [246.073, 16.1808, -77.4342],
+        "rotation": [0.054435, 0.996907, 0.0566785, 267.50941088422031]
+      }
+    },
     "moon_surface": {
       "type": "MESH",
       "mesh": "moon_surface",

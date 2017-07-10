@@ -1,5 +1,4 @@
 #include <cmath>
-#include <float.h>
 #include "quaternion.h"
 
 //From Ken Shoemake's "Quaternion Calculus and Fast Animation" article
@@ -41,6 +40,13 @@ Quaternion::Quaternion(const Matrix4f &rotation)
 	m_z /= length;
 	m_w /= length;
 }
+
+Quaternion::Quaternion() :
+	m_x(1),
+	m_y(0),
+	m_z(0),
+	m_w(0)
+{}
 
 Quaternion::Quaternion(float x, float y, float z, float w) :
 	m_x(x),
@@ -201,4 +207,15 @@ bool Quaternion::operator ==(const Quaternion &other) const
 bool Quaternion::operator !=(const Quaternion &other) const
 {
 	return !((*this) == other);
+}
+
+void Quaternion::calculateAxisAndAngle(Vector3f &outAxis, float &outAngle) const
+{
+	Quaternion q1 = normalized();
+	outAngle = 2 * std::acos(q1.m_w);
+	float s = std::sqrt(1 - q1.m_w * q1.m_w);
+	if (s < FLT_EPSILON)
+		outAxis.set(1, 0, 0);
+	else
+		outAxis.set(q1.m_x / s, q1.m_y / s, q1.m_z / s);
 }

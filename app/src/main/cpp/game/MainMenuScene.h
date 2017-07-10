@@ -10,6 +10,7 @@
 #include <engine/rendering/mesh.h>
 #include <engine/rendering/material.h>
 #include <list>
+#include <engine/core/quaternion.h>
 #include "JoystickInput.h"
 #include "TestController.h"
 
@@ -32,6 +33,7 @@ public:
 private:
 	static const std::string TAG;
 
+	static const std::string GAME_OBJECT_TYPE_CAMERA;
 	static const std::string GAME_OBJECT_TYPE_MESH;
 	static const std::string GAME_OBJECT_TYPE_DIRECTIONAL_LIGHT;
 
@@ -51,10 +53,16 @@ private:
 	std::shared_ptr<Camera> m_camera;
 	std::shared_ptr<GameObject> m_cameraGameObject;
 
+	Vector3f m_cameraStartPosition;
+	Quaternion m_cameraStartRotation;
+
 	json_value *findJsonValue(json_value *jsonObject, std::string name);
 	void freeMemory();
+	void loadCamera(json_value *gameObjectJsonObject);
 	void loadMeshGameObject(json_value *gameObjectJsonObject, std::string name);
 	void loadDirectionalLightGameObject(json_value *gameObjectJsonObject, std::string name);
+	Vector3f parseTranslation(json_value *transformationJsonObject);
+	Quaternion parseRotation(json_value *transformationJsonObject);
 };
 
 

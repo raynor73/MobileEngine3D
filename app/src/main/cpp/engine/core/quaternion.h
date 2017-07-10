@@ -7,6 +7,7 @@
 class Quaternion
 {
 public:
+	Quaternion();
 	Quaternion(const Matrix4f &);
 	Quaternion(float x, float y, float z, float w);
 	Quaternion(const Vector3f &axis, float angle);
@@ -19,6 +20,8 @@ public:
 	Vector3f calculateDown() const;
 	Vector3f calculateRight() const;
 	Vector3f calculateLeft() const;
+
+	void calculateAxisAndAngle(Vector3f &outAxis, float &outAngle) const;
 
 	float length() const;
 	Quaternion normalized() const;
