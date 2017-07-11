@@ -8,6 +8,9 @@
     },
     "moon_surface": {
       "filename": "moon_surface.jpg"
+    },
+    "lunar_module": {
+      "filename": "apollo_map.jpg"
     }
   },
   "materials": {
@@ -19,19 +22,31 @@
       "displacementMap": "default_displacement_map",
       "displacementMapScale": 0.0,
       "displacementMapOffset": 0.0
+    },
+    "lunar_module": {
+      "diffuse": "lunar_module",
+      "specularIntensity": 1.0,
+      "specularPower": 8.0,
+      "normalMap": "default_normal_map",
+      "displacementMap": "default_displacement_map",
+      "displacementMapScale": 0.0,
+      "displacementMapOffset": 0.0
     }
   },
   "meshes": {
     "moon_surface": {
       "filename": "moon_surface.obj"
+    },
+    "lunar_module": {
+      "filename": "lunar_module.obj"
     }
   },
   "objects": {
     "camera": {
       "type": "CAMERA",
       "transformation": {
-        "translation": [246.073, 16.1808, -77.4342],
-        "rotation": [0.054435, 0.996907, 0.0566785, 267.50941088422031]
+        "translation": [253.961, 17.854, -68.7836],
+        "rotation": [0.00045499, 0.999999, 0.00129326, 218.766172379055787]
       }
     },
     "moon_surface": {
@@ -43,6 +58,16 @@
         "scale": [1.0, 1.0, 1.0]
       },
       "material": "moon_surface"
+    },
+    "lunar_module": {
+      "type": "MESH",
+      "mesh": "lunar_module",
+      "transformation": {
+        "translation": [246.073, 16.1808, -77.4342],
+        "rotation": [1.0, 0.0, 0.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "material": "lunar_module"
     },
     "sun": {
       "type": "DIRECTIONAL_LIGHT",
