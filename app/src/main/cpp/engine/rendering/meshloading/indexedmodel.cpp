@@ -1,6 +1,7 @@
 #include <logwrapper.h>
 #include <utils.h>
 #include <cmath>
+#include <float.h>
 #include "indexedmodel.h"
 
 using namespace std;
